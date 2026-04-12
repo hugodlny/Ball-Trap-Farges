@@ -288,7 +288,7 @@ input,button,select{font-family:inherit}
   <div class="topbar">
     <button class="avatar-btn" id="btn-open-profil"><span id="topbar-initials">?</span></button>
     <div class="logo-center"><div class="ln">Ball Trap</div><div class="ls">Club de Farges</div></div>
-    <div class="topbar-right"></div>
+    <div class="topbar-right" id="topbar-right"></div>
   </div>
 
   <!-- PAGE HOME (stats + historique) -->
@@ -374,7 +374,7 @@ input,button,select{font-family:inherit}
     </div>
   </div>
 
-  <!-- NAV BAS -->
+  <!-- NAV BAS — sans admin -->
   <nav class="nav" id="main-nav">
     <button class="nb" data-page="home"><span class="ic">📊</span><span class="nl">Stats</span></button>
     <button class="nb" data-page="historique"><span class="ic">📋</span><span class="nl">Historique</span></button>
@@ -554,11 +554,14 @@ async function loadApp(){
   allAuth=await db.get('autorisations');
   $('acc-nom').textContent=CP?.nom||CU.email;
   $('topbar-initials').textContent=initials(CP?.nom||CU.email);
-  if(isAdmin&&!$('nb-admin')){
-    const b=document.createElement('button');
-    b.className='nb adm';b.id='nb-admin';b.dataset.page='admin';
-    b.innerHTML='<span class="ic">⚙</span><span class="nl" style="color:#a855f7">Admin</span>';
-    $('main-nav').appendChild(b);initNavBtn(b);
+  if(isAdmin){
+    // Bouton admin en haut à droite
+    const adminBtn=document.createElement('button');
+    adminBtn.id='btn-admin-top';
+    adminBtn.style.cssText='background:#2d1b4e;border:1.5px solid #a855f7;border-radius:8px;color:#a855f7;font-size:.7rem;font-weight:700;padding:6px 10px;cursor:pointer;letter-spacing:.06em;text-transform:uppercase';
+    adminBtn.textContent='⚙ Admin';
+    adminBtn.addEventListener('click',()=>showPage('admin'));
+    $('topbar-right').appendChild(adminBtn);
   }
   $('auth-screen').style.display='none';$('app').style.display='block';
   renderHome();

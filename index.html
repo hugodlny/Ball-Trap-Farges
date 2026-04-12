@@ -303,35 +303,9 @@ input,button,select{font-family:inherit}
     <div id="hist-list"></div>
   </div>
 
-  <!-- PAGE NOUVELLE PARTIE -->
+  <!-- PAGE NOUVELLE PARTIE — contenu 100% dynamique -->
   <div class="page" id="page-partie">
-    <div id="st-accueil">
-      <div class="section-title" style="margin-top:4px">Nouvelle partie</div>
-      <div class="card" style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
-        <div style="font-size:2rem">🎯</div>
-        <div><div style="font-size:.75rem;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Tireur</div><div style="font-size:1.05rem;font-weight:800" id="acc-nom">—</div></div>
-      </div>
-      <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">1 — Choix du parcours</div>
-      <div id="parcours-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px"></div>
-      <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">2 — Difficulté</div>
-      <div id="diff-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px"></div>
-      <div id="structure-preview" style="display:none">
-        <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">3 — Structure des postes</div>
-        <div class="card" id="structure-detail" style="margin-bottom:16px"></div>
-        <button class="btn" id="btn-start-partie">▶&nbsp; Lancer la partie</button>
-      </div>
-    </div>
-    <div id="st-jeu" style="display:none">
-      <div class="lsbox">
-        <div class="lsi"><div class="lsv or" id="ls-tot">0</div><div class="lsl">Total/<span id="ls-max">0</span></div></div>
-        <div class="lsi"><div class="lsv gr" id="ls-c1">0</div><div class="lsl">C1</div></div>
-        <div class="lsi"><div class="lsv yl" id="ls-c2">0</div><div class="lsl">C2</div></div>
-        <div class="lsi"><div class="lsv or" id="ls-pct">0%</div><div class="lsl">Réussite</div></div>
-      </div>
-      <div id="jeu-stations"></div>
-      <button class="btn" id="btn-finish">✔&nbsp; Terminer & Enregistrer</button>
-      <button class="btn-o" id="btn-cancel">✕&nbsp; Annuler</button>
-    </div>
+    <div id="partie-root"></div>
   </div>
 
   <!-- PAGE CLASSEMENT -->
@@ -989,24 +963,10 @@ function renderAdmParties(){
   });
 }
 
-// Délégation globale pour la page partie
+// Délégation pour le bouton + de la nav
 document.addEventListener('click', e=>{
-  // Bouton lancer partie
-  if(e.target.id==='btn-start-partie'||e.target.closest('#btn-start-partie')){
-    startPartie(); return;
-  }
-  // Bouton nouvelle partie (le +)
   if(e.target.id==='btn-nouvelle-partie'||e.target.closest('#btn-nouvelle-partie')){
-    openNouvellePartie(); return;
-  }
-  // Bouton terminer
-  if(e.target.id==='btn-finish'||e.target.closest('#btn-finish')){
-    finishPartie(); return;
-  }
-  // Bouton annuler
-  if(e.target.id==='btn-cancel'||e.target.closest('#btn-cancel')){
-    if(!confirm('Annuler ?'))return;
-    $('st-jeu').style.display='none';$('st-accueil').style.display='block';gState=[];showPage('home');return;
+    openNouvellePartie();
   }
 });
 $('btn-finish').addEventListener('click',()=>{

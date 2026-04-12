@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ball Trap">
+<title>Ball Trap Farges</title>
+<style>
+:root{
+  --bg:#0f172a;
+  --bg2:#1e293b;
+  --card:#1e293b;
+  --card2:#263548;
+  --marine:#1a3a6b;
+  --marine2:#2a5298;
+  --or:#C9960C;
+  --or2:#F0B429;
+  --or-pale:rgba(201,150,12,.15);
+  --gr:#1A7A4A;
+  --gr2:#4ade80;
+  --rd:#C0392B;
+  --yl:#C9960C;
+  --tx:#f1f5f9;
+  --tx2:#94a3b8;
+  --mu:#64748b;
+  --bd:#1f2937;
+  --shadow:0 2px 16px rgba(0,0,0,.4);
+  --r:14px;--r-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'SF Pro Display','Segoe UI',system-ui,sans-serif;min-height:100vh;font-size:16px;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+input,button,select{font-family:inherit}
+
+/* ── AUTH ─────────────────────────────────────────── */
+#auth-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#0a1628 0%,#0f2040 60%,#1a3a6b 100%)}
+.auth-logo-wrap{text-align:center;margin-bottom:28px;pointer-events:none}
+.auth-club-name{color:#fff;font-size:1.1rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-top:14px}
+.auth-club-name span{color:var(--or2);display:block;font-size:.72rem;letter-spacing:.22em;margin-top:3px}
+.auth-box{background:#1e293b;border:1px solid #2d3f55;border-radius:20px;padding:26px 22px;width:100%;max-width:380px}
+.auth-tabs{display:flex;background:#0f172a;border-radius:10px;padding:3px;margin-bottom:22px}
+.auth-tab{flex:1;padding:10px;background:none;border:none;border-radius:8px;color:var(--mu);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+.auth-tab.on{background:var(--card2);color:var(--tx)}
+.af{margin-bottom:14px}
+.af label{font-size:.72rem;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px}
+.af input{background:#0f172a;border:1.5px solid var(--bd);border-radius:10px;color:var(--tx);padding:13px 15px;font-size:.95rem;width:100%;outline:none;transition:all .2s}
+.af input:focus{border-color:var(--or)}
+.abtn{background:var(--or);color:#fff;border:none;border-radius:12px;padding:15px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;margin-bottom:8px;transition:opacity .2s}
+.abtn:active{opacity:.85}
+.abtn:disabled{opacity:.5}
+.alink{background:none;border:none;color:var(--mu);font-size:.85rem;cursor:pointer;display:block;margin:12px auto 0;text-align:center}
+.aerr{color:#f87171;font-size:.78rem;margin-top:6px;text-align:center;min-height:18px}
+
+/* ── APP ─────────────────────────────────────────── */
+#app{display:none;min-height:100vh;padding-bottom:84px}
+
+/* ── TOPBAR ──────────────────────────────────────── */
+.topbar{background:#111827;padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--bd)}
+.avatar-btn{width:40px;height:40px;border-radius:50%;background:var(--marine);display:flex;align-items:center;justify-content:center;border:2px solid var(--or);cursor:pointer;flex-shrink:0;transition:opacity .2s}
+.avatar-btn:active{opacity:.8}
+.avatar-btn span{color:var(--or);font-size:13px;font-weight:800}
+.logo-center{text-align:center;flex:1}
+.logo-center .ln{color:#fff;font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.logo-center .ls{color:var(--or2);font-size:9px;letter-spacing:.2em;margin-top:1px}
+.topbar-right{width:40px}
+
+/* ── NAV BAS ──────────────────────────────────────── */
+.nav{display:flex;background:#111827;border-top:1px solid var(--bd);position:fixed;bottom:0;left:0;right:0;z-index:50;padding:6px 0 calc(6px + env(safe-area-inset-bottom));align-items:flex-end}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;background:none;border:none;padding:4px 0;transition:opacity .15s}
+.nb:active{opacity:.7}
+.nb .ic{font-size:20px;line-height:1}
+.nb .nl{color:var(--mu);font-size:8px;text-transform:uppercase;letter-spacing:.07em;font-weight:600}
+.nb.on .nl{color:var(--or)}
+.nb-center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding-bottom:4px}
+.nb-plus{width:54px;height:54px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;border:4px solid #111827;margin-bottom:4px;cursor:pointer;transition:transform .15s;box-shadow:0 4px 20px rgba(201,150,12,.5)}
+.nb-plus:active{transform:scale(.93)}
+.nb-plus-icon{color:#fff;font-size:28px;font-weight:300;line-height:1;margin-top:-2px}
+.nb-center-wrap .nl{color:var(--or);font-size:8px;text-transform:uppercase;letter-spacing:.07em;font-weight:600}
+
+/* ── PAGES ───────────────────────────────────────── */
+.page{display:none;padding:16px}
+.page.on{display:block}
+
+/* ── HOME ────────────────────────────────────────── */
+.welcome-card{background:linear-gradient(135deg,var(--marine) 0%,var(--marine2) 100%);border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.wc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.wc-name{font-size:1rem;font-weight:800;color:#fff}
+.wc-sub{font-size:.75rem;color:rgba(255,255,255,.6);margin-top:3px}
+.wc-score-big{font-size:2rem;font-weight:800;color:var(--or2);line-height:1}
+.wc-score-lbl{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;text-align:right}
+.stat-mini-row{display:flex;gap:8px}
+.stat-mini{flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center}
+.stat-mini .sv{font-size:1.15rem;font-weight:800;color:#fff}
+.stat-mini .sl{font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+
+.section-title{font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin:16px 0 10px}
+
+/* ── CARDS ───────────────────────────────────────── */
+.card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.card-or{background:var(--or-pale);border:1px solid rgba(201,150,12,.3);border-radius:var(--r);padding:16px;margin-bottom:12px}
+
+/* ── INPUTS ──────────────────────────────────────── */
+.inp{background:#0f172a;border:1.5px solid var(--bd);border-radius:10px;color:var(--tx);padding:13px 15px;font-size:.95rem;width:100%;outline:none;transition:border .2s}
+.inp:focus{border-color:var(--or)}
+.lbl{font-size:.72rem;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:block}
+.fld{margin-bottom:14px}
+
+/* ── BUTTONS ─────────────────────────────────────── */
+.btn{background:var(--or);color:#fff;border:none;border-radius:12px;padding:15px 20px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;transition:opacity .2s}
+.btn:active{opacity:.85}
+.btn:disabled{opacity:.5}
+.btn-o{background:transparent;color:var(--tx);border:1.5px solid var(--bd);border-radius:12px;padding:13px 18px;font-size:.95rem;font-weight:600;cursor:pointer;width:100%;transition:all .2s;margin-top:10px}
+.btn-o:active{border-color:var(--or);color:var(--or)}
+.btn-r{background:transparent;color:#f87171;border:1.5px solid #f87171;border-radius:10px;padding:8px 14px;font-size:.85rem;font-weight:600;cursor:pointer}
+
+/* ── MODAL ───────────────────────────────────────── */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-end;justify-content:center}
+.mo.on{display:flex}
+.mbox{background:#1e293b;border-radius:24px 24px 0 0;padding:20px 18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto}
+.mhandle{width:36px;height:4px;background:var(--mu);border-radius:2px;margin:0 auto 18px;opacity:.5}
+.mtitle{font-size:1.1rem;font-weight:800;color:var(--tx);margin-bottom:16px}
+
+/* ── HIST ────────────────────────────────────────── */
+.hc{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:background .15s}
+.hc:active{background:var(--card2)}
+.htag{background:var(--bg2);border-radius:20px;padding:4px 11px;font-size:.72rem;color:var(--tx2);font-weight:500}
+
+/* ── STAT ROWS ───────────────────────────────────── */
+.sr{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--bd)}
+.sr:last-child{border-bottom:none}
+.sr-lbl{font-size:.88rem;color:var(--tx2)}
+.sr-val{font-size:.95rem;font-weight:700;color:var(--tx)}
+
+/* ── RANK ────────────────────────────────────────── */
+.ri{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--card);border-radius:var(--r);margin-bottom:10px}
+
+/* ── TOGGLE ──────────────────────────────────────── */
+.trow{display:flex;background:#0f172a;border-radius:10px;margin-bottom:14px;padding:3px}
+.tgl{flex:1;padding:9px;background:none;border:none;border-radius:8px;color:var(--mu);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s}
+.tgl.on{background:var(--card2);color:var(--tx)}
+
+/* ── FILTER ──────────────────────────────────────── */
+.frow{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+.ftag{background:var(--card);border-radius:20px;padding:7px 16px;font-size:.78rem;color:var(--tx2);cursor:pointer;white-space:nowrap;flex-shrink:0;font-weight:500;transition:all .2s}
+.ftag.on{background:var(--or);color:#fff;font-weight:700}
+
+/* ── POSTE CONFIG ────────────────────────────────── */
+.pcfg{background:#0f172a;border-radius:var(--r-sm);padding:14px;margin-bottom:10px;border-left:3px solid var(--or)}
+.pcfg h4{font-size:.8rem;color:var(--or);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.pcr{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pcl{font-size:.82rem;color:var(--tx2);font-weight:500;width:72px;flex-shrink:0}
+.ni{width:60px;background:var(--card2);border:1.5px solid var(--bd);border-radius:8px;color:var(--tx);padding:8px 10px;font-size:.95rem;text-align:center;outline:none}
+.ni:focus{border-color:var(--or)}
+
+/* ── LIVE SCORE ──────────────────────────────────── */
+.lsbox{background:var(--marine);border-radius:var(--r);padding:16px;margin-bottom:16px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
+.lsi{text-align:center}
+.lsv{font-size:2rem;font-weight:800;color:#fff;line-height:1}
+.lsv.or{color:var(--or2)}
+.lsv.gr{color:#4ade80}
+.lsv.yl{color:#fbbf24}
+.lsl{font-size:.6rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
+
+/* ── STATION ─────────────────────────────────────── */
+.stblock{background:var(--card);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.sthd{background:var(--marine);padding:10px 16px;display:flex;justify-content:space-between;align-items:center}
+.stn{font-size:.82rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.1em}
+.sts{font-size:.7rem;color:rgba(255,255,255,.6)}
+.stbd{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.shr{display:flex;align-items:center;gap:10px}
+.shl{font-size:.78rem;color:var(--tx2);font-weight:500;width:68px;flex-shrink:0}
+.sbts{display:flex;gap:6px}
+.sbt{height:44px;border-radius:10px;border:1.5px solid var(--bd);background:#0f172a;color:var(--mu);font-size:.75rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.sbt:active{transform:scale(.92)}
+.sbt.c1{background:rgba(26,122,74,.2);border-color:var(--gr2);color:var(--gr2)}
+.sbt.c2{background:var(--or-pale);border-color:var(--or);color:var(--or2)}
+.sbt.miss{background:rgba(192,57,43,.2);border-color:#f87171;color:#f87171}
+.sbt-c1{width:50px}.sbt-c2{width:50px}.sbt-x{width:44px}
+.dbt{width:50px;height:44px;border-radius:10px;border:1.5px solid var(--bd);background:#0f172a;color:var(--mu);font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-weight:700}
+.dbt:active{transform:scale(.92)}
+.dbt.hit{background:rgba(26,122,74,.2);border-color:var(--gr2);color:var(--gr2)}
+.dbt.miss{background:rgba(192,57,43,.2);border-color:#f87171;color:#f87171}
+
+/* ── PROFIL ──────────────────────────────────────── */
+.phdr{background:linear-gradient(135deg,var(--marine),var(--marine2));border-radius:var(--r);padding:20px;margin-bottom:14px;display:flex;align-items:center;gap:16px}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex-shrink:0}
+
+/* ── VIS OPTIONS ─────────────────────────────────── */
+.vopts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.vopt{background:#0f172a;border:1.5px solid var(--bd);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s}
+.vopt.on{border-color:var(--or);background:var(--or-pale)}
+.vopt .vi{font-size:1.5rem;margin-bottom:5px}
+.vopt .vl{font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.vopt.on .vl{color:var(--or)}
+
+/* ── DETAIL ──────────────────────────────────────── */
+.dpst{background:#0f172a;border-radius:var(--r-sm);padding:12px;margin-bottom:10px}
+.dpst h4{font-size:.78rem;color:var(--or);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.dsh{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd);font-size:.85rem}
+.dsh:last-child{border-bottom:none}
+
+/* ── AUTH USER ───────────────────────────────────── */
+.aui{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.aui:last-child{border-bottom:none}
+.achk{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--bd);background:#0f172a;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.achk.on{background:var(--or);border-color:var(--or);color:#fff}
+
+/* ── ADMIN ───────────────────────────────────────── */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.astat{background:var(--card);border-radius:var(--r);padding:16px;text-align:center}
+.astat .av2{font-size:2rem;font-weight:800;color:#a855f7}
+.astat .al{font-size:.68rem;color:var(--mu);text-transform:uppercase;font-weight:600;margin-top:3px}
+.arow{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--bd);gap:8px}
+.arow:last-child{border-bottom:none}
+
+/* ── CHART ───────────────────────────────────────── */
+.chwrap{width:100%;height:120px;margin-top:8px}
+
+/* ── MISC ────────────────────────────────────────── */
+.empty{text-align:center;padding:48px 20px;color:var(--mu)}
+.empty .ei{font-size:3rem;margin-bottom:12px}
+.loader{display:inline-block;width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--or);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--card2);color:var(--tx);border:1px solid var(--bd);padding:11px 22px;border-radius:30px;font-size:.85rem;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+#toast.on{opacity:1}
+
+/* ── PROFIL MODAL (slide depuis gauche) ──────────── */
+.profil-panel{position:fixed;inset:0;z-index:200;display:flex;pointer-events:none}
+.profil-panel.on{pointer-events:all}
+.profil-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .25s}
+.profil-panel.on .profil-overlay{opacity:1}
+.profil-drawer{position:absolute;top:0;left:0;bottom:0;width:82%;max-width:320px;background:#1e293b;transform:translateX(-100%);transition:transform .25s;overflow-y:auto;padding:60px 20px 40px}
+.profil-panel.on .profil-drawer{transform:translateX(0)}
+.profil-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--mu);font-size:1.3rem;cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- ══ AUTH ══ -->
+<div id="auth-screen">
+  <div class="auth-logo-wrap">
+    <svg width="86" height="86" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg" style="border-radius:50%;box-shadow:0 0 0 3px #C9960C,0 0 24px rgba(201,150,12,.35)">
+      <circle cx="45" cy="45" r="45" fill="#C9960C"/>
+      <circle cx="45" cy="45" r="36" fill="#7a8fa8"/>
+      <line x1="18" y1="18" x2="72" y2="72" stroke="#1a3a6b" stroke-width="9" stroke-linecap="round"/>
+      <line x1="72" y1="18" x2="18" y2="72" stroke="#1a3a6b" stroke-width="9" stroke-linecap="round"/>
+      <text x="45" y="34" fill="#1a3a6b" font-size="11" font-weight="800" text-anchor="middle" font-family="serif">T</text>
+      <text x="24" y="52" fill="#1a3a6b" font-size="11" font-weight="800" text-anchor="middle" font-family="serif">B</text>
+      <text x="66" y="52" fill="#1a3a6b" font-size="11" font-weight="800" text-anchor="middle" font-family="serif">C</text>
+      <text x="45" y="66" fill="#1a3a6b" font-size="9" font-weight="700" text-anchor="middle" font-family="serif">Farges</text>
+    </svg>
+    <div class="auth-club-name">Ball Trap Club<span>Farges</span></div>
+  </div>
+  <div class="auth-box">
+    <div class="auth-tabs">
+      <button class="auth-tab on" id="atb-login">Connexion</button>
+      <button class="auth-tab" id="atb-register">Inscription</button>
+    </div>
+    <div id="pnl-login">
+      <div class="af"><label>Email</label><input id="l-email" type="email" placeholder="ton@email.com" autocomplete="email"></div>
+      <div class="af"><label>Mot de passe</label><input id="l-pwd" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="abtn" id="l-btn">Se connecter</button>
+      <div class="aerr" id="l-err"></div>
+      <button class="alink" id="l-forgot">Mot de passe oublié ?</button>
+    </div>
+    <div id="pnl-register" style="display:none">
+      <div class="af"><label>Prénom / Pseudo</label><input id="r-nom" placeholder="Ex: Jean"></div>
+      <div class="af"><label>Email</label><input id="r-email" type="email" placeholder="ton@email.com"></div>
+      <div class="af"><label>Mot de passe</label><input id="r-pwd" type="password" placeholder="Min. 6 caractères"></div>
+      <button class="abtn" id="r-btn">Créer mon compte</button>
+      <div class="aerr" id="r-err"></div>
+    </div>
+    <div id="pnl-forgot" style="display:none">
+      <p style="font-size:.88rem;color:var(--tx2);margin-bottom:16px;line-height:1.5">Saisis ton email pour recevoir un lien de réinitialisation.</p>
+      <div class="af"><label>Email</label><input id="f-email" type="email" placeholder="ton@email.com"></div>
+      <button class="abtn" id="f-btn">Envoyer le lien</button>
+      <div class="aerr" id="f-msg"></div>
+      <button class="alink" id="f-back">← Retour</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <button class="avatar-btn" id="btn-open-profil"><span id="topbar-initials">?</span></button>
+    <div class="logo-center"><div class="ln">Ball Trap</div><div class="ls">Club de Farges</div></div>
+    <div class="topbar-right"></div>
+  </div>
+
+  <!-- PAGE HOME (stats + historique) -->
+  <div class="page on" id="page-home">
+    <div id="home-content"></div>
+  </div>
+
+  <!-- PAGE HISTORIQUE -->
+  <div class="page" id="page-historique">
+    <div class="section-title" style="margin-top:4px">Mon historique</div>
+    <div class="frow" id="hist-filters"></div>
+    <div id="hist-list"></div>
+  </div>
+
+  <!-- PAGE NOUVELLE PARTIE -->
+  <div class="page" id="page-partie">
+    <!-- ÉTAPE 1 : choix parcours -->
+    <div id="st-accueil">
+      <div class="section-title" style="margin-top:4px">Nouvelle partie</div>
+      <div class="card" style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+        <div style="font-size:2rem">🎯</div>
+        <div><div style="font-size:.75rem;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Tireur</div><div style="font-size:1.05rem;font-weight:800" id="acc-nom">—</div></div>
+      </div>
+
+      <!-- Choix parcours -->
+      <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">1 — Choix du parcours</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px" id="parcours-grid"></div>
+
+      <!-- Choix difficulté -->
+      <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px" id="diff-label" style="opacity:.4">2 — Difficulté</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px" id="diff-grid"></div>
+
+      <!-- Résumé structure -->
+      <div id="structure-preview" style="display:none">
+        <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">3 — Structure des postes</div>
+        <div class="card" id="structure-detail" style="margin-bottom:16px"></div>
+        <button class="btn" id="btn-start-partie">▶&nbsp; Lancer la partie</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 2 : saisie -->
+    <div id="st-jeu" style="display:none">
+      <div class="lsbox">
+        <div class="lsi"><div class="lsv or" id="ls-tot">0</div><div class="lsl">Total/<span id="ls-max">0</span></div></div>
+        <div class="lsi"><div class="lsv gr" id="ls-c1">0</div><div class="lsl">C1</div></div>
+        <div class="lsi"><div class="lsv yl" id="ls-c2">0</div><div class="lsl">C2</div></div>
+        <div class="lsi"><div class="lsv or" id="ls-pct">0%</div><div class="lsl">Réussite</div></div>
+      </div>
+      <div id="jeu-stations"></div>
+      <button class="btn" id="btn-finish">✔&nbsp; Terminer & Enregistrer</button>
+      <button class="btn-o" id="btn-cancel">✕&nbsp; Annuler</button>
+    </div>
+  </div>
+
+  <!-- PAGE CLASSEMENT -->
+  <div class="page" id="page-classement"></div>
+
+  <!-- PAGE TIREURS -->
+  <div class="page" id="page-tireurs">
+    <div class="section-title" style="margin-top:4px">Tireurs</div>
+    <div class="fld"><input class="inp" id="search-tireur" placeholder="🔍 Rechercher…"></div>
+    <div id="tireurs-list"></div>
+  </div>
+
+  <!-- PAGE ADMIN -->
+  <div class="page" id="page-admin">
+    <div class="section-title" style="margin-top:4px;color:#a855f7">⚙ Administration</div>
+    <div class="agrid" id="admin-kpis"></div>
+    <div class="card"><div class="lbl">Activité — 30 jours</div><div class="chwrap" id="admin-chart"></div></div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span class="lbl" style="margin:0">Utilisateurs</span>
+        <input class="inp" id="adm-search" placeholder="🔍" style="width:130px;padding:9px 12px;font-size:.85rem">
+      </div>
+      <div id="adm-users"></div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span class="lbl" style="margin:0">Toutes les parties</span>
+        <select class="inp" id="adm-filter-user" style="width:140px;padding:9px 12px;font-size:.85rem"><option value="">Tous</option></select>
+      </div>
+      <div id="adm-parties"></div>
+    </div>
+  </div>
+
+  <!-- NAV BAS -->
+  <nav class="nav" id="main-nav">
+    <button class="nb" data-page="home"><span class="ic">📊</span><span class="nl">Stats</span></button>
+    <button class="nb" data-page="historique"><span class="ic">📋</span><span class="nl">Historique</span></button>
+    <div class="nb-center-wrap">
+      <div class="nb-plus" id="btn-nouvelle-partie"><span class="nb-plus-icon">+</span></div>
+      <span class="nl">Partie</span>
+    </div>
+    <button class="nb" data-page="classement"><span class="ic">🏆</span><span class="nl">Classement</span></button>
+    <button class="nb" data-page="tireurs"><span class="ic">👥</span><span class="nl">Tireurs</span></button>
+  </nav>
+</div>
+
+<!-- PROFIL PANEL (drawer gauche) -->
+<div class="profil-panel" id="profil-panel">
+  <div class="profil-overlay" id="profil-overlay"></div>
+  <div class="profil-drawer">
+    <button class="profil-close" id="profil-close">✕</button>
+    <div id="profil-drawer-content"></div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="mo" id="mo-tireur"><div class="mbox"><div class="mhandle"></div><div id="mo-tireur-content"></div><button class="btn-o" id="mo-tireur-close">Fermer</button></div></div>
+<div class="mo" id="mo-fin"><div class="mbox"><div class="mhandle"></div><div class="mtitle">🏆 Partie terminée</div><div id="mo-fin-content"></div><button class="btn" id="btn-save-partie" style="margin-top:16px">💾&nbsp; Enregistrer</button><button class="btn-o" id="btn-fin-back">Continuer à saisir</button></div></div>
+<div class="mo" id="mo-detail"><div class="mbox"><div class="mhandle"></div><div id="mo-detail-content"></div></div></div>
+<div class="mo" id="mo-vis">
+  <div class="mbox">
+    <div class="mhandle"></div>
+    <div class="mtitle">🔒 Confidentialité</div>
+    <div class="vopts">
+      <div class="vopt on" id="vo-public"><div class="vi">🌍</div><div class="vl">Public</div></div>
+      <div class="vopt" id="vo-selects"><div class="vi">👥</div><div class="vl">Sélectif</div></div>
+      <div class="vopt" id="vo-prive"><div class="vi">🔒</div><div class="vl">Privé</div></div>
+    </div>
+    <div id="vo-selects-panel" style="display:none"><div class="lbl" style="margin-bottom:10px">Tireurs autorisés</div><div id="vo-users"></div></div>
+    <p id="vo-desc" style="font-size:.85rem;color:var(--tx2);margin-bottom:16px;line-height:1.5"></p>
+    <button class="btn" id="btn-save-vis">Enregistrer</button>
+    <button class="btn-o" id="btn-vis-close">Annuler</button>
+  </div>
+</div>
+<div class="mo" id="mo-edit">
+  <div class="mbox">
+    <div class="mhandle"></div>
+    <div class="mtitle">✏️ Modifier le profil</div>
+    <div class="trow" style="margin-bottom:18px">
+      <button class="tgl on" id="ep-tb-info">Infos</button>
+      <button class="tgl" id="ep-tb-email">Email</button>
+      <button class="tgl" id="ep-tb-pwd">Mot de passe</button>
+    </div>
+    <div id="ep-info"><div class="fld"><label class="lbl">Pseudo</label><input class="inp" id="ep-nom"></div><button class="btn" id="ep-save-nom">Enregistrer</button></div>
+    <div id="ep-email" style="display:none"><div class="fld"><label class="lbl">Nouvel email</label><input class="inp" id="ep-new-email" type="email"></div><button class="btn" id="ep-save-email">Enregistrer</button></div>
+    <div id="ep-pwd" style="display:none">
+      <div class="fld"><label class="lbl">Nouveau mot de passe</label><input class="inp" id="ep-new-pwd" type="password"></div>
+      <div class="fld"><label class="lbl">Confirmer</label><input class="inp" id="ep-confirm-pwd" type="password"></div>
+      <button class="btn" id="ep-save-pwd">Enregistrer</button>
+    </div>
+    <div id="ep-msg" style="font-size:.82rem;margin-top:12px;text-align:center;font-weight:600"></div>
+    <button class="btn-o" id="ep-close">Fermer</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SUPA='https://tbuimumsipnevtyudvmx.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRidWltdW1zaXBuZXZ0eXVkdm14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTMwMjcsImV4cCI6MjA5MTU2OTAyN30.yv-E6fkHjYgFZyKVpcz-a1-BuXVU6ICLnlmRIg1ZXcs';
+let token=null;
+const H=()=>({'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+(token||KEY)});
+async function api(m,p,b){
+  const r=await fetch(SUPA+p,{method:m,headers:{...H(),'Prefer':'return=representation'},body:b?JSON.stringify(b):undefined});
+  if(!r.ok){const e=await r.json();throw new Error(e.message||e.error_description||'Erreur');}
+  const t=await r.text();return t?JSON.parse(t):null;
+}
+const db={
+  get:(t,q='')=>api('GET',`/rest/v1/${t}?${q}`),
+  post:(t,b)=>api('POST',`/rest/v1/${t}`,b),
+  del:(t,q)=>api('DELETE',`/rest/v1/${t}?${q}`),
+  patch:(t,q,b)=>api('PATCH',`/rest/v1/${t}?${q}`,b)
+};
+
+let token_=null,CU=null,CP=null,isAdmin=false;
+let allP=[],allGames=[],myGames=[],allAuth=[];
+let postes=[{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1}];
+
+// ═══════════════════════════════════════════════
+// DONNÉES PARCOURS (TÉMOIN — à remplacer)
+// Structure : PARCOURS[nom][difficulté] = [{s,d}, ...] par poste
+// ═══════════════════════════════════════════════
+const PARCOURS = {
+  'Parcours A': {
+    'Bleu':  [{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1}],
+    'Vert':  [{s:3,d:1},{s:2,d:1},{s:3,d:1},{s:2,d:1},{s:3,d:1}],
+    'Rouge': [{s:2,d:1},{s:2,d:1},{s:2,d:2},{s:2,d:1},{s:2,d:1}],
+    'Noir':  [{s:1,d:2},{s:2,d:2},{s:1,d:2},{s:2,d:2},{s:1,d:2}],
+  },
+  'Parcours B': {
+    'Bleu':  [{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1}],
+    'Vert':  [{s:3,d:1},{s:3,d:1},{s:2,d:1},{s:3,d:1},{s:2,d:1}],
+    'Rouge': [{s:2,d:2},{s:2,d:1},{s:2,d:1},{s:2,d:2},{s:2,d:1}],
+    'Noir':  [{s:2,d:2},{s:1,d:2},{s:2,d:2},{s:1,d:2},{s:2,d:2}],
+  },
+  'Parcours C': {
+    'Bleu':  [{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1}],
+    'Vert':  [{s:2,d:1},{s:3,d:1},{s:3,d:1},{s:2,d:1},{s:3,d:1}],
+    'Rouge': [{s:2,d:1},{s:2,d:2},{s:2,d:1},{s:2,d:1},{s:2,d:2}],
+    'Noir':  [{s:1,d:2},{s:1,d:2},{s:2,d:2},{s:1,d:2},{s:2,d:2}],
+  },
+  'Parcours D': {
+    'Bleu':  [{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1}],
+    'Vert':  [{s:3,d:1},{s:2,d:1},{s:3,d:1},{s:3,d:1},{s:2,d:1}],
+    'Rouge': [{s:2,d:2},{s:2,d:1},{s:2,d:2},{s:2,d:1},{s:2,d:1}],
+    'Noir':  [{s:2,d:2},{s:2,d:2},{s:1,d:2},{s:2,d:2},{s:1,d:2}],
+  },
+};
+const PARCOURS_NOMS = Object.keys(PARCOURS);
+const DIFFICULTES = ['Bleu','Vert','Rouge','Noir'];
+const DIFF_COLORS = {Bleu:'#3b82f6',Vert:'#22c55e',Rouge:'#ef4444',Noir:'#a855f7'};
+let pConfig=null,gState=[];
+let selParcours=null,selDiff=null;
+let hFilter='all',rMetric='score',rPeriod='semaine',rParc='all';
+let tVis='public',tVisUsers=[];
+
+const $=id=>document.getElementById(id);
+function toast(msg,dur=2500){const e=$('toast');e.textContent=msg;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),dur);}
+function openMo(id){$(id).classList.add('on');}
+function closeMo(id){$(id).classList.remove('on');}
+function initials(n){return(n||'?').split(' ').map(w=>w[0]||'').join('').substring(0,2).toUpperCase();}
+function aColor(s){const c=['#1a3a6b','#1A7A4A','#7a2d1a','#5b2d8b','#1a5f7a','#7a1a3a'];let h=0;for(let x of(s||'?'))h=x.charCodeAt(0)+((h<<5)-h);return c[Math.abs(h)%c.length];}
+function fmtD(iso){const d=new Date(iso);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
+function fmtSD(iso){return new Date(iso).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'});}
+function wkStart(){const d=new Date();d.setHours(0,0,0,0);const dy=d.getDay();d.setDate(d.getDate()-(dy===0?6:dy-1));return d;}
+function moStart(){const d=new Date();d.setDate(1);d.setHours(0,0,0,0);return d;}
+function byPeriod(arr,p){if(p==='all')return arr;const c=p==='semaine'?wkStart():moStart();return arr.filter(x=>new Date(x.played_at)>=c);}
+function canView(p){if(!p)return false;if(p.id===CU.id)return true;if(p.visibilite==='public')return true;if(p.visibilite==='prive')return false;return allAuth.some(a=>a.owner_id===p.id&&a.viewer_id===CU.id);}
+
+// AUTH
+function initAuth(){
+  $('atb-login').addEventListener('click',()=>{$('pnl-login').style.display='block';$('pnl-register').style.display='none';$('pnl-forgot').style.display='none';$('atb-login').classList.add('on');$('atb-register').classList.remove('on');});
+  $('atb-register').addEventListener('click',()=>{$('pnl-login').style.display='none';$('pnl-register').style.display='block';$('pnl-forgot').style.display='none';$('atb-register').classList.add('on');$('atb-login').classList.remove('on');});
+  $('l-forgot').addEventListener('click',()=>{$('pnl-login').style.display='none';$('pnl-forgot').style.display='block';$('atb-login').classList.remove('on');});
+  $('f-back').addEventListener('click',()=>{$('pnl-forgot').style.display='none';$('pnl-login').style.display='block';$('atb-login').classList.add('on');});
+  $('l-btn').addEventListener('click',async()=>{
+    const email=$('l-email').value.trim(),pwd=$('l-pwd').value;
+    $('l-err').textContent='';
+    if(!email||!pwd){$('l-err').textContent='Remplis tous les champs.';return;}
+    $('l-btn').disabled=true;$('l-btn').textContent='Connexion…';
+    try{const r=await api('POST','/auth/v1/token?grant_type=password',{email,password:pwd});token=r.access_token;CU=r.user;await loadApp();}
+    catch(e){$('l-err').textContent='❌ '+e.message;}
+    $('l-btn').disabled=false;$('l-btn').textContent='Se connecter';
+  });
+  $('r-btn').addEventListener('click',async()=>{
+    const nom=$('r-nom').value.trim(),email=$('r-email').value.trim(),pwd=$('r-pwd').value;
+    $('r-err').textContent='';
+    if(!nom||!email||!pwd){$('r-err').textContent='Remplis tous les champs.';return;}
+    if(pwd.length<6){$('r-err').textContent='Mot de passe trop court.';return;}
+    $('r-btn').disabled=true;$('r-btn').textContent='Création…';
+    try{const r=await api('POST','/auth/v1/signup',{email,password:pwd});token=r.access_token;CU=r.user;await db.post('profils',{id:CU.id,nom,visibilite:'public'});await loadApp();}
+    catch(e){$('r-err').textContent='❌ '+e.message;}
+    $('r-btn').disabled=false;$('r-btn').textContent='Créer mon compte';
+  });
+  $('f-btn').addEventListener('click',async()=>{
+    const email=$('f-email').value.trim();$('f-msg').textContent='';
+    if(!email){$('f-msg').style.color='#f87171';$('f-msg').textContent='Saisis ton email.';return;}
+    $('f-btn').disabled=true;
+    try{await api('POST','/auth/v1/recover',{email,options:{redirectTo:'https://ball-trap-farges.netlify.app'}});$('f-msg').style.color='#4ade80';$('f-msg').textContent='✔ Email envoyé !';}
+    catch(e){$('f-msg').style.color='#f87171';$('f-msg').textContent='❌ '+e.message;}
+    $('f-btn').disabled=false;
+  });
+}
+
+async function loadApp(){
+  allP=await db.get('profils','order=created_at.asc');
+  CP=allP.find(p=>p.id===CU.id);
+  isAdmin=CP?.is_admin||false;
+  allGames=await db.get('parties','order=played_at.desc');
+  myGames=allGames.filter(g=>g.user_id===CU.id);
+  allAuth=await db.get('autorisations');
+  $('acc-nom').textContent=CP?.nom||CU.email;
+  $('topbar-initials').textContent=initials(CP?.nom||CU.email);
+  if(isAdmin&&!$('nb-admin')){
+    const b=document.createElement('button');
+    b.className='nb adm';b.id='nb-admin';b.dataset.page='admin';
+    b.innerHTML='<span class="ic">⚙</span><span class="nl" style="color:#a855f7">Admin</span>';
+    $('main-nav').appendChild(b);initNavBtn(b);
+  }
+  $('auth-screen').style.display='none';$('app').style.display='block';
+  renderHome();
+}
+
+// NAV
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  const pg=$('page-'+id);if(pg)pg.classList.add('on');
+  document.querySelectorAll('.nb[data-page]').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
+  if(id==='home')renderHome();
+  if(id==='historique')renderHistorique();
+  if(id==='classement')renderClassement();
+  if(id==='tireurs')renderTireurs();
+  if(id==='admin')renderAdmin();
+}
+
+function initNavBtn(btn){
+  btn.addEventListener('click',()=>{
+    const id=btn.dataset.page;
+    if(id==='partie'){openNouvellePartie();return;}
+    showPage(id);
+  });
+}
+document.querySelectorAll('.nb[data-page]').forEach(initNavBtn);
+
+function openNouvellePartie(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb[data-page]').forEach(b=>b.classList.remove('on'));
+  $('page-partie').classList.add('on');
+  $('st-accueil').style.display='block';$('st-parcours').style.display='none';$('st-jeu').style.display='none';
+}
+$('btn-nouvelle-partie').addEventListener('click',openNouvellePartie);
+
+// PROFIL DRAWER
+function openProfilPanel(){
+  renderProfilDrawer();
+  $('profil-panel').classList.add('on');
+}
+function closeProfilPanel(){$('profil-panel').classList.remove('on');}
+$('btn-open-profil').addEventListener('click',openProfilPanel);
+$('profil-overlay').addEventListener('click',closeProfilPanel);
+$('profil-close').addEventListener('click',closeProfilPanel);
+
+function renderProfilDrawer(){
+  const pts=myGames,sc=pts.map(x=>x.total);
+  const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):'—';
+  const best=sc.length?Math.max(...sc):'—';
+  const col=aColor(CP?.nom||'?');
+  const vl={public:'🌍 Public',selects:'👥 Sélectif',prive:'🔒 Privé'};
+  $('profil-drawer-content').innerHTML=`
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+      <div class="av" style="background:${col};width:54px;height:54px;font-size:1.3rem;border:2px solid var(--or)">${initials(CP?.nom)}</div>
+      <div><div style="font-size:1.05rem;font-weight:800">${CP?.nom||'—'}</div>
+        <div style="font-size:.75rem;color:var(--tx2);margin-top:3px">${CU.email}</div>
+        ${isAdmin?'<div style="color:#a855f7;font-size:.72rem;margin-top:4px;font-weight:600">⚙ Administrateur</div>':''}
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px">
+      <div style="background:var(--bg2);border-radius:10px;padding:12px;text-align:center"><div style="font-size:1.3rem;font-weight:800;color:var(--or)">${best}</div><div style="font-size:.68rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Meilleur</div></div>
+      <div style="background:var(--bg2);border-radius:10px;padding:12px;text-align:center"><div style="font-size:1.3rem;font-weight:800;color:var(--tx)">${avg}</div><div style="font-size:.68rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Moyenne</div></div>
+    </div>
+    <div style="background:var(--bg2);border-radius:10px;padding:12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:.72rem;color:var(--mu);text-transform:uppercase;margin-bottom:4px">Confidentialité</div><div style="font-size:.9rem;font-weight:600">${vl[CP?.visibilite||'public']}</div></div>
+      <button class="btn-o" id="dp-vis-btn" style="width:auto;margin:0;padding:8px 12px;font-size:.82rem">Modifier</button>
+    </div>
+    <button class="btn" id="dp-edit-btn" style="margin-bottom:10px">✏️ Modifier le profil</button>
+    <button class="btn-o" id="dp-logout-btn" style="margin:0;color:#f87171;border-color:#f87171">⎋ Se déconnecter</button>`;
+  $('dp-vis-btn').addEventListener('click',()=>{closeProfilPanel();openVisModal();});
+  $('dp-edit-btn').addEventListener('click',()=>{closeProfilPanel();initEditProfil();openMo('mo-edit');});
+  $('dp-logout-btn').addEventListener('click',async()=>{
+    if(!confirm('Se déconnecter ?'))return;
+    try{await api('POST','/auth/v1/logout',{});}catch(e){}
+    token=null;CU=null;CP=null;isAdmin=false;
+    $('auth-screen').style.display='flex';$('app').style.display='none';
+    closeProfilPanel();
+  });
+}
+
+// HOME
+function renderHome(){
+  const pts=myGames,sc=pts.map(x=>x.total);
+  const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):'—';
+  const best=sc.length?Math.max(...sc):'—';
+  const avgPct=pts.length?Math.round(pts.reduce((a,x)=>a+x.pct,0)/pts.length):0;
+  const c1=pts.reduce((a,x)=>a+x.c1,0),hits=pts.reduce((a,x)=>a+x.total,0);
+  const c1p=hits?Math.round(c1/hits*100):0;
+  const srt=[...pts].sort((a,b)=>new Date(a.played_at)-new Date(b.played_at));
+  const derniere=pts[0];
+  $('home-content').innerHTML=`
+    <div class="welcome-card">
+      <div class="wc-top">
+        <div><div class="wc-name">${CP?.nom||'—'}</div>
+          <div class="wc-sub">${derniere?'Dernière partie · '+fmtSD(derniere.played_at):pts.length+' partie'+(pts.length!==1?'s':'')}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="wc-score-big">${best}</div>
+          <div class="wc-score-lbl">Meilleur score</div>
+        </div>
+      </div>
+      <div class="stat-mini-row">
+        <div class="stat-mini"><div class="sv">${avg}</div><div class="sl">Moyenne</div></div>
+        <div class="stat-mini"><div class="sv">${avgPct}%</div><div class="sl">Réussite</div></div>
+        <div class="stat-mini"><div class="sv">${c1p}%</div><div class="sl">Préc. C1</div></div>
+      </div>
+    </div>
+    ${srt.length>=2?`
+    <div class="section-title">Progression</div>
+    <div class="card"><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'#C9960C'}])}</div></div>`:''}
+    <div class="section-title">Historique récent</div>
+    ${pts.slice(0,5).map(p=>`
+    <div class="hc" data-id="${p.id}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div><div style="font-size:.8rem;font-weight:700;color:var(--or);text-transform:uppercase;letter-spacing:.05em">🗺 ${p.parcours}</div><div style="font-size:.72rem;color:var(--mu);margin-top:3px">${fmtD(p.played_at)}</div></div>
+        <div style="text-align:right"><div style="font-size:1.4rem;font-weight:800">${p.total}<span style="font-size:.85rem;color:var(--mu);font-weight:400">/${p.max_plateaux}</span></div><div style="font-size:.72rem;color:var(--mu)">${p.pct}%</div></div>
+      </div>
+      <div style="display:flex;gap:7px"><span class="htag" style="color:#4ade80">C1: ${p.c1}</span><span class="htag" style="color:var(--or2)">C2: ${p.c2}</span></div>
+    </div>`).join('')}
+    ${pts.length>5?`<button class="btn-o" style="margin:0" id="btn-voir-tout">Voir tout l'historique</button>`:''}`;
+  $('home-content').querySelectorAll('.hc[data-id]').forEach(el=>{el.addEventListener('click',()=>openDetail(el.dataset.id));});
+  if($('btn-voir-tout')) $('btn-voir-tout').addEventListener('click',()=>showPage('historique'));
+}
+
+// GRAPHES
+function lineChart(data){
+  if(!data.length||!data[0].vals.length)return'<p style="color:var(--mu);font-size:.85rem;text-align:center;padding:20px">Pas assez de données</p>';
+  const W=300,H=100,pL=28,pB=20,pT=10,pR=10;
+  const allY=data.flatMap(d=>d.vals.map(v=>v.y));
+  const minY=Math.max(0,Math.min(...allY)-2),maxY=Math.max(...allY)+2;
+  const xs=(i,n)=>n<2?W/2:pL+(i/(n-1))*(W-pL-pR);
+  const ys=v=>pT+(1-(v-minY)/(maxY-minY||1))*(H-pT-pB);
+  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">`;
+  [0,.5,1].forEach(t=>{const y=pT+t*(H-pT-pB),val=Math.round(maxY-t*(maxY-minY));svg+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="#1e293b" stroke-width="1"/><text x="${pL-4}" y="${y+4}" fill="#64748b" font-size="8" text-anchor="end">${val}</text>`;});
+  data.forEach(s=>{
+    const n=s.vals.length;
+    if(n<2){svg+=`<circle cx="${xs(0,n)}" cy="${ys(s.vals[0].y)}" r="4" fill="${s.color}"/>`;return;}
+    svg+=`<path d="${s.vals.map((v,i)=>`${i?'L':'M'}${xs(i,n)},${ys(v.y)}`).join(' ')}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round"/>`;
+    s.vals.forEach((v,i)=>svg+=`<circle cx="${xs(i,n)}" cy="${ys(v.y)}" r="3" fill="${s.color}"/>`);
+  });
+  data[0].vals.forEach((v,i)=>{const n=data[0].vals.length;if(n<=8||i%Math.ceil(n/6)===0)svg+=`<text x="${xs(i,n)}" y="${H-4}" fill="#64748b" font-size="7" text-anchor="middle">${v.x}</text>`;});
+  return svg+'</svg>';
+}
+function barChart(data){
+  if(!data.length)return'';
+  const W=300,H=80,pL=10,pB=22,pT=8,pR=10;
+  const maxV=Math.max(...data.map(d=>d.v),1);
+  const bw=(W-pL-pR)/data.length-2;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">`;
+  data.forEach((d,i)=>{const x=pL+i*((W-pL-pR)/data.length)+1,bh=Math.max(2,(d.v/maxV)*(H-pT-pB)),y=H-pB-bh;svg+=`<rect x="${x}" y="${y}" width="${bw}" height="${bh}" fill="${d.v>0?'#a855f7':'#1e293b'}" rx="2"/>`;if(d.v>0)svg+=`<text x="${x+bw/2}" y="${y-2}" fill="#a855f7" font-size="7" text-anchor="middle">${d.v}</text>`;svg+=`<text x="${x+bw/2}" y="${H-5}" fill="#64748b" font-size="6.5" text-anchor="middle">${d.l}</text>`;});
+  return svg+'</svg>';
+}
+
+// EDIT PROFIL
+function initEditProfil(){$('ep-nom').value=CP?.nom||'';$('ep-new-email').value=CU.email||'';$('ep-new-pwd').value='';$('ep-confirm-pwd').value='';$('ep-msg').textContent='';switchEp('info');}
+function switchEp(tab){['info','email','pwd'].forEach(t=>{$('ep-'+t).style.display=t===tab?'block':'none';$('ep-tb-'+t).classList.toggle('on',t===tab);});$('ep-msg').textContent='';}
+function epMsg(msg,ok=true){$('ep-msg').style.color=ok?'#4ade80':'#f87171';$('ep-msg').textContent=msg;}
+
+// VIS
+function openVisModal(){tVis=CP?.visibilite||'public';tVisUsers=allAuth.filter(a=>a.owner_id===CU.id).map(a=>a.viewer_id);updateVisUI();openMo('mo-vis');}
+function updateVisUI(){
+  ['public','selects','prive'].forEach(v=>$('vo-'+v).classList.toggle('on',tVis===v));
+  const descs={public:'Tout le monde peut voir tes statistiques.',selects:'Seuls les tireurs que tu choisis peuvent voir.',prive:'Personne ne peut voir ton profil.'};
+  $('vo-desc').textContent=descs[tVis];
+  $('vo-selects-panel').style.display=tVis==='selects'?'block':'none';
+  if(tVis==='selects'){
+    $('vo-users').innerHTML=allP.filter(p=>p.id!==CU.id).map(p=>{
+      const chk=tVisUsers.includes(p.id),col=aColor(p.nom);
+      return `<div class="aui"><div class="achk${chk?' on':''}" data-uid="${p.id}">${chk?'✔':''}</div><div class="av" style="background:${col};width:34px;height:34px;font-size:.85rem">${initials(p.nom)}</div><div style="flex:1;font-size:.9rem;font-weight:600">${p.nom}</div></div>`;
+    }).join('');
+    $('vo-users').querySelectorAll('.achk').forEach(el=>{el.addEventListener('click',()=>{const uid=el.dataset.uid;if(tVisUsers.includes(uid)){tVisUsers=tVisUsers.filter(x=>x!==uid);el.classList.remove('on');el.textContent='';}else{tVisUsers.push(uid);el.classList.add('on');el.textContent='✔';}});});
+  }
+}
+
+// PARTIE
+function renderPostes(){
+  $('postes-cfg').innerHTML=postes.map((p,i)=>`<div class="pcfg"><h4>Poste ${i+1}</h4>
+    <div class="pcr"><span class="pcl">Simples</span><input class="ni" type="number" min="0" max="10" value="${p.s}" data-i="${i}" data-t="s"></div>
+    <div class="pcr"><span class="pcl">Doubles</span><input class="ni" type="number" min="0" max="5" value="${p.d}" data-i="${i}" data-t="d"></div>
+  </div>`).join('');
+  $('postes-cfg').querySelectorAll('.ni').forEach(inp=>{inp.oninput=()=>postes[+inp.dataset.i][inp.dataset.t]=Math.max(0,parseInt(inp.value)||0);});
+}
+function buildJeu(){
+  $('jeu-stations').innerHTML=pConfig.postes.map((p,si)=>{
+    let rows='';
+    for(let j=0;j<p.s;j++) rows+=`<div class="shr"><span class="shl">Simple ${j+1}</span><div class="sbts"><button class="sbt sbt-c1" data-si="${si}" data-j="${j}" data-v="c1">C1</button><button class="sbt sbt-c2" data-si="${si}" data-j="${j}" data-v="c2">C2</button><button class="sbt sbt-x" data-si="${si}" data-j="${j}" data-v="miss">✘</button></div></div>`;
+    for(let j=0;j<p.d;j++) rows+=`<div class="shr"><span class="shl">Double ${j+1}</span><div class="sbts"><button class="dbt" data-si="${si}" data-j="${j}" data-p="0">P1</button><button class="dbt" data-si="${si}" data-j="${j}" data-p="1">P2</button></div></div>`;
+    return `<div class="stblock"><div class="sthd"><span class="stn">Poste ${si+1}</span><span class="sts">${p.s}S · ${p.d}D · ${p.s+p.d*2} plx</span></div><div class="stbd">${rows}</div></div>`;
+  }).join('');
+  $('jeu-stations').querySelectorAll('.sbt').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const si=+btn.dataset.si,j=+btn.dataset.j,v=btn.dataset.v;
+      gState[si].s[j]=gState[si].s[j]===v?null:v;
+      ['c1','c2','miss'].forEach(k=>{const b=$('jeu-stations').querySelector(`.sbt[data-si="${si}"][data-j="${j}"][data-v="${k}"]`);if(b)b.className=`sbt ${k==='c1'?'sbt-c1':k==='c2'?'sbt-c2':'sbt-x'}${gState[si].s[j]===k?' '+k:''}`;});
+      updateLive();
+    });
+  });
+  $('jeu-stations').querySelectorAll('.dbt').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const si=+btn.dataset.si,j=+btn.dataset.j,p=+btn.dataset.p;
+      const cur=gState[si].d[j][p];
+      gState[si].d[j][p]=cur===null?'hit':cur==='hit'?'miss':null;
+      const v=gState[si].d[j][p];
+      btn.className=`dbt${v==='hit'?' hit':v==='miss'?' miss':''}`;
+      btn.textContent=v==='hit'?'✔':v==='miss'?'✘':(p===0?'P1':'P2');
+      updateLive();
+    });
+  });
+}
+function calcLive(){
+  let tot=0,c1=0,c2=0,mx=0;
+  gState.forEach((ps,si)=>{mx+=pConfig.postes[si].s+pConfig.postes[si].d*2;ps.s.forEach(v=>{if(v==='c1'){tot++;c1++;}else if(v==='c2'){tot++;c2++;}});ps.d.forEach(d=>d.forEach(v=>{if(v==='hit')tot++;}));});
+  return{tot,c1,c2,mx};
+}
+function updateLive(){
+  const{tot,c1,c2,mx}=calcLive();
+  $('ls-tot').textContent=tot;$('ls-max').textContent=mx;$('ls-c1').textContent=c1;$('ls-c2').textContent=c2;
+  $('ls-pct').textContent=mx?Math.round(tot/mx*100)+'%':'0%';
+}
+
+// HISTORIQUE
+function renderHistorique(){
+  const parcours=[...new Set(myGames.map(p=>p.parcours))];
+  $('hist-filters').innerHTML=[{id:'all',n:'Tous'}].concat(parcours.map(p=>({id:p,n:p}))).map(f=>`<span class="ftag${hFilter===f.id?' on':''}" data-id="${f.id}">${f.n}</span>`).join('');
+  $('hist-filters').querySelectorAll('.ftag').forEach(t=>t.addEventListener('click',()=>{hFilter=t.dataset.id;renderHistorique();}));
+  const list=hFilter==='all'?myGames:myGames.filter(p=>p.parcours===hFilter);
+  const el=$('hist-list');
+  if(!list.length){el.innerHTML=`<div class="empty"><div class="ei">📋</div><p>Aucune partie enregistrée.</p></div>`;return;}
+  el.innerHTML='';
+  list.forEach(p=>{
+    const div=document.createElement('div');div.className='hc';
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+      <div><div style="font-size:.8rem;font-weight:700;color:var(--or);text-transform:uppercase;letter-spacing:.05em">🗺 ${p.parcours}</div><div style="font-size:.72rem;color:var(--mu);margin-top:3px">${fmtD(p.played_at)}</div></div>
+      <div style="text-align:right"><div style="font-size:1.4rem;font-weight:800">${p.total}<span style="font-size:.85rem;color:var(--mu);font-weight:400">/${p.max_plateaux}</span></div><div style="font-size:.72rem;color:var(--mu)">${p.pct}%</div></div>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <span class="htag">${p.nb_simples}S · ${p.nb_doubles}D</span>
+      <span class="htag" style="color:#4ade80">C1: ${p.c1}</span>
+      <span class="htag" style="color:var(--or2)">C2: ${p.c2}</span>
+      <span style="color:var(--mu);font-size:.72rem;align-self:center;margin-left:auto">→</span>
+    </div>`;
+    div.addEventListener('click',()=>openDetail(p.id));
+    el.appendChild(div);
+  });
+}
+
+function openDetail(id){
+  const p=myGames.find(x=>x.id===id);if(!p)return;
+  const gs=p.game_state||[];
+  let html='';
+  gs.forEach((po,si)=>{
+    let sh='';
+    po.s.forEach((v,j)=>{const cl=v==='c1'?'color:#4ade80':v==='c2'?'color:var(--or2)':v==='miss'?'color:#f87171':'color:var(--mu)';const lb=v==='c1'?'✔ C1':v==='c2'?'✔ C2':v==='miss'?'✘ Raté':'— N/S';sh+=`<div class="dsh"><span style="color:var(--tx2)">Simple ${j+1}</span><span style="font-weight:700;font-size:.85rem;${cl}">${lb}</span></div>`;});
+    po.d.forEach((d,j)=>{[0,1].forEach(pi=>{const v=d[pi];const cl=v==='hit'?'color:#4ade80':v==='miss'?'color:#f87171':'color:var(--mu)';const lb=v==='hit'?'✔ Touché':v==='miss'?'✘ Raté':'— N/S';sh+=`<div class="dsh"><span style="color:var(--tx2)">Double ${j+1} — P${pi+1}</span><span style="font-weight:700;font-size:.85rem;${cl}">${lb}</span></div>`;});});
+    html+=`<div class="dpst"><h4>Poste ${si+1}</h4>${sh}</div>`;
+  });
+  $('mo-detail-content').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+      <div><div style="font-size:1rem;font-weight:800;color:var(--or)">${p.parcours}</div><div style="font-size:.78rem;color:var(--mu);margin-top:4px">📅 ${fmtD(p.played_at)}</div></div>
+      <div style="text-align:right"><div style="font-size:1.6rem;font-weight:800">${p.total}/${p.max_plateaux}</div><div style="font-size:.78rem;color:var(--mu)">${p.pct}%</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:#4ade80">${p.c1}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">C1</div></div>
+      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:var(--or2)">${p.c2}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">C2</div></div>
+      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:#f87171">${p.max_plateaux-p.total}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Ratés</div></div>
+    </div>
+    <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Détail poste par poste</div>
+    ${html}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
+      <button class="btn-r" id="det-del-btn" style="padding:13px">🗑 Supprimer</button>
+      <button class="btn-o" id="det-close-btn" style="margin:0">Fermer</button>
+    </div>`;
+  $('det-del-btn').addEventListener('click',()=>deleteGame(id));
+  $('det-close-btn').addEventListener('click',()=>closeMo('mo-detail'));
+  openMo('mo-detail');
+}
+async function deleteGame(id){
+  if(!confirm('Supprimer cette partie ?'))return;
+  try{await db.del('parties',`id=eq.${id}`);allGames=allGames.filter(p=>p.id!==id);myGames=myGames.filter(p=>p.id!==id);closeMo('mo-detail');renderHistorique();renderHome();toast('✔ Partie supprimée');}
+  catch(e){toast('❌ '+e.message);}
+}
+
+// CLASSEMENT
+function setRM(m,btn){rMetric=m;$('page-classement').querySelectorAll('#rtm .tgl').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderCList();}
+function setRP(p,btn){rPeriod=p;$('page-classement').querySelectorAll('#rtp .tgl').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderCList();}
+function setRPa(p){rParc=p;renderCList();}
+function renderClassement(){
+  $('page-classement').innerHTML=`
+    <div class="section-title" style="margin-top:4px">Classement</div>
+    <div class="trow" id="rtm">
+      <button class="tgl${rMetric==='score'?' on':''}">Meilleur score</button>
+      <button class="tgl${rMetric==='pct'?' on':''}">Taux réussite</button>
+    </div>
+    <div class="trow" id="rtp">
+      <button class="tgl${rPeriod==='semaine'?' on':''}">Semaine</button>
+      <button class="tgl${rPeriod==='mois'?' on':''}">Mois</button>
+      <button class="tgl${rPeriod==='all'?' on':''}">Tout temps</button>
+    </div>
+    <div class="frow" id="rank-filters"></div>
+    <div id="rank-list"></div>`;
+  const[bS,bP]=$('page-classement').querySelectorAll('#rtm .tgl');
+  bS.addEventListener('click',()=>setRM('score',bS));bP.addEventListener('click',()=>setRM('pct',bP));
+  const[bSem,bMois,bAll]=$('page-classement').querySelectorAll('#rtp .tgl');
+  bSem.addEventListener('click',()=>setRP('semaine',bSem));bMois.addEventListener('click',()=>setRP('mois',bMois));bAll.addEventListener('click',()=>setRP('all',bAll));
+  renderCList();
+}
+function renderCList(){
+  const parcours=[...new Set(allGames.map(p=>p.parcours))];
+  const rf=$('rank-filters');
+  rf.innerHTML=[{id:'all',n:'Tous'}].concat(parcours.map(p=>({id:p,n:p}))).map(f=>`<span class="ftag${rParc===f.id?' on':''}" data-id="${f.id}">${f.n}</span>`).join('');
+  rf.querySelectorAll('.ftag').forEach(t=>t.addEventListener('click',()=>setRPa(t.dataset.id)));
+  let filtered=byPeriod(allGames,rPeriod);
+  if(rParc!=='all')filtered=filtered.filter(p=>p.parcours===rParc);
+  const visIds=allP.filter(p=>p.id===CU.id||p.visibilite!=='prive').map(p=>p.id);
+  filtered=filtered.filter(p=>visIds.includes(p.user_id));
+  const byU={};
+  filtered.forEach(p=>{if(!byU[p.user_id])byU[p.user_id]={uid:p.user_id,bs:0,bp:0,nb:0};byU[p.user_id].bs=Math.max(byU[p.user_id].bs,p.total);byU[p.user_id].bp=Math.max(byU[p.user_id].bp,p.pct);byU[p.user_id].nb++;});
+  const sorted=Object.values(byU).sort((a,b)=>rMetric==='score'?b.bs-a.bs:b.bp-a.bp);
+  const el=$('rank-list');
+  if(!sorted.length){el.innerHTML=`<div class="empty"><div class="ei">🏆</div><p>Aucune donnée pour cette période.</p></div>`;return;}
+  const medals=['🥇','🥈','🥉'];
+  el.innerHTML=sorted.map((u,i)=>{
+    const pr=allP.find(p=>p.id===u.uid),nom=pr?.nom||'?',col=aColor(nom),isMe=u.uid===CU.id;
+    return `<div class="ri" style="${isMe?'border:1.5px solid var(--or);background:var(--or-pale)':''}">
+      <div style="font-size:1.2rem;width:30px;text-align:center">${medals[i]||(i+1)}</div>
+      <div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem">${initials(nom)}</div>
+      <div style="flex:1"><div style="font-size:.95rem;font-weight:700">${nom}${isMe?' <span style="color:var(--or);font-size:.72rem">(moi)</span>':''}</div><div style="font-size:.75rem;color:var(--mu)">${u.nb} partie${u.nb!==1?'s':''}</div></div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--or2)">${rMetric==='score'?u.bs+' pts':u.bp+'%'}</div>
+    </div>`;
+  }).join('');
+}
+
+// TIREURS
+function renderTireurs(){
+  const q=($('search-tireur').value||'').toLowerCase();
+  const list=allP.filter(p=>p.id!==CU.id&&p.nom.toLowerCase().includes(q));
+  const el=$('tireurs-list');
+  if(!list.length){el.innerHTML=`<div class="empty"><div class="ei">👥</div><p>${q?'Aucun résultat.':'Aucun autre tireur inscrit.'}</p></div>`;return;}
+  el.innerHTML='';
+  list.forEach(p=>{
+    if(p.visibilite==='prive'&&!isAdmin)return;
+    const pts=allGames.filter(x=>x.user_id===p.id);
+    const best=pts.length?Math.max(...pts.map(x=>x.total)):'—';
+    const col=aColor(p.nom);const vis=canView(p);
+    const div=document.createElement('div');div.className='hc';div.style.cursor=vis?'pointer':'default';
+    div.innerHTML=`<div style="display:flex;align-items:center;gap:14px">
+      <div class="av" style="background:${col};width:44px;height:44px;font-size:1rem">${initials(p.nom)}</div>
+      <div style="flex:1"><div style="font-size:1rem;font-weight:700">${p.nom}</div><div style="font-size:.75rem;color:var(--mu);margin-top:3px">${vis?`${pts.length} partie${pts.length!==1?'s':''} · Meilleur : ${best} pts`:'Profil restreint'}</div></div>
+      <span style="font-size:1.2rem;color:${vis?'var(--or)':'var(--mu)'}">${vis?'›':'🔒'}</span>
+    </div>`;
+    if(vis)div.addEventListener('click',()=>openTireurModal(p.id));
+    el.appendChild(div);
+  });
+}
+
+function openTireurModal(uid){
+  const p=allP.find(x=>x.id===uid);
+  if(!canView(p)){toast('🔒 Profil privé');return;}
+  const pts=allGames.filter(x=>x.user_id===uid).sort((a,b)=>new Date(b.played_at)-new Date(a.played_at));
+  const sc=pts.map(x=>x.total);
+  const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):'—';
+  const best=sc.length?Math.max(...sc):'—';
+  const avgPct=pts.length?Math.round(pts.reduce((a,x)=>a+x.pct,0)/pts.length):0;
+  const hits=pts.reduce((a,x)=>a+x.total,0);
+  const c1p=hits?Math.round(pts.reduce((a,x)=>a+x.c1,0)/hits*100):0;
+  const col=aColor(p?.nom||'?');
+  const srt=[...pts].sort((a,b)=>new Date(a.played_at)-new Date(b.played_at));
+  $('mo-tireur-content').innerHTML=`
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <div class="av" style="background:${col};width:52px;height:52px;font-size:1.2rem">${initials(p?.nom)}</div>
+      <div><div style="font-size:1.1rem;font-weight:800">${p?.nom}</div><div style="font-size:.75rem;color:var(--mu)">${pts.length} partie${pts.length!==1?'s':''}</div></div>
+    </div>
+    <div class="card">
+      <div class="sr"><span class="sr-lbl">Moyenne</span><span class="sr-val">${avg} pts</span></div>
+      <div class="sr"><span class="sr-lbl">Meilleur score</span><span class="sr-val" style="color:#4ade80">${best} pts</span></div>
+      <div class="sr"><span class="sr-lbl">Taux réussite moyen</span><span class="sr-val" style="color:var(--or2)">${avgPct}%</span></div>
+      <div class="sr"><span class="sr-lbl">Précision C1</span><span class="sr-val" style="color:#4ade80">${c1p}%</span></div>
+    </div>
+    ${srt.length>=2?`<div class="card"><div class="lbl">Évolution du score</div><div class="chwrap">${lineChart([{vals:srt.map(x=>({x:fmtSD(x.played_at),y:x.total})),color:'#2a5298'}])}</div></div>`:''}
+    <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Historique récent</div>
+    ${pts.slice(0,6).map(x=>`<div class="hc" style="cursor:default;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:.8rem;font-weight:700;color:var(--or)">🗺 ${x.parcours}</div><div style="font-size:.7rem;color:var(--mu);margin-top:2px">${fmtD(x.played_at)}</div></div>
+        <div style="text-align:right"><div style="font-size:1.3rem;font-weight:800">${x.total}/${x.max_plateaux}</div><div style="font-size:.7rem;color:var(--mu)">${x.pct}%</div></div>
+      </div>
+    </div>`).join('')}`;
+  openMo('mo-tireur');
+}
+
+// ADMIN
+function renderAdmin(){
+  if(!isAdmin)return;
+  const tw=byPeriod(allGames,'semaine').length,tm=byPeriod(allGames,'mois').length;
+  $('admin-kpis').innerHTML=`
+    <div class="astat"><div class="av2">${allP.length}</div><div class="al">Tireurs</div></div>
+    <div class="astat"><div class="av2">${allGames.length}</div><div class="al">Parties totales</div></div>
+    <div class="astat"><div class="av2">${tw}</div><div class="al">Cette semaine</div></div>
+    <div class="astat"><div class="av2">${tm}</div><div class="al">Ce mois</div></div>`;
+  const days=[];
+  for(let i=29;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);d.setHours(0,0,0,0);const nx=new Date(d);nx.setDate(nx.getDate()+1);days.push({l:i%5===0?d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}):'',v:allGames.filter(p=>{const pd=new Date(p.played_at);return pd>=d&&pd<nx;}).length});}
+  $('admin-chart').innerHTML=barChart(days);
+  $('adm-filter-user').innerHTML='<option value="">Tous</option>'+allP.map(p=>`<option value="${p.id}">${p.nom}</option>`).join('');
+  renderAdmUsers();renderAdmParties();
+  $('adm-search').oninput=renderAdmUsers;$('adm-filter-user').onchange=renderAdmParties;
+}
+function renderAdmUsers(){
+  const q=($('adm-search').value||'').toLowerCase();
+  $('adm-users').innerHTML='';
+  allP.filter(p=>p.nom.toLowerCase().includes(q)).forEach(p=>{
+    const pts=allGames.filter(x=>x.user_id===p.id);
+    const best=pts.length?Math.max(...pts.map(x=>x.total)):'—';
+    const col=aColor(p.nom);
+    const vl={public:'🌍',selects:'👥',prive:'🔒'};
+    const row=document.createElement('div');row.className='arow';
+    row.innerHTML=`<div class="av" style="background:${col};width:34px;height:34px;font-size:.85rem;flex-shrink:0">${initials(p.nom)}</div>
+      <div style="flex:1"><div style="font-size:.9rem;font-weight:700">${p.nom} ${vl[p.visibilite||'public']}${p.is_admin?' <span style="color:#a855f7;font-size:.72rem">admin</span>':''}</div>
+      <div style="font-size:.75rem;color:var(--mu)">${pts.length} parties · Mieux: ${best}</div></div>`;
+    const del=document.createElement('button');del.className='btn-r';del.textContent='🗑';
+    del.addEventListener('click',async()=>{if(!confirm(`Supprimer ${p.nom} ?`))return;try{await db.del('profils',`id=eq.${p.id}`);allP=allP.filter(x=>x.id!==p.id);allGames=allGames.filter(x=>x.user_id!==p.id);toast(`✔ ${p.nom} supprimé`);renderAdmin();}catch(e){toast('❌ '+e.message);}});
+    row.appendChild(del);$('adm-users').appendChild(row);
+  });
+}
+function renderAdmParties(){
+  const uid=$('adm-filter-user').value;
+  const list=(uid?allGames.filter(p=>p.user_id===uid):allGames).slice(0,50);
+  $('adm-parties').innerHTML='';
+  list.forEach(p=>{
+    const pr=allP.find(x=>x.id===p.user_id);
+    const row=document.createElement('div');row.className='arow';
+    row.innerHTML=`<div style="flex:1"><div style="font-size:.88rem;font-weight:700">${pr?.nom||'?'} <span style="color:var(--or)">· ${p.parcours}</span></div>
+      <div style="font-size:.75rem;color:var(--mu)">${fmtD(p.played_at)} · ${p.total}/${p.max_plateaux} (${p.pct}%)</div></div>`;
+    const del=document.createElement('button');del.className='btn-r';del.textContent='🗑';
+    del.addEventListener('click',async()=>{if(!confirm('Supprimer ?'))return;try{await db.del('parties',`id=eq.${p.id}`);allGames=allGames.filter(x=>x.id!==p.id);myGames=myGames.filter(x=>x.id!==p.id);toast('✔ Supprimé');renderAdmin();}catch(e){toast('❌ '+e.message);}});
+    row.appendChild(del);$('adm-parties').appendChild(row);
+  });
+}
+
+// EVENTS
+initAuth();
+$('btn-nouvelle-partie').addEventListener('click',openNouvellePartie);
+$('btn-start-partie').addEventListener('click',startPartie);
+$('btn-finish').addEventListener('click',()=>{
+  const{tot,c1,c2,mx}=calcLive();const pct=mx?Math.round(tot/mx*100):0;
+  $('mo-fin-content').innerHTML=`<p style="font-size:.85rem;color:var(--tx2);margin-bottom:14px;font-weight:600">${CP?.nom} · ${pConfig.nom}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div class="card" style="text-align:center;border-top:3px solid var(--marine);margin:0;padding:14px"><div style="font-size:2rem;font-weight:800">${tot}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Total / ${mx}</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--or);margin:0;padding:14px"><div style="font-size:2rem;font-weight:800;color:var(--or2)">${pct}%</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Réussite</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:#4ade80">${c1}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">C1</div></div>
+      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:var(--or2)">${c2}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">C2</div></div>
+    </div>`;
+  openMo('mo-fin');
+});
+$('btn-save-partie').addEventListener('click',async()=>{
+  const{tot,c1,c2,mx}=calcLive();
+  const nbS=pConfig.postes.reduce((a,p)=>a+p.s,0),nbD=pConfig.postes.reduce((a,p)=>a+p.d,0);
+  $('btn-save-partie').disabled=true;$('btn-save-partie').textContent='Sauvegarde…';
+  try{
+    const res=await db.post('parties',{user_id:CU.id,parcours:pConfig.nom,difficulte:pConfig.diff,nb_simples:nbS,nb_doubles:nbD,total:tot,max_plateaux:mx,c1,c2,pct:mx?Math.round(tot/mx*100):0,game_state:gState,postes:pConfig.postes,played_at:new Date().toISOString()});
+    allGames.unshift(res[0]);myGames.unshift(res[0]);
+    closeMo('mo-fin');openNouvellePartie();
+    $('st-jeu').style.display='none';$('st-accueil').style.display='block';
+    gState=[];$('p-nom').value='';
+    postes=[{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1},{s:3,d:1}];
+    showPage('home');toast('✔ Partie enregistrée !');
+  }catch(e){toast('❌ '+e.message);}
+  $('btn-save-partie').disabled=false;$('btn-save-partie').textContent='💾 Enregistrer';
+});
+$('btn-cancel').addEventListener('click',()=>{if(!confirm('Annuler ?'))return;$('st-jeu').style.display='none';$('st-accueil').style.display='block';gState=[];showPage('home');});
+$('btn-fin-back').addEventListener('click',()=>closeMo('mo-fin'));
+$('mo-tireur-close').addEventListener('click',()=>closeMo('mo-tireur'));
+$('btn-vis-close').addEventListener('click',()=>closeMo('mo-vis'));
+$('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
+['public','selects','prive'].forEach(v=>$('vo-'+v).addEventListener('click',()=>{tVis=v;updateVisUI();}));
+$('btn-save-vis').addEventListener('click',async()=>{
+  $('btn-save-vis').disabled=true;
+  try{
+    await db.patch('profils',`id=eq.${CU.id}`,{visibilite:tVis});CP.visibilite=tVis;
+    if(tVis==='selects'){await db.del('autorisations',`owner_id=eq.${CU.id}`);for(const vid of tVisUsers)await db.post('autorisations',{owner_id:CU.id,viewer_id:vid});allAuth=await db.get('autorisations');}
+    closeMo('mo-vis');toast('✔ Confidentialité mise à jour');
+  }catch(e){toast('❌ '+e.message);}
+  $('btn-save-vis').disabled=false;
+});
+$('ep-tb-info').addEventListener('click',()=>switchEp('info'));
+$('ep-tb-email').addEventListener('click',()=>switchEp('email'));
+$('ep-tb-pwd').addEventListener('click',()=>switchEp('pwd'));
+$('ep-save-nom').addEventListener('click',async()=>{
+  const nom=$('ep-nom').value.trim();if(!nom){epMsg('Saisis un pseudo.',false);return;}
+  $('ep-save-nom').disabled=true;
+  try{await db.patch('profils',`id=eq.${CU.id}`,{nom});CP.nom=nom;allP=allP.map(p=>p.id===CU.id?{...p,nom}:p);$('acc-nom').textContent=nom;$('topbar-initials').textContent=initials(nom);epMsg('✔ Pseudo mis à jour !');renderHome();}
+  catch(e){epMsg('❌ '+e.message,false);}
+  $('ep-save-nom').disabled=false;
+});
+$('ep-save-email').addEventListener('click',async()=>{
+  const email=$('ep-new-email').value.trim();if(!email){epMsg('Saisis un email.',false);return;}
+  $('ep-save-email').disabled=true;
+  try{await api('PUT','/auth/v1/user',{email});epMsg('✔ Email mis à jour !');}catch(e){epMsg('❌ '+e.message,false);}
+  $('ep-save-email').disabled=false;
+});
+$('ep-save-pwd').addEventListener('click',async()=>{
+  const pwd=$('ep-new-pwd').value,conf=$('ep-confirm-pwd').value;
+  if(!pwd||pwd.length<6){epMsg('Trop court (6 min).',false);return;}
+  if(pwd!==conf){epMsg('Mots de passe différents.',false);return;}
+  $('ep-save-pwd').disabled=true;
+  try{await api('PUT','/auth/v1/user',{password:pwd});epMsg('✔ Mot de passe mis à jour !');$('ep-new-pwd').value='';$('ep-confirm-pwd').value='';}catch(e){epMsg('❌ '+e.message,false);}
+  $('ep-save-pwd').disabled=false;
+});
+$('search-tireur').addEventListener('input',renderTireurs);
+
+(async()=>{
+  $('app').style.display='none';
+  $('auth-screen').style.display='flex';
+  try{const r=await api('GET','/auth/v1/user');if(r?.id){CU=r;await loadApp();}}catch(e){}
+})();
+</script>
+</body>
+</html>

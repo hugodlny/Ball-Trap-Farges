@@ -989,10 +989,26 @@ function renderAdmParties(){
   });
 }
 
-// EVENTS
-initAuth();
-$('btn-nouvelle-partie').addEventListener('click',openNouvellePartie);
-$('btn-start-partie').addEventListener('click',startPartie);
+// Délégation globale pour la page partie
+document.addEventListener('click', e=>{
+  // Bouton lancer partie
+  if(e.target.id==='btn-start-partie'||e.target.closest('#btn-start-partie')){
+    startPartie(); return;
+  }
+  // Bouton nouvelle partie (le +)
+  if(e.target.id==='btn-nouvelle-partie'||e.target.closest('#btn-nouvelle-partie')){
+    openNouvellePartie(); return;
+  }
+  // Bouton terminer
+  if(e.target.id==='btn-finish'||e.target.closest('#btn-finish')){
+    finishPartie(); return;
+  }
+  // Bouton annuler
+  if(e.target.id==='btn-cancel'||e.target.closest('#btn-cancel')){
+    if(!confirm('Annuler ?'))return;
+    $('st-jeu').style.display='none';$('st-accueil').style.display='block';gState=[];showPage('home');return;
+  }
+});
 $('btn-finish').addEventListener('click',()=>{
   const{tot,c1,c2,mx}=calcLive();const pct=mx?Math.round(tot/mx*100):0;
   $('mo-fin-content').innerHTML=`<p style="font-size:.85rem;color:var(--tx2);margin-bottom:14px;font-weight:600">${CP?.nom} · ${pConfig.nom}</p>
@@ -1021,7 +1037,6 @@ $('btn-save-partie').addEventListener('click',async()=>{
   }catch(e){toast('❌ '+e.message);}
   $('btn-save-partie').disabled=false;$('btn-save-partie').textContent='💾 Enregistrer';
 });
-$('btn-cancel').addEventListener('click',()=>{if(!confirm('Annuler ?'))return;$('st-jeu').style.display='none';$('st-accueil').style.display='block';gState=[];showPage('home');});
 $('btn-fin-back').addEventListener('click',()=>closeMo('mo-fin'));
 $('mo-tireur-close').addEventListener('click',()=>closeMo('mo-tireur'));
 $('btn-vis-close').addEventListener('click',()=>closeMo('mo-vis'));

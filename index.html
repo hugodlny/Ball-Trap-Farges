@@ -305,31 +305,22 @@ input,button,select{font-family:inherit}
 
   <!-- PAGE NOUVELLE PARTIE -->
   <div class="page" id="page-partie">
-    <!-- ÉTAPE 1 : choix parcours -->
     <div id="st-accueil">
       <div class="section-title" style="margin-top:4px">Nouvelle partie</div>
-      <div class="card" style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <div class="card" style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
         <div style="font-size:2rem">🎯</div>
         <div><div style="font-size:.75rem;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Tireur</div><div style="font-size:1.05rem;font-weight:800" id="acc-nom">—</div></div>
       </div>
-
-      <!-- Choix parcours -->
       <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">1 — Choix du parcours</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px" id="parcours-grid"></div>
-
-      <!-- Choix difficulté -->
-      <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px" id="diff-label" style="opacity:.4">2 — Difficulté</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px" id="diff-grid"></div>
-
-      <!-- Résumé structure -->
+      <div id="parcours-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px"></div>
+      <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">2 — Difficulté</div>
+      <div id="diff-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px"></div>
       <div id="structure-preview" style="display:none">
         <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">3 — Structure des postes</div>
         <div class="card" id="structure-detail" style="margin-bottom:16px"></div>
         <button class="btn" id="btn-start-partie">▶&nbsp; Lancer la partie</button>
       </div>
     </div>
-
-    <!-- ÉTAPE 2 : saisie -->
     <div id="st-jeu" style="display:none">
       <div class="lsbox">
         <div class="lsi"><div class="lsv or" id="ls-tot">0</div><div class="lsl">Total/<span id="ls-max">0</span></div></div>

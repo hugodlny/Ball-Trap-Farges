@@ -425,7 +425,7 @@ function initAuth(){
     const email=$('f-email').value.trim();$('f-msg').textContent='';
     if(!email){$('f-msg').style.color='#f87171';$('f-msg').textContent='Saisis ton email.';return;}
     $('f-btn').disabled=true;
-    try{await api('POST','/auth/v1/recover',{email,options:{redirectTo:'https://hugodlny.github.io/Ball-Trap-Farges'}});$('f-msg').style.color='#4ade80';$('f-msg').textContent='✔ Email envoyé !';}
+    try{await api('POST','/auth/v1/recover',{email,options:{redirectTo:'https://hugodlny.github.io/Ball-Trap-Farges/'}});$('f-msg').style.color='#4ade80';$('f-msg').textContent='✔ Email envoyé !';}
     catch(e){$('f-msg').style.color='#f87171';$('f-msg').textContent='❌ '+e.message;}
     $('f-btn').disabled=false;
   });

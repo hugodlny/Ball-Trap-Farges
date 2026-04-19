@@ -152,7 +152,8 @@ input,button,select{font-family:inherit}
 @keyframes spin{to{transform:rotate(360deg)}}
 #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#263548;color:var(--tx);border:1px solid var(--bd);padding:11px 22px;border-radius:30px;font-size:.85rem;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 #toast.on{opacity:1}
-.profil-panel{position:fixed;inset:0;z-index:200;display:flex;pointer-events:none}
+.profil-panel{position:fixed;inset:0;z-index:200;display:none;pointer-events:none}
+.profil-panel.on{display:flex}
 .profil-panel.on{pointer-events:all}
 .profil-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .25s}
 .profil-panel.on .profil-overlay{opacity:1}
@@ -294,7 +295,7 @@ input,button,select{font-family:inherit}
   </div>
 </div>
 
-<div class="profil-panel" id="profil-panel" style="display:none">
+<div class="profil-panel" id="profil-panel">
   <div class="profil-overlay" id="profil-overlay"></div>
   <div class="profil-drawer">
     <button class="profil-close" id="profil-close">✕</button>
@@ -525,7 +526,7 @@ async function loadApp(){
     b.textContent='⚙ Admin';b.addEventListener('click',()=>showPage('admin'));
     $('topbar-right').appendChild(b);
   }
-  $('auth-screen').style.display='none';$('app').style.display='block';$('profil-panel').style.display='flex';
+  $('auth-screen').style.display='none';$('app').style.display='block';
   renderHome();
 }
 
@@ -575,7 +576,7 @@ function renderProfilDrawer(){
     <button id="dp-logout-btn" style="background:transparent;color:#f87171;border:1.5px solid #f87171;border-radius:12px;padding:13px;font-size:.95rem;font-weight:600;cursor:pointer;width:100%">⎋ Se déconnecter</button>`;
   $('dp-vis-btn').addEventListener('click',()=>{$('profil-panel').classList.remove('on');openVisModal();});
   $('dp-edit-btn').addEventListener('click',()=>{$('profil-panel').classList.remove('on');initEditProfil();openMo('mo-edit');});
-  $('dp-logout-btn').addEventListener('click',async()=>{if(!confirm('Se déconnecter ?'))return;try{await api('POST','/auth/v1/logout',{});}catch(e){}token=null;CU=null;CP=null;isAdmin=false;$('auth-screen').style.display='flex';$('app').style.display='none';$('profil-panel').classList.remove('on');$('profil-panel').style.display='none';});
+  $('dp-logout-btn').addEventListener('click',async()=>{if(!confirm('Se déconnecter ?'))return;try{await api('POST','/auth/v1/logout',{});}catch(e){}token=null;CU=null;CP=null;isAdmin=false;$('auth-screen').style.display='flex';$('app').style.display='none';$('profil-panel').classList.remove('on');});
 }
 
 // HOME
@@ -1143,4 +1144,64 @@ function updateVisUI(){
 ['public','selects','prive'].forEach(v=>$('vo-'+v).addEventListener('click',()=>{tVis=v;updateVisUI();}));
 $('btn-save-vis').addEventListener('click',async()=>{
   $('btn-save-vis').disabled=true;
-  try{await db.patch('profils',`id=eq.${CU.id}`,{visibilite:tVis});CP.visibilite=tVis;if(tVis==='selects'){await db.del('autorisations',`owner_id=eq.${CU.id}`);for(const vid of tVisUsers)await db.post('autorisations',{owner_id:CU.id
+  try{await db.patch('profils',`id=eq.${CU.id}`,{visibilite:tVis});CP.visibilite=tVis;if(tVis==='selects'){await db.del('autorisations',`owner_id=eq.${CU.id}`);for(const vid of tVisUsers)await db.post('autorisations',{owner_id:CU.id  try{
+    await db.patch('profils',`id=eq.${CU.id}`,{visibilite:tVis});
+    CP.visibilite=tVis;
+    if(tVis==='selects'){
+      await db.del('autorisations',`owner_id=eq.${CU.id}`);
+      for(const vid of tVisUsers) await db.post('autorisations',{owner_id:CU.id,viewer_id:vid});
+      allAuth=await db.get('autorisations');
+    }
+    toast('✔ Confidentialité mise à jour');
+    closeMo('mo-vis');
+  }catch(e){toast('❌ '+e.message);}
+  $('btn-save-vis').disabled=false;
+});
+$('btn-vis-close').addEventListener('click',()=>closeMo('mo-vis'));
+
+// EDIT PROFIL
+function initEditProfil(){
+  $('ep-nom').value=CP?.nom||'';
+  $('ep-new-email').value='';
+  $('ep-new-pwd').value='';
+  $('ep-confirm-pwd').value='';
+  $('ep-msg').textContent='';
+  $('ep-info').style.display='block';
+  $('ep-email').style.display='none';
+  $('ep-pwd').style.display='none';
+  ['ep-tb-info','ep-tb-email','ep-tb-pwd'].forEach(id=>$(id).classList.remove('on'));
+  $('ep-tb-info').classList.add('on');
+}
+$('ep-tb-info').addEventListener('click',()=>{$('ep-info').style.display='block';$('ep-email').style.display='none';$('ep-pwd').style.display='none';['ep-tb-info','ep-tb-email','ep-tb-pwd'].forEach(id=>$(id).classList.remove('on'));$('ep-tb-info').classList.add('on');});
+$('ep-tb-email').addEventListener('click',()=>{$('ep-info').style.display='none';$('ep-email').style.display='block';$('ep-pwd').style.display='none';['ep-tb-info','ep-tb-email','ep-tb-pwd'].forEach(id=>$(id).classList.remove('on'));$('ep-tb-email').classList.add('on');});
+$('ep-tb-pwd').addEventListener('click',()=>{$('ep-info').style.display='none';$('ep-email').style.display='none';$('ep-pwd').style.display='block';['ep-tb-info','ep-tb-email','ep-tb-pwd'].forEach(id=>$(id).classList.remove('on'));$('ep-tb-pwd').classList.add('on');});
+$('ep-save-nom').addEventListener('click',async()=>{
+  const nom=$('ep-nom').value.trim();
+  if(!nom){$('ep-msg').style.color='#f87171';$('ep-msg').textContent='Saisis un pseudo.';return;}
+  $('ep-save-nom').disabled=true;
+  try{await db.patch('profils',`id=eq.${CU.id}`,{nom});CP.nom=nom;$('topbar-initials').textContent=initials(nom);$('ep-msg').style.color='#4ade80';$('ep-msg').textContent='✔ Pseudo mis à jour !';}
+  catch(e){$('ep-msg').style.color='#f87171';$('ep-msg').textContent='❌ '+e.message;}
+  $('ep-save-nom').disabled=false;
+});
+$('ep-save-email').addEventListener('click',async()=>{
+  const email=$('ep-new-email').value.trim();
+  if(!email){$('ep-msg').style.color='#f87171';$('ep-msg').textContent='Saisis un email.';return;}
+  $('ep-save-email').disabled=true;
+  try{await api('PUT','/auth/v1/user',{email});$('ep-msg').style.color='#4ade80';$('ep-msg').textContent='✔ Email mis à jour !';}
+  catch(e){$('ep-msg').style.color='#f87171';$('ep-msg').textContent='❌ '+e.message;}
+  $('ep-save-email').disabled=false;
+});
+$('ep-save-pwd').addEventListener('click',async()=>{
+  const pwd=$('ep-new-pwd').value,conf=$('ep-confirm-pwd').value;
+  if(!pwd||pwd.length<6){$('ep-msg').style.color='#f87171';$('ep-msg').textContent='Mot de passe trop court.';return;}
+  if(pwd!==conf){$('ep-msg').style.color='#f87171';$('ep-msg').textContent='Les mots de passe ne correspondent pas.';return;}
+  $('ep-save-pwd').disabled=true;
+  try{await api('PUT','/auth/v1/user',{password:pwd});$('ep-msg').style.color='#4ade80';$('ep-msg').textContent='✔ Mot de passe mis à jour !';}
+  catch(e){$('ep-msg').style.color='#f87171';$('ep-msg').textContent='❌ '+e.message;}
+  $('ep-save-pwd').disabled=false;
+});
+$('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
+
+</script>
+</body>
+</html>

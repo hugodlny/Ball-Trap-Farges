@@ -1144,7 +1144,7 @@ function updateVisUI(){
 ['public','selects','prive'].forEach(v=>$('vo-'+v).addEventListener('click',()=>{tVis=v;updateVisUI();}));
 $('btn-save-vis').addEventListener('click',async()=>{
   $('btn-save-vis').disabled=true;
-  try{await db.patch('profils',`id=eq.${CU.id}`,{visibilite:tVis});CP.visibilite=tVis;if(tVis==='selects'){await db.del('autorisations',`owner_id=eq.${CU.id}`);for(const vid of tVisUsers)await db.post('autorisations',{owner_id:CU.id  try{
+  try{
     await db.patch('profils',`id=eq.${CU.id}`,{visibilite:tVis});
     CP.visibilite=tVis;
     if(tVis==='selects'){

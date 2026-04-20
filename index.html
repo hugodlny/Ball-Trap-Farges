@@ -74,8 +74,10 @@ input,button,select{font-family:inherit}
 /* MODAL */
 .mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-end;justify-content:center}
 .mo.on{display:flex}
-.mbox{background:#1e293b;border-radius:24px 24px 0 0;padding:20px 18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto}
-.mhandle{width:36px;height:4px;background:var(--mu);border-radius:2px;margin:0 auto 18px;opacity:.5}
+.mhandle{width:44px;height:5px;background:rgba(255,255,255,.25);border-radius:3px;margin:0 auto 18px;cursor:grab;transition:background .15s}
+.mhandle:active{cursor:grabbing;background:rgba(255,255,255,.45)}
+.mbox{background:#1e293b;border-radius:24px 24px 0 0;padding:20px 18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;transition:transform .25s ease;touch-action:pan-y}
+
 .mtitle{font-size:1.1rem;font-weight:800;color:var(--tx);margin-bottom:16px}
 
 /* STATIONS */
@@ -277,6 +279,7 @@ input,button,select{font-family:inherit}
 <div class="mo" id="mo-vis">
   <div class="mbox">
     <div class="mhandle"></div>
+    
     <div class="mtitle">🔒 Confidentialité</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
       <div class="vopt on" id="vo-public"><div class="vi">🌍</div><div class="vl">Public</div><div style="font-size:.65rem;color:var(--tx2);margin-top:4px;line-height:1.3">Visible par tous</div></div>
@@ -290,6 +293,7 @@ input,button,select{font-family:inherit}
 <div class="mo" id="mo-edit">
   <div class="mbox">
     <div class="mhandle"></div>
+    
     <div class="mtitle">✏️ Modifier le profil</div>
     <div class="trow" style="margin-bottom:18px">
       <button class="tgl on" id="ep-tb-info">Infos</button>
@@ -725,7 +729,7 @@ function renderStats(){
   const c1pct=allHits?Math.round(allC1/allHits*100):0;
   const srt=[...pts].sort((a,b)=>new Date(a.played_at)-new Date(b.played_at));
 
-  // Par parcours (Compact uniquement)
+  // Par parcours (Compaq uniquement)
   const compactGames=pts.filter(p=>p.type_jeu!=='DTL');
   const dtlGames=pts.filter(p=>p.type_jeu==='DTL');
   const sbp={};
@@ -818,9 +822,9 @@ function renderStats(){
     ${bestDay?`<div class="card" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.72rem;color:var(--mu);text-transform:uppercase;font-weight:600">Meilleure journée</div><div style="font-size:.95rem;font-weight:700;margin-top:4px">${bestDay}</div></div><div style="font-size:1.4rem;font-weight:800;color:var(--or2)">${bestDayAvg.toFixed(1)} moy.</div></div>`:''}
 
     ${compactGames.length?`
-    <div class="section-title">Réussite par poste — Global (Compact)</div>
+    <div class="section-title">Réussite par poste — Global (Compaq)</div>
     <div class="card" style="margin-bottom:12px">
-      <div style="font-size:.78rem;color:var(--tx2);margin-bottom:8px">Toutes parties Compact confondues</div>
+      <div style="font-size:.78rem;color:var(--tx2);margin-bottom:8px">Toutes parties Compaq confondues</div>
       ${renderLetterGrid(globalLetters)}
     </div>
     `:''}
@@ -935,7 +939,7 @@ function renderSelectionPage(){
       <div style="display:flex;flex-direction:column;gap:12px">
         <div id="btn-compact" style="background:#1e293b;border:2px solid #1f2937;border-radius:14px;padding:18px;cursor:pointer;display:flex;align-items:center;gap:16px">
           <div style="font-size:2.2rem">🏕️</div>
-          <div style="flex:1"><div style="font-size:1rem;font-weight:800">Compact</div>
+          <div style="flex:1"><div style="font-size:1rem;font-weight:800">Compaq</div>
             <div style="font-size:.78rem;color:#64748b;margin-top:3px">4 parcours · Simples & Doubles</div>
             <div style="font-size:.72rem;color:#64748b;margin-top:2px">Lac Léman · Salève · Rhône · Jura</div></div>
           <span style="color:#C9960C;font-size:1.4rem">›</span>
@@ -948,7 +952,7 @@ function renderSelectionPage(){
           <span style="color:#C9960C;font-size:1.4rem">›</span>
         </div>
       </div>`;
-    $('btn-compact').addEventListener('click',()=>{selTypeJeu='Compact';renderSelectionPage();});
+    $('btn-compact').addEventListener('click',()=>{selTypeJeu='Compaq';renderSelectionPage();});
     $('btn-dtl').addEventListener('click',()=>{selTypeJeu='DTL';renderSelectionPage();});
     return;
   }
@@ -977,7 +981,7 @@ function renderSelectionPage(){
   const emojis={Bleu:'🔵',Vert:'🟢',Rouge:'🔴',Noir:'⚫'};
   const labels={Bleu:'Débutant',Vert:'Intermédiaire',Rouge:'Avancé',Noir:'Expert'};
   let html=header+`<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;cursor:pointer" id="btn-back-compact">
-    <span style="color:#C9960C;font-size:.85rem">← Compact</span></div>
+    <span style="color:#C9960C;font-size:.85rem">← Compaq</span></div>
     <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">1 — Choix du parcours</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px" id="parc-grid"></div>
     <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">2 — Difficulté</div>
@@ -1041,7 +1045,7 @@ function startDTL(){
 function startPartie(){
   if(!selParcours||!selDiff)return;
   const pd=PARCOURS[selParcours][selDiff];
-  pConfig={nom:selParcours,diff:selDiff,type:'Compact',postes:pd.map(p=>({s:p.s,d:p.d,simples:p.simples,doubles:p.doubles}))};
+  pConfig={nom:selParcours,diff:selDiff,type:'Compaq',postes:pd.map(p=>({s:p.s,d:p.d,simples:p.simples,doubles:p.doubles}))};
   gState=pConfig.postes.map(p=>({s:Array(p.s).fill(null),d:Array(p.d).fill(null).map(()=>[null,null])}));
   buildJeuUI();
 }
@@ -1138,7 +1142,7 @@ $('btn-save-partie').addEventListener('click',async()=>{
   const nbS=pConfig.postes.reduce((a,p)=>a+p.s,0),nbD=pConfig.postes.reduce((a,p)=>a+p.d,0);
   $('btn-save-partie').disabled=true;$('btn-save-partie').textContent='Sauvegarde…';
   try{
-    const res=await db.post('parties',{user_id:CU.id,parcours:pConfig.nom,type_jeu:pConfig.type||'Compact',difficulte:pConfig.diff,nb_simples:nbS,nb_doubles:nbD,total:tot,max_plateaux:mx,c1:lc.c1,c2:lc.c2,hit_simples:lc.hitS,hit_doubles:lc.hitD,pct:mx?Math.round(tot/mx*100):0,game_state:gState,postes:pConfig.postes,played_at:new Date().toISOString()});
+    const res=await db.post('parties',{user_id:CU.id,parcours:pConfig.nom,type_jeu:pConfig.type||'Compaq',difficulte:pConfig.diff,nb_simples:nbS,nb_doubles:nbD,total:tot,max_plateaux:mx,c1:lc.c1,c2:lc.c2,hit_simples:lc.hitS,hit_doubles:lc.hitD,pct:mx?Math.round(tot/mx*100):0,game_state:gState,postes:pConfig.postes,played_at:new Date().toISOString()});
     allGames.unshift(res[0]);myGames.unshift(res[0]);
     closeMo('mo-fin');gState=[];selTypeJeu=null;showPage('home');toast('✔ Partie enregistrée !');
   }catch(e){toast('❌ '+e.message);}
@@ -1430,6 +1434,51 @@ $('ep-save-pwd').addEventListener('click',async()=>{
   $('ep-save-pwd').disabled=false;
 });
 $('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
+
+// SWIPE TO CLOSE MODALS
+(function(){
+  const THRESHOLD = 80; // px vers le bas pour fermer
+  document.querySelectorAll('.mo').forEach(mo=>{
+    const mbox = mo.querySelector('.mbox');
+    const handle = mo.querySelector('.mhandle');
+    if(!mbox || !handle) return;
+    let startY=0, curY=0, dragging=false;
+
+    handle.addEventListener('touchstart',e=>{
+      startY = e.touches[0].clientY;
+      curY = startY;
+      dragging = true;
+      mbox.style.transition = 'none';
+    },{passive:true});
+
+    handle.addEventListener('touchmove',e=>{
+      if(!dragging) return;
+      curY = e.touches[0].clientY;
+      const dy = Math.max(0, curY - startY);
+      mbox.style.transform = `translateY(${dy}px)`;
+      mo.style.background = `rgba(0,0,0,${0.7 - dy/400})`;
+    },{passive:true});
+
+    handle.addEventListener('touchend',()=>{
+      if(!dragging) return;
+      dragging = false;
+      const dy = curY - startY;
+      mbox.style.transition = 'transform .25s ease';
+      if(dy > THRESHOLD){
+        mbox.style.transform = `translateY(100%)`;
+        setTimeout(()=>{
+          mo.classList.remove('on');
+          mbox.style.transform = '';
+          mbox.style.transition = '';
+          mo.style.background = '';
+        }, 250);
+      } else {
+        mbox.style.transform = '';
+        mo.style.background = '';
+      }
+    });
+  });
+})();
 
 </script>
 </body>

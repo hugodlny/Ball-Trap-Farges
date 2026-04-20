@@ -615,8 +615,9 @@ function renderHome(){
   const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):'—';
   const best=sc.length?Math.max(...sc):'—';
   const avgPct=pts.length?Math.round(pts.reduce((a,x)=>a+x.pct,0)/pts.length):0;
-  const c1=pts.reduce((a,x)=>a+x.c1,0),hits=pts.reduce((a,x)=>a+x.total,0);
-  const c1p=hits?Math.round(c1/hits*100):0;
+  const hits=pts.reduce((a,x)=>a+x.total,0);
+  const nbSH=pts.reduce((a,x)=>a+(x.hit_simples??x.c1),0),nbST=pts.reduce((a,x)=>a+(x.nb_simples||0),0);
+  const c1p=nbST?Math.round(nbSH/nbST*100):0;
   const srt=[...pts].sort((a,b)=>new Date(a.played_at)-new Date(b.played_at));
   const amiIds=mesAmis.map(a=>a.id);
   const feed=allGames.filter(g=>amiIds.includes(g.user_id)).sort((a,b)=>new Date(b.played_at)-new Date(a.played_at)).slice(0,5);
@@ -631,7 +632,7 @@ function renderHome(){
       <div style="display:flex;gap:8px">
         <div style="flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><div style="font-size:1.15rem;font-weight:800;color:#fff">${avg}</div><div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">Moyenne</div></div>
         <div style="flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><div style="font-size:1.15rem;font-weight:800;color:#fff">${avgPct}%</div><div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">Réussite</div></div>
-        <div style="flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><div style="font-size:1.15rem;font-weight:800;color:#fff">${c1p}%</div><div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">Préc. C1</div></div>
+        <div style="flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><div style="font-size:1.15rem;font-weight:800;color:#fff">${c1p}%</div><div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">% Simples</div></div>
       </div>
     </div>
     ${srt.length>=2?`<div class="section-title">Progression</div><div class="card"><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'#C9960C'}])}</div></div>`:''}
@@ -644,7 +645,7 @@ function renderHome(){
         <div style="text-align:right"><div style="font-size:1.4rem;font-weight:800">${p.total}<span style="font-size:.85rem;color:var(--mu);font-weight:400">/${p.max_plateaux}</span></div>
           <div style="font-size:.72rem;color:var(--mu)">${p.pct}%</div></div>
       </div>
-      <div style="display:flex;gap:7px"><span class="htag" style="color:#4ade80">C1: ${p.c1}</span><span class="htag" style="color:var(--or2)">C2: ${p.c2}</span></div>
+      <div style="display:flex;gap:7px"><span class="htag" style="color:#4ade80">S: ${p.hit_simples??p.c1}</span><span class="htag" style="color:var(--or2)">D: ${p.hit_doubles??p.c2}</span></div>
     </div>`).join('')}`;
   $('home-content').querySelectorAll('.hc[data-id]').forEach(el=>el.addEventListener('click',()=>openDetail(el.dataset.id)));
 }
@@ -655,6 +656,7 @@ function calcLetterStats(games){
   const letterMap={};
   games.forEach(p=>{
     if(!p.game_state||!p.postes)return;
+    if(p.type_jeu==='DTL')return;
     const cfg=PARCOURS[p.parcours]?.[p.difficulte];
     if(!cfg)return;
     p.game_state.forEach((poste,si)=>{
@@ -711,15 +713,23 @@ function renderStats(){
   const avg=(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1);
   const best=Math.max(...sc),worst=Math.min(...sc);
   const avgPct=Math.round(pts.reduce((a,x)=>a+x.pct,0)/pts.length);
-  const allC1=pts.reduce((a,x)=>a+x.c1,0),allC2=pts.reduce((a,x)=>a+x.c2,0);
+  const allHitS=pts.reduce((a,x)=>a+(x.hit_simples??x.c1),0);
+  const allHitD=pts.reduce((a,x)=>a+(x.hit_doubles??x.c2),0);
+  const allC1=pts.reduce((a,x)=>a+x.c1,0);
   const allHits=pts.reduce((a,x)=>a+x.total,0),allMax=pts.reduce((a,x)=>a+x.max_plateaux,0);
   const allMiss=allMax-allHits;
+  const allNbS=pts.reduce((a,x)=>a+(x.nb_simples||0),0);
+  const allNbD=pts.reduce((a,x)=>a+(x.nb_doubles||0)*2,0);
+  const pctS=allNbS?Math.round(allHitS/allNbS*100):0;
+  const pctD=allNbD?Math.round(allHitD/allNbD*100):0;
   const c1pct=allHits?Math.round(allC1/allHits*100):0;
   const srt=[...pts].sort((a,b)=>new Date(a.played_at)-new Date(b.played_at));
 
-  // Par parcours
+  // Par parcours (Compact uniquement)
+  const compactGames=pts.filter(p=>p.type_jeu!=='DTL');
+  const dtlGames=pts.filter(p=>p.type_jeu==='DTL');
   const sbp={};
-  pts.forEach(p=>{
+  compactGames.forEach(p=>{
     if(!sbp[p.parcours])sbp[p.parcours]={scores:[],pcts:[],c1:[],c2:[],games:[]};
     sbp[p.parcours].scores.push(p.total);sbp[p.parcours].pcts.push(p.pct);
     sbp[p.parcours].c1.push(p.c1);sbp[p.parcours].c2.push(p.c2);
@@ -749,16 +759,19 @@ function renderStats(){
   const stddev=Math.sqrt(sc.map(x=>(x-mean)**2).reduce((a,b)=>a+b,0)/sc.length);
 
   // Lettre stats globales
-  const globalLetters=calcLetterStats(pts);
-  const patterns=detectPatterns(pts,sbp,sbd,c1pct,stddev);
+  const globalLetters=calcLetterStats(compactGames);
+  const patterns=detectPatterns(pts,sbp,sbd,pctS,stddev);
 
   // HTML parcours avec lettres
   const parcHtml=Object.entries(sbp).map(([nom,d])=>{
     const pa=(d.scores.reduce((a,b)=>a+b,0)/d.scores.length).toFixed(1);
     const pb=Math.max(...d.scores);
     const pp=Math.round(d.pcts.reduce((a,b)=>a+b,0)/d.pcts.length);
-    const pc1=d.c1.reduce((a,b)=>a+b,0),pc2=d.c2.reduce((a,b)=>a+b,0);
-    const ptot=pc1+pc2;const pc1pct=ptot?Math.round(pc1/ptot*100):0;
+    const pHitS=d.games.reduce((a,x)=>a+(x.hit_simples??x.c1),0);
+    const pHitD=d.games.reduce((a,x)=>a+(x.hit_doubles??x.c2),0);
+    const pNbS=d.games.reduce((a,x)=>a+(x.nb_simples||0),0);
+    const pNbD=d.games.reduce((a,x)=>a+(x.nb_doubles||0)*2,0);
+    const pc1pct=pNbS?Math.round(pHitS/pNbS*100):0;
     const col=pp>=75?'#4ade80':pp>=50?'var(--or2)':'#f87171';
     const lettersForParc=calcLetterStats(d.games);
     const hasDiffs=[...new Set(d.games.map(g=>g.difficulte).filter(Boolean))];
@@ -771,7 +784,7 @@ function renderStats(){
         <div style="text-align:center"><div style="font-size:1.15rem;font-weight:800">${pa}</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Moy.</div></div>
         <div style="text-align:center"><div style="font-size:1.15rem;font-weight:800;color:#4ade80">${pb}</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Mieux</div></div>
         <div style="text-align:center"><div style="font-size:1.15rem;font-weight:800;color:${col}">${pp}%</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Réussite</div></div>
-        <div style="text-align:center"><div style="font-size:1.15rem;font-weight:800;color:#4ade80">${pc1pct}%</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">C1</div></div>
+        <div style="text-align:center"><div style="font-size:1.15rem;font-weight:800;color:#4ade80">${pc1pct}%</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Simples</div></div>
       </div>
       <div class="prog-bar-bg" style="margin-bottom:10px"><div class="prog-bar" style="width:${pp}%;background:${col}"></div></div>
       ${hasDiffs.length?`<div style="font-size:.68rem;color:var(--mu);margin-bottom:4px">Difficultés jouées : ${hasDiffs.map(d=>`<span style="color:${DIFF_COLORS[d]||'#64748b'}">${d}</span>`).join(' · ')}</div>`:''}
@@ -792,11 +805,11 @@ function renderStats(){
     </div>
 
     <div class="card" style="margin-bottom:12px">
-      <div class="lbl" style="margin-bottom:10px">Précision cartouche</div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">C1 — 1ère cartouche</span><span style="font-size:.9rem;font-weight:700;color:#4ade80">${allC1} (${c1pct}%)</span></div>
-      <div class="prog-bar-bg"><div class="prog-bar" style="width:${c1pct}%;background:#4ade80"></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:10px;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">C2 — 2ème cartouche</span><span style="font-size:.9rem;font-weight:700;color:var(--or2)">${allC2} (${allHits?Math.round(allC2/allHits*100):0}%)</span></div>
-      <div class="prog-bar-bg"><div class="prog-bar" style="width:${allHits?Math.round(allC2/allHits*100):0}%;background:var(--or2)"></div></div>
+      <div class="lbl" style="margin-bottom:10px">Simples vs Doubles</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">Simples touchés</span><span style="font-size:.9rem;font-weight:700;color:#4ade80">${allHitS}/${allNbS} (${pctS}%)</span></div>
+      <div class="prog-bar-bg"><div class="prog-bar" style="width:${pctS}%;background:#4ade80"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">Doubles touchés</span><span style="font-size:.9rem;font-weight:700;color:var(--or2)">${allHitD}/${allNbD} (${pctD}%)</span></div>
+      <div class="prog-bar-bg"><div class="prog-bar" style="width:${pctD}%;background:var(--or2)"></div></div>
       <div style="display:flex;justify-content:space-between;margin-top:10px;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">Ratés</span><span style="font-size:.9rem;font-weight:700;color:#f87171">${allMiss} (${allMax?Math.round(allMiss/allMax*100):0}%)</span></div>
       <div class="prog-bar-bg"><div class="prog-bar" style="width:${allMax?Math.round(allMiss/allMax*100):0}%;background:#f87171"></div></div>
     </div>
@@ -804,15 +817,31 @@ function renderStats(){
     ${streak>=3?`<div class="card" style="margin-bottom:12px;border-left:3px solid #4ade80;display:flex;align-items:center;gap:12px"><div style="font-size:2rem">🔥</div><div><div style="font-size:.95rem;font-weight:700">Série en cours : ${streak} parties ≥50%</div><div style="font-size:.78rem;color:var(--mu);margin-top:3px">Continue sur ta lancée !</div></div></div>`:''}
     ${bestDay?`<div class="card" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.72rem;color:var(--mu);text-transform:uppercase;font-weight:600">Meilleure journée</div><div style="font-size:.95rem;font-weight:700;margin-top:4px">${bestDay}</div></div><div style="font-size:1.4rem;font-weight:800;color:var(--or2)">${bestDayAvg.toFixed(1)} moy.</div></div>`:''}
 
-    <div class="section-title">Réussite par poste — Global</div>
+    ${compactGames.length?`
+    <div class="section-title">Réussite par poste — Global (Compact)</div>
     <div class="card" style="margin-bottom:12px">
-      <div style="font-size:.78rem;color:var(--tx2);margin-bottom:8px">Toutes parties confondues</div>
+      <div style="font-size:.78rem;color:var(--tx2);margin-bottom:8px">Toutes parties Compact confondues</div>
       ${renderLetterGrid(globalLetters)}
     </div>
+    `:''}
 
     <div class="section-title">Par parcours</div>
     ${parcHtml}
 
+    ${(()=>{
+      if(!dtlGames.length)return '';
+      const avg=(dtlGames.reduce((a,x)=>a+x.total,0)/dtlGames.length).toFixed(1);
+      const best=Math.max(...dtlGames.map(x=>x.total));
+      const avgP=Math.round(dtlGames.reduce((a,x)=>a+x.pct,0)/dtlGames.length);
+      const postesHtml=Array.from({length:5},(_,i)=>{
+        const hits=dtlGames.reduce((a,p)=>{const po=p.game_state?.[i];if(!po)return a;return a+(po.s.filter(v=>v==='c1'||v==='c2').length);},0);
+        const total=dtlGames.reduce((a,p)=>{const po=p.game_state?.[i];if(!po)return a;return a+po.s.length;},0);
+        const pct=total?Math.round(hits/total*100):0;
+        const col=pct>=80?'#4ade80':pct>=60?'var(--or2)':pct>=40?'#fb923c':'#f87171';
+        return '<div style="background:#0f172a;border-radius:10px;padding:10px 4px;text-align:center;border:1.5px solid '+col+'"><div style="font-size:.85rem;font-weight:800;color:'+col+'">P'+(i+1)+'</div><div style="font-size:.72rem;font-weight:700;color:'+col+';margin-top:3px">'+pct+'%</div><div style="font-size:.6rem;color:var(--mu);margin-top:2px">'+hits+'/'+total+'</div></div>';
+      }).join('');
+      return '<div class="section-title">🎯 DTL</div><div class="card" style="margin-bottom:12px"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px"><div style="text-align:center"><div style="font-size:1.2rem;font-weight:800;color:var(--or2)">'+avg+'</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Moy.</div></div><div style="text-align:center"><div style="font-size:1.2rem;font-weight:800;color:#4ade80">'+best+'</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Meilleur</div></div><div style="text-align:center"><div style="font-size:1.2rem;font-weight:800;color:var(--or2)">'+avgP+'%</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Réussite</div></div></div><div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Réussite par poste</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">'+postesHtml+'</div></div>';
+    })()}
     <div class="section-title">Par difficulté</div>
     ${Object.entries(sbd).map(([diff,d])=>{
       const da=(d.scores.reduce((a,b)=>a+b,0)/d.scores.length).toFixed(1);
@@ -835,7 +864,7 @@ function renderStats(){
     <div class="section-title">Progression</div>
     <div class="card"><div class="lbl" style="margin-bottom:6px">Score dans le temps</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'#C9960C'}])}</div></div>
     <div class="card"><div class="lbl" style="margin-bottom:6px">Taux de réussite (%)</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.pct})),color:'#4ade80'}])}</div></div>
-    <div class="card"><div class="lbl" style="margin-bottom:6px">C1 vs C2 par partie</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.c1})),color:'#4ade80'},{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.c2})),color:'#F0B429'}])}</div></div>
+    <div class="card"><div class="lbl" style="margin-bottom:6px">Simples vs Doubles touchés par partie</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.hit_simples??p.c1})),color:'#4ade80'},{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.hit_doubles??p.c2})),color:'#F0B429'}])}</div></div>
     `:''}
 
     <div class="section-title">🧠 Analyse & Patterns</div>
@@ -1021,8 +1050,8 @@ function buildJeuUI(){
   $('partie-root').innerHTML=`
     <div style="background:#1a3a6b;border-radius:14px;padding:16px;margin-bottom:16px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px">
       <div style="text-align:center"><div style="font-size:2rem;font-weight:800;color:#F0B429" id="ls-tot">0</div><div style="font-size:.6rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">Total/<span id="ls-max">0</span></div></div>
-      <div style="text-align:center"><div style="font-size:2rem;font-weight:800;color:#4ade80" id="ls-c1">0</div><div style="font-size:.6rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">C1</div></div>
-      <div style="text-align:center"><div style="font-size:2rem;font-weight:800;color:#fbbf24" id="ls-c2">0</div><div style="font-size:.6rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">C2</div></div>
+      <div style="text-align:center"><div style="font-size:2rem;font-weight:800;color:#4ade80" id="ls-c1">0</div><div style="font-size:.6rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">Simples</div></div>
+      <div style="text-align:center"><div style="font-size:2rem;font-weight:800;color:#fbbf24" id="ls-c2">0</div><div style="font-size:.6rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">Doubles</div></div>
       <div style="text-align:center"><div style="font-size:2rem;font-weight:800;color:#F0B429" id="ls-pct">0%</div><div style="font-size:.6rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">Réussite</div></div>
     </div>
     ${pConfig.type==='DTL'?'<div style="background:#1e293b;border-radius:10px;padding:8px 12px;margin-bottom:12px;font-size:.75rem;color:#64748b;text-align:center">🎯 DTL — <span style="color:#4ade80">C1</span> = 1ère cart. · <span style="color:#fbbf24">C2</span> = 2ème cart. · <span style="color:#f87171">✘</span> = raté</div>':''}
@@ -1068,26 +1097,29 @@ function buildJeu(){
       updateLive();
     });
   });
+  window.scrollTo({top:0,behavior:'instant'});
 }
 
 function calcLive(){
-  let tot=0,c1=0,c2=0,mx=0;
+  let tot=0,c1S=0,c2S=0,hitS=0,hitD=0,mx=0,mxS=0,mxD=0;
   gState.forEach((ps,si)=>{
-    mx+=pConfig.postes[si].s+pConfig.postes[si].d*2;
-    ps.s.forEach(v=>{if(v==='c1'){tot++;c1++;}else if(v==='c2'){tot++;c2++;}});
-    ps.d.forEach(d=>d.forEach(v=>{if(v==='hit')tot++;}));
+    const cfg=pConfig.postes[si];
+    mxS+=cfg.s; mxD+=cfg.d*2;
+    mx+=cfg.s+cfg.d*2;
+    ps.s.forEach(v=>{if(v==='c1'){tot++;c1S++;hitS++;}else if(v==='c2'){tot++;c2S++;hitS++;}});
+    ps.d.forEach(d=>d.forEach(v=>{if(v==='hit'){tot++;hitD++;}}));
   });
-  return{tot,c1,c2,mx};
+  return{tot,c1:c1S,c2:c2S,hitS,hitD,mxS,mxD,mx};
 }
 function updateLive(){
-  const{tot,c1,c2,mx}=calcLive();
+  const{tot,hitS,hitD,mxS,mxD,mx}=calcLive();
   $('ls-tot').textContent=tot;$('ls-max').textContent=mx;
-  $('ls-c1').textContent=c1;$('ls-c2').textContent=c2;
+  $('ls-c1').textContent=hitS;$('ls-c2').textContent=hitD;
   $('ls-pct').textContent=mx?Math.round(tot/mx*100)+'%':'0%';
 }
 
 function finishPartie(){
-  const{tot,c1,c2,mx}=calcLive();const pct=mx?Math.round(tot/mx*100):0;
+  const{tot,hitS,hitD,mxS,mxD,mx}=calcLive();const pct=mx?Math.round(tot/mx*100):0;
   $('mo-fin-content').innerHTML=`
     <p style="font-size:.85rem;color:var(--tx2);margin-bottom:14px;font-weight:600">${CP?.nom} · ${pConfig.nom}${pConfig.diff?' · '+pConfig.diff:''}</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
@@ -1095,18 +1127,18 @@ function finishPartie(){
       <div class="card" style="text-align:center;border-top:3px solid var(--or);margin:0;padding:14px"><div style="font-size:2rem;font-weight:800;color:var(--or2)">${pct}%</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Réussite</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:#4ade80">${c1}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">C1</div></div>
-      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:var(--or2)">${c2}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">C2</div></div>
+      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:#4ade80">${hitS}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Simples touchés</div></div>
+      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:var(--or2)">${hitD}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles touchés</div></div>
     </div>`;
   openMo('mo-fin');
 }
 
 $('btn-save-partie').addEventListener('click',async()=>{
-  const{tot,c1,c2,mx}=calcLive();
+  const lc=calcLive();const{tot,mx}=lc;
   const nbS=pConfig.postes.reduce((a,p)=>a+p.s,0),nbD=pConfig.postes.reduce((a,p)=>a+p.d,0);
   $('btn-save-partie').disabled=true;$('btn-save-partie').textContent='Sauvegarde…';
   try{
-    const res=await db.post('parties',{user_id:CU.id,parcours:pConfig.nom,type_jeu:pConfig.type||'Compact',difficulte:pConfig.diff,nb_simples:nbS,nb_doubles:nbD,total:tot,max_plateaux:mx,c1,c2,pct:mx?Math.round(tot/mx*100):0,game_state:gState,postes:pConfig.postes,played_at:new Date().toISOString()});
+    const res=await db.post('parties',{user_id:CU.id,parcours:pConfig.nom,type_jeu:pConfig.type||'Compact',difficulte:pConfig.diff,nb_simples:nbS,nb_doubles:nbD,total:tot,max_plateaux:mx,c1:lc.c1,c2:lc.c2,hit_simples:lc.hitS,hit_doubles:lc.hitD,pct:mx?Math.round(tot/mx*100):0,game_state:gState,postes:pConfig.postes,played_at:new Date().toISOString()});
     allGames.unshift(res[0]);myGames.unshift(res[0]);
     closeMo('mo-fin');gState=[];selTypeJeu=null;showPage('home');toast('✔ Partie enregistrée !');
   }catch(e){toast('❌ '+e.message);}
@@ -1131,8 +1163,8 @@ function openDetail(id){
       <div style="text-align:right"><div style="font-size:1.6rem;font-weight:800">${p.total}/${p.max_plateaux}</div><div style="font-size:.78rem;color:var(--mu)">${p.pct}%</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
-      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:#4ade80">${p.c1}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">C1</div></div>
-      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:var(--or2)">${p.c2}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">C2</div></div>
+      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:#4ade80">${p.hit_simples??p.c1}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Simples</div></div>
+      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:var(--or2)">${p.hit_doubles??p.c2}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles</div></div>
       <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:#f87171">${p.max_plateaux-p.total}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Ratés</div></div>
     </div>
     <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Détail</div>${html}

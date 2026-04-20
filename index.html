@@ -17,6 +17,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--tx);font-family:-apple-system,system-ui,sans-serif;min-height:100vh;font-size:16px;-webkit-font-smoothing:antialiased}
+body.modal-open{overflow:hidden;position:fixed;width:100%;touch-action:none}
 input,button,select{font-family:inherit}
 
 /* AUTH */
@@ -72,11 +73,12 @@ input,button,select{font-family:inherit}
 .btn-gr{background:transparent;color:#4ade80;border:1.5px solid #4ade80;border-radius:10px;padding:8px 14px;font-size:.85rem;font-weight:600;cursor:pointer}
 
 /* MODAL */
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-end;justify-content:center}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-end;justify-content:center;touch-action:none;overscroll-behavior:none}
 .mo.on{display:flex}
-.mhandle{width:44px;height:5px;background:rgba(255,255,255,.25);border-radius:3px;margin:0 auto 18px;cursor:grab;position:relative}
+.mhandle{width:44px;height:5px;background:rgba(255,255,255,.25);border-radius:3px;margin:0 auto 18px;cursor:grab;position:relative;touch-action:none;user-select:none}
 .mhandle::before{content:"";position:absolute;top:-16px;left:-60px;right:-60px;bottom:-16px}
-.mbox{background:#1e293b;border-radius:24px 24px 0 0;padding:20px 18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;transition:transform .25s ease;touch-action:pan-y}
+.mbox{background:#1e293b;border-radius:24px 24px 0 0;padding:0;width:100%;max-width:520px;max-height:92vh;overflow:hidden;transition:transform .25s ease;touch-action:none}
+.mbox-inner{padding:20px 18px;max-height:92vh;overflow-y:auto;touch-action:pan-y}
 
 .mtitle{font-size:1.1rem;font-weight:800;color:var(--tx);margin-bottom:16px}
 
@@ -273,12 +275,13 @@ input,button,select{font-family:inherit}
   </nav>
 </div>
 
-<div class="mo" id="mo-ami-detail"><div class="mbox"><div class="mhandle"></div><div id="mo-ami-detail-content"></div><button class="btn-o" id="mo-ami-close">Fermer</button></div></div>
-<div class="mo" id="mo-fin"><div class="mbox"><div class="mhandle"></div><div class="mtitle">🏆 Partie terminée</div><div id="mo-fin-content"></div><button class="btn" id="btn-save-partie" style="margin-top:16px">💾 Enregistrer</button><button class="btn-o" id="btn-fin-back">Continuer à saisir</button></div></div>
-<div class="mo" id="mo-detail"><div class="mbox"><div class="mhandle"></div><div id="mo-detail-content"></div></div></div>
+<div class="mo" id="mo-ami-detail"><div class="mbox"><div class="mhandle"></div><div class="mbox-inner"><div id="mo-ami-detail-content"></div><button class="btn-o" id="mo-ami-close">Fermer</button></div></div></div>
+<div class="mo" id="mo-fin"><div class="mbox"><div class="mhandle"></div><div class="mbox-inner"><div class="mtitle">🏆 Partie terminée</div><div id="mo-fin-content"></div><button class="btn" id="btn-save-partie" style="margin-top:16px">💾 Enregistrer</button><button class="btn-o" id="btn-fin-back">Continuer à saisir</button></div></div></div>
+<div class="mo" id="mo-detail"><div class="mbox"><div class="mhandle"></div><div class="mbox-inner"><div id="mo-detail-content"></div></div></div></div>
 <div class="mo" id="mo-vis">
   <div class="mbox">
     <div class="mhandle"></div>
+    <div class="mbox-inner">
     
     <div class="mtitle">🔒 Confidentialité</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
@@ -288,11 +291,13 @@ input,button,select{font-family:inherit}
     <p id="vo-desc" style="font-size:.85rem;color:var(--tx2);margin-bottom:16px;line-height:1.5"></p>
     <button class="btn" id="btn-save-vis">Enregistrer</button>
     <button class="btn-o" id="btn-vis-close">Annuler</button>
+    </div>
   </div>
 </div>
 <div class="mo" id="mo-edit">
   <div class="mbox">
     <div class="mhandle"></div>
+    <div class="mbox-inner">
     
     <div class="mtitle">✏️ Modifier le profil</div>
     <div class="trow" style="margin-bottom:18px">
@@ -309,6 +314,7 @@ input,button,select{font-family:inherit}
     </div>
     <div id="ep-msg" style="font-size:.82rem;margin-top:12px;text-align:center;font-weight:600"></div>
     <button class="btn-o" id="ep-close">Fermer</button>
+    </div>
   </div>
 </div>
 
@@ -475,8 +481,14 @@ let tVis='public',tVisUsers=[];
 
 const $=id=>document.getElementById(id);
 function toast(msg,dur=2500){const e=$('toast');e.textContent=msg;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),dur);}
-function openMo(id){$(id).classList.add('on');}
-function closeMo(id){$(id).classList.remove('on');}
+function openMo(id){
+  $(id).classList.add('on');
+  document.body.classList.add('modal-open');
+}
+function closeMo(id){
+  $(id).classList.remove('on');
+  if(!document.querySelector('.mo.on'))document.body.classList.remove('modal-open');
+}
 function initials(n){return(n||'?').split(' ').map(w=>w[0]||'').join('').substring(0,2).toUpperCase();}
 function aColor(s){const c=['#1a3a6b','#1A7A4A','#7a2d1a','#5b2d8b','#1a5f7a','#7a1a3a'];let h=0;for(let x of(s||'?'))h=x.charCodeAt(0)+((h<<5)-h);return c[Math.abs(h)%c.length];}
 function fmtD(iso){const d=new Date(iso);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
@@ -1438,46 +1450,67 @@ $('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
 // SWIPE TO CLOSE MODALS
 (function(){
   const THRESHOLD=80;
-  let startY=0,curY=0,activeMo=null,activeMbox=null;
+  let startY=0,curY=0,activeMo=null,activeMbox=null,dragging=false;
 
-  document.addEventListener('touchstart',e=>{
-    const handle=e.target.closest('.mhandle');
-    if(!handle)return;
-    activeMbox=handle.closest('.mbox');
-    activeMo=handle.closest('.mo');
-    if(!activeMbox||!activeMo)return;
-    startY=e.touches[0].clientY;
-    curY=startY;
-    activeMbox.style.transition='none';
-  },{passive:true});
+  // Attacher directement sur chaque mhandle au lieu du document
+  // pour éviter les conflits avec le scroll natif
+  function attachSwipe(handle){
+    if(handle._swipeAttached)return;
+    handle._swipeAttached=true;
+    const mbox=handle.closest('.mbox');
+    const mo=handle.closest('.mo');
+    if(!mbox||!mo)return;
 
-  document.addEventListener('touchmove',e=>{
-    if(!activeMo)return;
-    curY=e.touches[0].clientY;
-    const dy=Math.max(0,curY-startY);
-    activeMbox.style.transform=`translateY(${dy}px)`;
-    activeMo.style.background=`rgba(0,0,0,${Math.max(0,0.7-dy/300)})`;
-  },{passive:true});
+    handle.addEventListener('touchstart',e=>{
+      e.stopPropagation();
+      startY=e.touches[0].clientY;
+      curY=startY;
+      dragging=true;
+      activeMo=mo;
+      activeMbox=mbox;
+      mbox.style.transition='none';
+    },{passive:false});
 
-  document.addEventListener('touchend',()=>{
-    if(!activeMo)return;
-    const dy=curY-startY;
-    activeMbox.style.transition='transform .25s ease';
-    if(dy>THRESHOLD){
-      activeMbox.style.transform='translateY(110%)';
-      const mo=activeMo;const mbox=activeMbox;
-      setTimeout(()=>{
-        mo.classList.remove('on');
+    handle.addEventListener('touchmove',e=>{
+      if(!dragging)return;
+      e.preventDefault();
+      e.stopPropagation();
+      curY=e.touches[0].clientY;
+      const dy=Math.max(0,curY-startY);
+      mbox.style.transform=`translateY(${dy}px)`;
+      mo.style.background=`rgba(0,0,0,${Math.max(0,0.7-dy/300)})`;
+    },{passive:false});
+
+    handle.addEventListener('touchend',e=>{
+      if(!dragging)return;
+      e.stopPropagation();
+      dragging=false;
+      const dy=curY-startY;
+      mbox.style.transition='transform .25s ease';
+      if(dy>THRESHOLD){
+        mbox.style.transform='translateY(110%)';
+        setTimeout(()=>{
+          mo.classList.remove('on');
+          mbox.style.transform='';
+          mbox.style.transition='';
+          mo.style.background='';
+        },260);
+      }else{
         mbox.style.transform='';
-        mbox.style.transition='';
         mo.style.background='';
-      },250);
-    }else{
-      activeMbox.style.transform='';
-      activeMo.style.background='';
-    }
-    activeMo=null;activeMbox=null;
+      }
+      activeMo=null;activeMbox=null;
+    },{passive:false});
+  }
+
+  // Observer les modals qui s'ouvrent pour attacher les listeners
+  const observer=new MutationObserver(()=>{
+    document.querySelectorAll('.mo.on .mhandle').forEach(attachSwipe);
   });
+  observer.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
+
+  // Attacher aussi sur ceux déjà présents au chargement
+  document.querySelectorAll('.mhandle').forEach(attachSwipe);
 })();
 
 </script>

@@ -196,6 +196,21 @@ input,button,select{font-family:inherit}
       <div class="af"><label>Prénom / Pseudo</label><input id="r-nom" placeholder="Ex: Jean"></div>
       <div class="af"><label>Email</label><input id="r-email" type="email" placeholder="ton@email.com"></div>
       <div class="af"><label>Mot de passe</label><input id="r-pwd" type="password" placeholder="Min. 6 caractères"></div>
+      <div class="af">
+        <label>Visibilité dans le classement</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+          <div id="r-vis-public" class="r-vis-opt r-vis-on" style="background:#0f172a;border:2px solid var(--or);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer">
+            <div style="font-size:1.2rem">🌍</div>
+            <div style="font-size:.78rem;font-weight:700;color:var(--tx);margin-top:4px">Public</div>
+            <div style="font-size:.65rem;color:var(--tx2);margin-top:2px;line-height:1.3">Visible par tous dans le classement</div>
+          </div>
+          <div id="r-vis-prive" class="r-vis-opt" style="background:#0f172a;border:1.5px solid var(--bd);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer">
+            <div style="font-size:1.2rem">🔒</div>
+            <div style="font-size:.78rem;font-weight:700;color:var(--tx);margin-top:4px">Privé</div>
+            <div style="font-size:.65rem;color:var(--tx2);margin-top:2px;line-height:1.3">Visible uniquement par tes amis</div>
+          </div>
+        </div>
+      </div>
       <button class="abtn" id="r-btn">Créer mon compte</button>
       <div class="aerr" id="r-err"></div>
     </div>
@@ -263,12 +278,10 @@ input,button,select{font-family:inherit}
   <div class="mbox">
     <div class="mhandle"></div>
     <div class="mtitle">🔒 Confidentialité</div>
-    <div class="vopts">
-      <div class="vopt on" id="vo-public"><div class="vi">🌍</div><div class="vl">Public</div></div>
-      <div class="vopt" id="vo-selects"><div class="vi">👥</div><div class="vl">Sélectif</div></div>
-      <div class="vopt" id="vo-prive"><div class="vi">🔒</div><div class="vl">Privé</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div class="vopt on" id="vo-public"><div class="vi">🌍</div><div class="vl">Public</div><div style="font-size:.65rem;color:var(--tx2);margin-top:4px;line-height:1.3">Visible par tous</div></div>
+      <div class="vopt" id="vo-prive"><div class="vi">🔒</div><div class="vl">Privé</div><div style="font-size:.65rem;color:var(--tx2);margin-top:4px;line-height:1.3">Visible par tes amis</div></div>
     </div>
-    <div id="vo-selects-panel" style="display:none"><div class="lbl" style="margin-bottom:10px">Tireurs autorisés</div><div id="vo-users"></div></div>
     <p id="vo-desc" style="font-size:.85rem;color:var(--tx2);margin-bottom:16px;line-height:1.5"></p>
     <button class="btn" id="btn-save-vis">Enregistrer</button>
     <button class="btn-o" id="btn-vis-close">Annuler</button>
@@ -469,9 +482,26 @@ function moStart(){const d=new Date();d.setDate(1);d.setHours(0,0,0,0);return d;
 function byPeriod(arr,p){if(p==='all')return arr;const c=p==='semaine'?wkStart():moStart();return arr.filter(x=>new Date(x.played_at)>=c);}
 function canView(p){if(!p)return false;if(p.id===CU.id)return true;if(p.visibilite==='public')return true;if(p.visibilite==='prive')return false;if(mesAmis.some(a=>a.id===p.id))return true;return allAuth.some(a=>a.owner_id===p.id&&a.viewer_id===CU.id);}
 
+// REG VIS
+let regVis='public';
+function selectRegVis(v){
+  regVis=v;
+  const pub=document.getElementById('r-vis-public');
+  const priv=document.getElementById('r-vis-prive');
+  if(v==='public'){
+    pub.style.border='2px solid var(--or)';
+    priv.style.border='1.5px solid var(--bd)';
+  } else {
+    priv.style.border='2px solid var(--or)';
+    pub.style.border='1.5px solid var(--bd)';
+  }
+}
+
 // AUTH
 $('atb-login').addEventListener('click',()=>{$('pnl-login').style.display='block';$('pnl-register').style.display='none';$('pnl-forgot').style.display='none';$('atb-login').classList.add('on');$('atb-register').classList.remove('on');});
 $('atb-register').addEventListener('click',()=>{$('pnl-login').style.display='none';$('pnl-register').style.display='block';$('pnl-forgot').style.display='none';$('atb-register').classList.add('on');$('atb-login').classList.remove('on');});
+$('r-vis-public').addEventListener('click',()=>selectRegVis('public'));
+$('r-vis-prive').addEventListener('click',()=>selectRegVis('prive'));
 $('l-forgot').addEventListener('click',()=>{$('pnl-login').style.display='none';$('pnl-forgot').style.display='block';$('atb-login').classList.remove('on');});
 $('f-back').addEventListener('click',()=>{$('pnl-forgot').style.display='none';$('pnl-login').style.display='block';$('atb-login').classList.add('on');});
 $('l-btn').addEventListener('click',async()=>{
@@ -493,7 +523,7 @@ $('r-btn').addEventListener('click',async()=>{
     const r=await api('POST','/auth/v1/signup',{email,password:pwd});
     token=r.access_token;CU=r.user;
     const code=Math.random().toString(36).substring(2,8).toUpperCase();
-    await db.post('profils',{id:CU.id,nom,visibilite:'public',code_social:code});
+    await db.post('profils',{id:CU.id,nom,visibilite:regVis,code_social:code});
     await loadApp();
   }catch(e){$('r-err').textContent='❌ '+e.message;}
   $('r-btn').disabled=false;$('r-btn').textContent='Créer mon compte';
@@ -553,7 +583,7 @@ function renderProfilDrawer(){
   const best=sc.length?Math.max(...sc):'—';
   const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):'—';
   const col=aColor(CP?.nom||'?');
-  const vl={public:'🌍 Public',selects:'👥 Sélectif',prive:'🔒 Privé'};
+  const vl={public:'🌍 Public',prive:'🔒 Privé'};
   $('profil-drawer-content').innerHTML=`
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
       <div class="av" style="background:${col};width:54px;height:54px;font-size:1.3rem;border:2px solid var(--or)">${initials(CP?.nom)}</div>
@@ -1244,7 +1274,12 @@ function renderCList(){
   rf.querySelectorAll('.ftag').forEach(t=>t.addEventListener('click',()=>setRPa(t.dataset.id)));
   let filtered=byPeriod(allGames,rPeriod);
   if(rParc!=='all')filtered=filtered.filter(p=>p.parcours===rParc);
-  const visIds=allP.filter(p=>p.id===CU.id||p.visibilite!=='prive').map(p=>p.id);
+  const amiIds=mesAmis.map(a=>a.id);
+  const visIds=allP.filter(p=>
+    p.id===CU.id ||
+    p.visibilite==='public' ||
+    (p.visibilite==='prive' && amiIds.includes(p.id))
+  ).map(p=>p.id);
   filtered=filtered.filter(p=>visIds.includes(p.user_id));
   const byU={};
   filtered.forEach(p=>{if(!byU[p.user_id])byU[p.user_id]={uid:p.user_id,bs:0,bp:0,nb:0};byU[p.user_id].bs=Math.max(byU[p.user_id].bs,p.total);byU[p.user_id].bp=Math.max(byU[p.user_id].bp,p.pct);byU[p.user_id].nb++;});
@@ -1277,7 +1312,7 @@ function renderAdmUsers(){
   const q=($('adm-search').value||'').toLowerCase();$('adm-users').innerHTML='';
   allP.filter(p=>p.nom.toLowerCase().includes(q)).forEach(p=>{
     const pts=allGames.filter(x=>x.user_id===p.id);const best=pts.length?Math.max(...pts.map(x=>x.total)):'—';const col=aColor(p.nom);
-    const vl={public:'🌍',selects:'👥',prive:'🔒'};
+    const vl={public:'🌍',prive:'🔒'};
     const row=document.createElement('div');row.className='arow';
     row.innerHTML=`<div class="av" style="background:${col};width:34px;height:34px;font-size:.85rem;flex-shrink:0">${initials(p.nom)}</div>
       <div style="flex:1"><div style="font-size:.9rem;font-weight:700">${p.nom} ${vl[p.visibilite||'public']}${p.is_admin?' <span style="color:#a855f7;font-size:.72rem">admin</span>':''}</div>
@@ -1302,28 +1337,18 @@ function renderAdmParties(){
 }
 
 // VIS
-function openVisModal(){tVis=CP?.visibilite||'public';tVisUsers=allAuth.filter(a=>a.owner_id===CU.id).map(a=>a.viewer_id);updateVisUI();openMo('mo-vis');}
+function openVisModal(){tVis=CP?.visibilite||'public';updateVisUI();openMo('mo-vis');}
 function updateVisUI(){
-  ['public','selects','prive'].forEach(v=>$('vo-'+v).classList.toggle('on',tVis===v));
-  const descs={public:'Tout le monde peut voir tes statistiques.',selects:'Seuls les tireurs que tu choisis peuvent voir.',prive:'Personne ne peut voir ton profil.'};
-  $('vo-desc').textContent=descs[tVis];
-  $('vo-selects-panel').style.display=tVis==='selects'?'block':'none';
-  if(tVis==='selects'){
-    $('vo-users').innerHTML=allP.filter(p=>p.id!==CU.id).map(p=>{const chk=tVisUsers.includes(p.id),col=aColor(p.nom);return `<div class="aui"><div class="achk${chk?' on':''}" data-uid="${p.id}">${chk?'✔':''}</div><div class="av" style="background:${col};width:34px;height:34px;font-size:.85rem">${initials(p.nom)}</div><div style="flex:1;font-size:.9rem;font-weight:600">${p.nom}</div></div>`;}).join('');
-    $('vo-users').querySelectorAll('.achk').forEach(el=>{el.addEventListener('click',()=>{const uid=el.dataset.uid;if(tVisUsers.includes(uid)){tVisUsers=tVisUsers.filter(x=>x!==uid);el.classList.remove('on');el.textContent='';}else{tVisUsers.push(uid);el.classList.add('on');el.textContent='✔';}});});
-  }
+  ['public','prive'].forEach(v=>$('vo-'+v).classList.toggle('on',tVis===v));
+  const descs={public:'Tu apparais dans le classement de tout le monde.',prive:'Tu apparais uniquement dans le classement de tes amis.'};
+  $('vo-desc').textContent=descs[tVis]||'';
 }
-['public','selects','prive'].forEach(v=>$('vo-'+v).addEventListener('click',()=>{tVis=v;updateVisUI();}));
+['public','prive'].forEach(v=>$('vo-'+v).addEventListener('click',()=>{tVis=v;updateVisUI();}));
 $('btn-save-vis').addEventListener('click',async()=>{
   $('btn-save-vis').disabled=true;
   try{
     await db.patch('profils',`id=eq.${CU.id}`,{visibilite:tVis});
     CP.visibilite=tVis;
-    if(tVis==='selects'){
-      await db.del('autorisations',`owner_id=eq.${CU.id}`);
-      for(const vid of tVisUsers) await db.post('autorisations',{owner_id:CU.id,viewer_id:vid});
-      allAuth=await db.get('autorisations');
-    }
     toast('✔ Confidentialité mise à jour');
     closeMo('mo-vis');
   }catch(e){toast('❌ '+e.message);}

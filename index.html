@@ -1450,18 +1450,16 @@ $('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
 // SWIPE TO CLOSE MODALS
 (function(){
   const THRESHOLD=80;
-  let startY=0,curY=0,activeMo=null,activeMbox=null,dragging=false;
+  let startY=0,curY=0,dragging=false,activeMo=null,activeMbox=null;
 
-  // Attacher directement sur chaque mhandle au lieu du document
-  // pour éviter les conflits avec le scroll natif
-  function attachSwipe(handle){
-    if(handle._swipeAttached)return;
-    handle._swipeAttached=true;
-    const mbox=handle.closest('.mbox');
-    const mo=handle.closest('.mo');
-    if(!mbox||!mo)return;
+  function initSwipe(mo){
+    const mbox=mo.querySelector('.mbox');
+    const handle=mo.querySelector('.mhandle');
+    if(!mbox||!handle||handle._sw)return;
+    handle._sw=true;
 
     handle.addEventListener('touchstart',e=>{
+      e.preventDefault();
       e.stopPropagation();
       startY=e.touches[0].clientY;
       curY=startY;
@@ -1477,8 +1475,8 @@ $('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
       e.stopPropagation();
       curY=e.touches[0].clientY;
       const dy=Math.max(0,curY-startY);
-      mbox.style.transform=`translateY(${dy}px)`;
-      mo.style.background=`rgba(0,0,0,${Math.max(0,0.7-dy/300)})`;
+      mbox.style.transform='translateY('+dy+'px)';
+      mo.style.background='rgba(0,0,0,'+Math.max(0,0.7-dy/300)+')';
     },{passive:false});
 
     handle.addEventListener('touchend',e=>{
@@ -1491,6 +1489,7 @@ $('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
         mbox.style.transform='translateY(110%)';
         setTimeout(()=>{
           mo.classList.remove('on');
+          if(!document.querySelector('.mo.on'))document.body.classList.remove('modal-open');
           mbox.style.transform='';
           mbox.style.transition='';
           mo.style.background='';
@@ -1503,14 +1502,16 @@ $('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
     },{passive:false});
   }
 
-  // Observer les modals qui s'ouvrent pour attacher les listeners
-  const observer=new MutationObserver(()=>{
-    document.querySelectorAll('.mo.on .mhandle').forEach(attachSwipe);
-  });
-  observer.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
+  // Initialiser au moment où openMo est appelé
+  const _origOpenMo=window.openMo;
+  window.openMo=function(id){
+    _origOpenMo(id);
+    const mo=document.getElementById(id);
+    if(mo)initSwipe(mo);
+  };
 
-  // Attacher aussi sur ceux déjà présents au chargement
-  document.querySelectorAll('.mhandle').forEach(attachSwipe);
+  // Initialiser aussi tous les modals existants maintenant
+  document.querySelectorAll('.mo').forEach(initSwipe);
 })();
 
 </script>

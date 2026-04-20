@@ -74,8 +74,8 @@ input,button,select{font-family:inherit}
 /* MODAL */
 .mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-end;justify-content:center}
 .mo.on{display:flex}
-.mhandle{width:44px;height:5px;background:rgba(255,255,255,.25);border-radius:3px;margin:0 auto 18px;cursor:grab;transition:background .15s}
-.mhandle:active{cursor:grabbing;background:rgba(255,255,255,.45)}
+.mhandle{width:44px;height:5px;background:rgba(255,255,255,.25);border-radius:3px;margin:0 auto 18px;cursor:grab;position:relative}
+.mhandle::before{content:"";position:absolute;top:-16px;left:-60px;right:-60px;bottom:-16px}
 .mbox{background:#1e293b;border-radius:24px 24px 0 0;padding:20px 18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;transition:transform .25s ease;touch-action:pan-y}
 
 .mtitle{font-size:1.1rem;font-weight:800;color:var(--tx);margin-bottom:16px}
@@ -1437,46 +1437,46 @@ $('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
 
 // SWIPE TO CLOSE MODALS
 (function(){
-  const THRESHOLD = 80; // px vers le bas pour fermer
-  document.querySelectorAll('.mo').forEach(mo=>{
-    const mbox = mo.querySelector('.mbox');
-    const handle = mo.querySelector('.mhandle');
-    if(!mbox || !handle) return;
-    let startY=0, curY=0, dragging=false;
+  const THRESHOLD=80;
+  let startY=0,curY=0,activeMo=null,activeMbox=null;
 
-    handle.addEventListener('touchstart',e=>{
-      startY = e.touches[0].clientY;
-      curY = startY;
-      dragging = true;
-      mbox.style.transition = 'none';
-    },{passive:true});
+  document.addEventListener('touchstart',e=>{
+    const handle=e.target.closest('.mhandle');
+    if(!handle)return;
+    activeMbox=handle.closest('.mbox');
+    activeMo=handle.closest('.mo');
+    if(!activeMbox||!activeMo)return;
+    startY=e.touches[0].clientY;
+    curY=startY;
+    activeMbox.style.transition='none';
+  },{passive:true});
 
-    handle.addEventListener('touchmove',e=>{
-      if(!dragging) return;
-      curY = e.touches[0].clientY;
-      const dy = Math.max(0, curY - startY);
-      mbox.style.transform = `translateY(${dy}px)`;
-      mo.style.background = `rgba(0,0,0,${0.7 - dy/400})`;
-    },{passive:true});
+  document.addEventListener('touchmove',e=>{
+    if(!activeMo)return;
+    curY=e.touches[0].clientY;
+    const dy=Math.max(0,curY-startY);
+    activeMbox.style.transform=`translateY(${dy}px)`;
+    activeMo.style.background=`rgba(0,0,0,${Math.max(0,0.7-dy/300)})`;
+  },{passive:true});
 
-    handle.addEventListener('touchend',()=>{
-      if(!dragging) return;
-      dragging = false;
-      const dy = curY - startY;
-      mbox.style.transition = 'transform .25s ease';
-      if(dy > THRESHOLD){
-        mbox.style.transform = `translateY(100%)`;
-        setTimeout(()=>{
-          mo.classList.remove('on');
-          mbox.style.transform = '';
-          mbox.style.transition = '';
-          mo.style.background = '';
-        }, 250);
-      } else {
-        mbox.style.transform = '';
-        mo.style.background = '';
-      }
-    });
+  document.addEventListener('touchend',()=>{
+    if(!activeMo)return;
+    const dy=curY-startY;
+    activeMbox.style.transition='transform .25s ease';
+    if(dy>THRESHOLD){
+      activeMbox.style.transform='translateY(110%)';
+      const mo=activeMo;const mbox=activeMbox;
+      setTimeout(()=>{
+        mo.classList.remove('on');
+        mbox.style.transform='';
+        mbox.style.transition='';
+        mo.style.background='';
+      },250);
+    }else{
+      activeMbox.style.transform='';
+      activeMo.style.background='';
+    }
+    activeMo=null;activeMbox=null;
   });
 })();
 

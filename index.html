@@ -7,182 +7,390 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Ball Trap">
 <title>Ball Trap Farges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0f172a;--bg2:#1e293b;--card:#1e293b;--card2:#263548;
-  --marine:#1a3a6b;--marine2:#2a5298;
-  --or:#C9960C;--or2:#F0B429;--or-pale:rgba(201,150,12,.15);
-  --gr2:#4ade80;--tx:#f1f5f9;--tx2:#94a3b8;--mu:#64748b;--bd:#1f2937;
-  --r:14px;--r-sm:10px;
+  --bg:#080e1a;
+  --bg2:#0d1526;
+  --card:#111d30;
+  --card2:#162035;
+  --gold:#c9920a;
+  --gold2:#e8aa20;
+  --gold-dim:rgba(201,146,10,.12);
+  --tx:#eef2f7;
+  --tx2:#7a8fa8;
+  --mu:#3d5068;
+  --bd:rgba(255,255,255,.07);
+  --bd2:rgba(255,255,255,.12);
+  --green:#2ecc8a;
+  --red:#e05555;
+  --r:12px;--r-sm:8px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--tx);font-family:-apple-system,system-ui,sans-serif;min-height:100vh;font-size:16px;-webkit-font-smoothing:antialiased}
+body{
+  background:var(--bg);
+  color:var(--tx);
+  font-family:'DM Sans',system-ui,sans-serif;
+  min-height:100vh;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
 body.modal-open{overflow:hidden;position:fixed;width:100%;touch-action:none}
 input,button,select{font-family:inherit}
 
-/* AUTH */
-#auth-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#0a1628,#0f2040,#1a3a6b)}
-.auth-box{background:#1e293b;border:1px solid #2d3f55;border-radius:20px;padding:26px 22px;width:100%;max-width:380px;margin-top:20px}
-.auth-tabs{display:flex;background:#0f172a;border-radius:10px;padding:3px;margin-bottom:22px}
-.auth-tab{flex:1;padding:10px;background:none;border:none;border-radius:8px;color:var(--mu);font-size:.88rem;font-weight:600;cursor:pointer}
-.auth-tab.on{background:#263548;color:var(--tx)}
-.af{margin-bottom:14px}
-.af label{font-size:.72rem;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px}
-.af input{background:#0f172a;border:1.5px solid var(--bd);border-radius:10px;color:var(--tx);padding:13px 15px;font-size:.95rem;width:100%;outline:none}
-.af input:focus{border-color:var(--or)}
-.abtn{background:var(--or);color:#fff;border:none;border-radius:12px;padding:15px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;margin-bottom:8px}
-.abtn:disabled{opacity:.5}
-.alink{background:none;border:none;color:var(--mu);font-size:.85rem;cursor:pointer;display:block;margin:12px auto 0;text-align:center}
-.aerr{color:#f87171;font-size:.78rem;margin-top:6px;text-align:center;min-height:18px}
+/* ── AUTH ── */
+#auth-screen{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 24px;
+  background:var(--bg);
+  position:relative;overflow:hidden;
+}
+#auth-screen::before{
+  content:'';position:absolute;top:-30%;left:-20%;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(201,146,10,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.auth-box{
+  background:var(--card);
+  border:1px solid var(--bd);
+  border-radius:20px;
+  padding:28px 24px;
+  width:100%;max-width:380px;
+  margin-top:28px;
+}
+.auth-tabs{
+  display:flex;
+  background:var(--bg);
+  border-radius:8px;
+  padding:3px;
+  margin-bottom:24px;
+  border:1px solid var(--bd);
+}
+.auth-tab{
+  flex:1;padding:10px;background:none;border:none;
+  border-radius:6px;color:var(--tx2);
+  font-size:.875rem;font-weight:500;cursor:pointer;
+  letter-spacing:.01em;transition:all .2s;
+}
+.auth-tab.on{background:var(--card2);color:var(--tx);}
+.af{margin-bottom:16px}
+.af label{
+  font-size:.7rem;color:var(--tx2);font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  display:block;margin-bottom:8px;
+}
+.af input{
+  background:var(--bg);
+  border:1px solid var(--bd);
+  border-radius:8px;color:var(--tx);
+  padding:13px 14px;font-size:.95rem;width:100%;outline:none;
+  transition:border-color .2s;
+}
+.af input:focus{border-color:var(--gold)}
+.abtn{
+  background:var(--gold);color:#000;border:none;
+  border-radius:8px;padding:14px;
+  font-size:.9rem;font-weight:600;cursor:pointer;width:100%;
+  margin-bottom:8px;letter-spacing:.02em;
+  transition:opacity .2s;
+}
+.abtn:active{opacity:.85}
+.abtn:disabled{opacity:.4}
+.alink{
+  background:none;border:none;color:var(--tx2);
+  font-size:.85rem;cursor:pointer;display:block;
+  margin:14px auto 0;text-align:center;
+  transition:color .2s;
+}
+.alink:hover{color:var(--tx)}
+.aerr{color:var(--red);font-size:.78rem;margin-top:6px;text-align:center;min-height:18px}
 
-/* APP */
-#app{display:none;min-height:100vh;padding-bottom:84px}
-.topbar{background:#111827;padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--bd)}
-.avatar-btn{width:40px;height:40px;border-radius:50%;background:var(--marine);display:flex;align-items:center;justify-content:center;border:2px solid var(--or);cursor:pointer;flex-shrink:0;position:relative}
-.avatar-btn span{color:var(--or);font-size:13px;font-weight:800}
-.badge-notif{position:absolute;top:-3px;right:-3px;width:14px;height:14px;background:#ef4444;border-radius:50%;border:2px solid #111827;display:none;align-items:center;justify-content:center;font-size:8px;color:#fff;font-weight:800}
+/* ── APP ── */
+#app{display:none;min-height:100vh;padding-bottom:80px}
+.topbar{
+  background:var(--bg);
+  padding:13px 16px 11px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+  border-bottom:1px solid var(--bd);
+}
+.avatar-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(201,146,10,.15);
+  display:flex;align-items:center;justify-content:center;
+  border:1.5px solid var(--gold);cursor:pointer;flex-shrink:0;position:relative;
+}
+.avatar-btn span{color:var(--gold);font-size:12px;font-weight:600;letter-spacing:.02em}
+.badge-notif{
+  position:absolute;top:-2px;right:-2px;
+  width:13px;height:13px;
+  background:var(--red);border-radius:50%;
+  border:2px solid var(--bg);
+  display:none;align-items:center;justify-content:center;
+  font-size:7px;color:#fff;font-weight:700;
+}
 .badge-notif.on{display:flex}
 .logo-center{text-align:center;flex:1}
-.logo-center .ln{color:#fff;font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
-.logo-center .ls{color:var(--or2);font-size:9px;letter-spacing:.2em;margin-top:1px}
+.logo-center .ln{color:var(--tx);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.logo-center .ls{color:var(--gold);font-size:.6rem;letter-spacing:.25em;margin-top:2px;opacity:.8}
 
-/* NAV */
-.nav{display:flex;background:#111827;border-top:1px solid var(--bd);position:fixed;bottom:0;left:0;right:0;z-index:50;padding:6px 0 calc(6px + env(safe-area-inset-bottom));align-items:flex-end}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;background:none;border:none;padding:4px 0}
-.nb .ic{font-size:20px;line-height:1}
-.nb .nl{color:var(--mu);font-size:8px;text-transform:uppercase;letter-spacing:.07em;font-weight:600}
-.nb.on .nl{color:var(--or)}
+/* ── NAV ── */
+.nav{
+  display:flex;
+  background:var(--bg);
+  border-top:1px solid var(--bd);
+  position:fixed;bottom:0;left:0;right:0;z-index:50;
+  padding:8px 0 calc(8px + env(safe-area-inset-bottom));
+  align-items:flex-end;
+}
+.nb{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+  cursor:pointer;background:none;border:none;padding:4px 0;
+}
+.nb-ic{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.nb-ic svg{width:20px;height:20px;stroke:var(--mu);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
+.nb.on .nb-ic svg{stroke:var(--gold)}
+.nb .nl{color:var(--mu);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;font-weight:500;transition:color .2s}
+.nb.on .nl{color:var(--gold)}
 .nb-center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding-bottom:4px;cursor:pointer}
-.nb-plus{width:54px;height:54px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;border:4px solid #111827;margin-bottom:4px;box-shadow:0 4px 20px rgba(201,150,12,.5)}
-.nb-plus-icon{color:#fff;font-size:28px;font-weight:300;line-height:1;margin-top:-2px}
-.nb-center-wrap .nl{color:var(--or);font-size:8px;text-transform:uppercase;letter-spacing:.07em;font-weight:600}
+.nb-plus{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  border:3px solid var(--bg);
+  margin-bottom:4px;
+}
+.nb-plus svg{width:22px;height:22px;stroke:#000;fill:none;stroke-width:2.2;stroke-linecap:round}
+.nb-center-wrap .nl{color:var(--gold);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;font-weight:500}
 
-/* PAGES */
+/* ── PAGES ── */
 .page{display:none;padding:16px}
 .page.on{display:block}
-.section-title{font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin:16px 0 10px}
-.card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:12px}
-.inp{background:#0f172a;border:1.5px solid var(--bd);border-radius:10px;color:var(--tx);padding:13px 15px;font-size:.95rem;width:100%;outline:none}
-.inp:focus{border-color:var(--or)}
-.lbl{font-size:.72rem;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:block}
+.section-title{
+  font-size:.65rem;font-weight:500;color:var(--tx2);
+  text-transform:uppercase;letter-spacing:.12em;
+  margin:20px 0 12px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--bd);
+}
+.card{
+  background:var(--card);
+  border-radius:var(--r);
+  padding:16px;margin-bottom:10px;
+  border:1px solid var(--bd);
+}
+.inp{
+  background:var(--bg);border:1px solid var(--bd);
+  border-radius:8px;color:var(--tx);
+  padding:12px 14px;font-size:.95rem;width:100%;outline:none;
+  transition:border-color .2s;
+}
+.inp:focus{border-color:var(--gold)}
+.lbl{
+  font-size:.7rem;color:var(--tx2);font-weight:500;
+  text-transform:uppercase;letter-spacing:.08em;
+  margin-bottom:6px;display:block;
+}
 .fld{margin-bottom:14px}
-.btn{background:var(--or);color:#fff;border:none;border-radius:12px;padding:15px 20px;font-size:1rem;font-weight:700;cursor:pointer;width:100%}
-.btn:disabled{opacity:.5}
-.btn-o{background:transparent;color:var(--tx);border:1.5px solid var(--bd);border-radius:12px;padding:13px 18px;font-size:.95rem;font-weight:600;cursor:pointer;width:100%;margin-top:10px}
-.btn-r{background:transparent;color:#f87171;border:1.5px solid #f87171;border-radius:10px;padding:8px 14px;font-size:.85rem;font-weight:600;cursor:pointer}
-.btn-gr{background:transparent;color:#4ade80;border:1.5px solid #4ade80;border-radius:10px;padding:8px 14px;font-size:.85rem;font-weight:600;cursor:pointer}
+.btn{
+  background:var(--gold);color:#000;border:none;
+  border-radius:8px;padding:14px 20px;
+  font-size:.9rem;font-weight:600;cursor:pointer;width:100%;
+  letter-spacing:.02em;transition:opacity .2s;
+}
+.btn:active{opacity:.85}
+.btn:disabled{opacity:.4}
+.btn-o{
+  background:transparent;color:var(--tx2);
+  border:1px solid var(--bd);border-radius:8px;
+  padding:13px 18px;font-size:.875rem;font-weight:500;
+  cursor:pointer;width:100%;margin-top:8px;
+  transition:border-color .2s,color .2s;
+}
+.btn-o:hover{border-color:var(--bd2);color:var(--tx)}
+.btn-r{
+  background:transparent;color:var(--red);
+  border:1px solid rgba(224,85,85,.35);
+  border-radius:8px;padding:8px 14px;
+  font-size:.82rem;font-weight:500;cursor:pointer;
+}
+.btn-gr{
+  background:transparent;color:var(--green);
+  border:1px solid rgba(46,204,138,.35);
+  border-radius:8px;padding:8px 14px;
+  font-size:.82rem;font-weight:500;cursor:pointer;
+}
 
-/* MODAL */
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-end;justify-content:center;touch-action:none;overscroll-behavior:none}
+/* ── MODAL ── */
+.mo{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.65);z-index:100;
+  align-items:flex-end;justify-content:center;
+  touch-action:none;overscroll-behavior:none;
+  backdrop-filter:blur(4px);
+}
 .mo.on{display:flex}
-.mhandle{width:44px;height:5px;background:rgba(255,255,255,.25);border-radius:3px;margin:0 auto 18px;cursor:grab;position:relative;touch-action:none;user-select:none}
-.mhandle::before{content:"";position:absolute;top:-16px;left:-60px;right:-60px;bottom:-16px}
-.mbox{background:#1e293b;border-radius:24px 24px 0 0;padding:0;width:100%;max-width:520px;max-height:92vh;overflow:hidden;transition:transform .25s ease;touch-action:none}
-.mbox-inner{padding:20px 18px;max-height:92vh;overflow-y:auto;touch-action:pan-y}
+.mhandle{
+  width:36px;height:4px;
+  background:var(--bd2);border-radius:2px;
+  margin:0 auto 20px;
+  position:relative;touch-action:none;user-select:none;cursor:grab;
+}
+.mhandle::before{content:'';position:absolute;top:-18px;left:-80px;right:-80px;bottom:-18px}
+.mbox{
+  background:var(--card);
+  border-radius:18px 18px 0 0;
+  border-top:1px solid var(--bd);
+  padding:0;width:100%;max-width:520px;max-height:92vh;
+  overflow:hidden;transition:transform .25s ease;touch-action:none;
+}
+.mbox-inner{padding:20px 20px 32px;max-height:92vh;overflow-y:auto;touch-action:pan-y}
+.mtitle{font-size:1.05rem;font-weight:600;color:var(--tx);margin-bottom:18px;letter-spacing:.01em}
 
-.mtitle{font-size:1.1rem;font-weight:800;color:var(--tx);margin-bottom:16px}
-
-/* STATIONS */
-.stblock{background:var(--card);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
-.sthd{background:var(--marine);padding:10px 16px;display:flex;justify-content:space-between;align-items:center}
-.stn{font-size:.82rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.1em}
-.sts{font-size:.7rem;color:rgba(255,255,255,.6)}
+/* ── STATIONS (saisie partie) ── */
+.stblock{background:var(--card);border-radius:var(--r);margin-bottom:10px;overflow:hidden;border:1px solid var(--bd)}
+.sthd{background:var(--bg2);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd)}
+.stn{font-size:.72rem;font-weight:600;color:var(--tx);text-transform:uppercase;letter-spacing:.12em}
+.sts{font-size:.68rem;color:var(--tx2)}
 .stbd{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
 .shr{display:flex;align-items:center;gap:10px}
-.shl{font-size:.78rem;color:var(--tx2);font-weight:500;width:68px;flex-shrink:0}
+.shl{font-size:.78rem;color:var(--tx2);font-weight:400;width:68px;flex-shrink:0}
 .sbts{display:flex;gap:6px}
-.sbt{height:44px;border-radius:10px;border:1.5px solid var(--bd);background:#0f172a;color:var(--mu);font-size:.75rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.sbt.c1{background:rgba(26,122,74,.2);border-color:#4ade80;color:#4ade80}
-.sbt.c2{background:var(--or-pale);border-color:var(--or);color:var(--or2)}
-.sbt.miss{background:rgba(192,57,43,.2);border-color:#f87171;color:#f87171}
-.sbt-c1{width:50px}.sbt-c2{width:50px}.sbt-x{width:44px}
-.dbt{width:50px;height:44px;border-radius:10px;border:1.5px solid var(--bd);background:#0f172a;color:var(--mu);font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
-.dbt.hit{background:rgba(26,122,74,.2);border-color:#4ade80;color:#4ade80}
-.dbt.miss{background:rgba(192,57,43,.2);border-color:#f87171;color:#f87171}
+.sbt{
+  height:42px;border-radius:8px;
+  border:1px solid var(--bd);
+  background:var(--bg);color:var(--mu);
+  font-size:.72rem;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.sbt.c1{background:rgba(46,204,138,.1);border-color:rgba(46,204,138,.5);color:var(--green)}
+.sbt.c2{background:var(--gold-dim);border-color:rgba(201,146,10,.4);color:var(--gold2)}
+.sbt.miss{background:rgba(224,85,85,.1);border-color:rgba(224,85,85,.4);color:var(--red)}
+.sbt-c1{width:50px}.sbt-c2{width:50px}.sbt-x{width:42px}
+.dbt{
+  width:50px;height:42px;border-radius:8px;
+  border:1px solid var(--bd);background:var(--bg);
+  color:var(--mu);font-size:.85rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-weight:600;
+  transition:all .15s;
+}
+.dbt.hit{background:rgba(46,204,138,.1);border-color:rgba(46,204,138,.5);color:var(--green)}
+.dbt.miss{background:rgba(224,85,85,.1);border-color:rgba(224,85,85,.4);color:var(--red)}
 
-/* MISC */
-.hc{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;cursor:pointer}
-.htag{background:var(--bg2);border-radius:20px;padding:4px 11px;font-size:.72rem;color:var(--tx2);font-weight:500}
-.sr{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--bd)}
+/* ── MISC ── */
+.hc{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:8px;cursor:pointer;border:1px solid var(--bd);transition:border-color .2s}
+.hc:active{border-color:var(--bd2)}
+.htag{background:var(--bg);border-radius:6px;padding:3px 10px;font-size:.7rem;color:var(--tx2);font-weight:500;border:1px solid var(--bd)}
+.sr{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--bd)}
 .sr:last-child{border-bottom:none}
-.ri{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--card);border-radius:var(--r);margin-bottom:10px}
-.trow{display:flex;background:#0f172a;border-radius:10px;margin-bottom:14px;padding:3px}
-.tgl{flex:1;padding:9px;background:none;border:none;border-radius:8px;color:var(--mu);font-size:.8rem;font-weight:600;cursor:pointer}
+.ri{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--card);border-radius:var(--r);margin-bottom:8px;border:1px solid var(--bd)}
+.trow{display:flex;background:var(--bg);border-radius:8px;margin-bottom:14px;padding:3px;border:1px solid var(--bd)}
+.tgl{flex:1;padding:9px;background:none;border:none;border-radius:6px;color:var(--tx2);font-size:.8rem;font-weight:500;cursor:pointer;transition:all .2s}
 .tgl.on{background:var(--card2);color:var(--tx)}
 .frow{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
-.ftag{background:var(--card);border-radius:20px;padding:7px 16px;font-size:.78rem;color:var(--tx2);cursor:pointer;white-space:nowrap;flex-shrink:0;font-weight:500}
-.ftag.on{background:var(--or);color:#fff;font-weight:700}
-.vopts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
-.vopt{background:#0f172a;border:1.5px solid var(--bd);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer}
-.vopt.on{border-color:var(--or);background:var(--or-pale)}
-.vopt .vi{font-size:1.5rem;margin-bottom:5px}
-.vopt .vl{font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-.vopt.on .vl{color:var(--or)}
-.dpst{background:#0f172a;border-radius:var(--r-sm);padding:12px;margin-bottom:10px}
-.dpst h4{font-size:.78rem;color:var(--or);font-weight:700;text-transform:uppercase;margin-bottom:8px}
-.dsh{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd);font-size:.85rem}
+.ftag{
+  background:var(--card);border-radius:20px;
+  padding:7px 16px;font-size:.75rem;
+  color:var(--tx2);cursor:pointer;white-space:nowrap;
+  flex-shrink:0;font-weight:500;
+  border:1px solid var(--bd);transition:all .2s;
+}
+.ftag.on{background:var(--gold-dim);color:var(--gold2);border-color:rgba(201,146,10,.3)}
+.vopts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.vopt{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:16px 10px;text-align:center;cursor:pointer;transition:all .2s}
+.vopt.on{border-color:rgba(201,146,10,.5);background:var(--gold-dim)}
+.vopt .vi{font-size:1.3rem;margin-bottom:6px}
+.vopt .vl{font-size:.7rem;color:var(--tx2);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.vopt.on .vl{color:var(--gold2)}
+.dpst{background:var(--bg);border-radius:var(--r-sm);padding:12px;margin-bottom:8px;border:1px solid var(--bd)}
+.dpst h4{font-size:.68rem;color:var(--tx2);font-weight:500;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.dsh{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:.85rem}
 .dsh:last-child{border-bottom:none}
 .aui{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd)}
 .aui:last-child{border-bottom:none}
-.achk{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--bd);background:#0f172a;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.achk.on{background:var(--or);border-color:var(--or);color:#fff}
-.agrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.astat{background:var(--card);border-radius:var(--r);padding:16px;text-align:center}
-.astat .av2{font-size:2rem;font-weight:800;color:#a855f7}
-.astat .al{font-size:.68rem;color:var(--mu);text-transform:uppercase;font-weight:600;margin-top:3px}
-.arow{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--bd);gap:8px}
+.achk{width:20px;height:20px;border-radius:5px;border:1px solid var(--bd);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.achk.on{background:var(--gold);border-color:var(--gold);color:#000}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.astat{background:var(--card);border-radius:var(--r);padding:16px;text-align:center;border:1px solid var(--bd)}
+.astat .av2{font-size:1.8rem;font-weight:600;color:var(--tx)}
+.astat .al{font-size:.65rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;font-weight:500;margin-top:4px}
+.arow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bd);gap:8px}
 .arow:last-child{border-bottom:none}
 .chwrap{width:100%;height:120px;margin-top:8px}
-.ami-card{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
-.code-badge{background:var(--or-pale);border:1.5px solid var(--or);border-radius:10px;padding:10px 16px;text-align:center;margin-bottom:14px}
-.code-badge .cb-label{font-size:.68rem;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
-.code-badge .cb-code{font-size:1.4rem;font-weight:800;color:var(--or2);letter-spacing:.15em}
-.pattern-card{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;border-left:3px solid}
-.pattern-card.danger{border-left-color:#f87171}
-.pattern-card.warning{border-left-color:#fbbf24}
-.pattern-card.success{border-left-color:#4ade80}
-.pattern-card .pc-icon{font-size:1.4rem;margin-bottom:6px}
-.pattern-card .pc-title{font-size:.9rem;font-weight:700;margin-bottom:4px}
-.pattern-card .pc-desc{font-size:.78rem;color:var(--tx2);line-height:1.4}
+.ami-card{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:1px solid var(--bd)}
+.code-badge{
+  background:var(--gold-dim);
+  border:1px solid rgba(201,146,10,.3);
+  border-radius:10px;padding:14px 16px;text-align:center;margin-bottom:16px;
+}
+.code-badge .cb-label{font-size:.65rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.code-badge .cb-code{font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:500;color:var(--gold2);letter-spacing:.2em}
+.pattern-card{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:8px;border:1px solid var(--bd);border-left:2px solid}
+.pattern-card.danger{border-left-color:var(--red)}
+.pattern-card.warning{border-left-color:var(--gold)}
+.pattern-card.success{border-left-color:var(--green)}
+.pattern-card .pc-icon{display:none}
+.pattern-card .pc-title{font-size:.88rem;font-weight:600;margin-bottom:4px}
+.pattern-card .pc-desc{font-size:.78rem;color:var(--tx2);line-height:1.5}
 .stat-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.stat-box{background:var(--card);border-radius:var(--r-sm);padding:12px;text-align:center}
-.stat-box .sv{font-size:1.4rem;font-weight:800}
-.stat-box .sl{font-size:.68rem;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
-.prog-bar-bg{background:#0f172a;border-radius:20px;height:8px;overflow:hidden;margin-top:6px}
-.prog-bar{height:8px;border-radius:20px}
-.empty{text-align:center;padding:48px 20px;color:var(--mu)}
-.empty .ei{font-size:3rem;margin-bottom:12px}
-.loader{display:inline-block;width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--or);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+.stat-box{background:var(--card);border-radius:var(--r-sm);padding:14px;text-align:center;border:1px solid var(--bd)}
+.stat-box .sv{font-size:1.5rem;font-weight:600}
+.stat-box .sl{font-size:.65rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.prog-bar-bg{background:var(--bg);border-radius:20px;height:4px;overflow:hidden;margin-top:8px}
+.prog-bar{height:4px;border-radius:20px}
+.empty{text-align:center;padding:56px 20px;color:var(--mu)}
+.empty .ei{font-size:1.5rem;margin-bottom:10px;opacity:.3;filter:grayscale(1)}
+.loader{display:inline-block;width:16px;height:16px;border:1.5px solid var(--bd);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
-#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#263548;color:var(--tx);border:1px solid var(--bd);padding:11px 22px;border-radius:30px;font-size:.85rem;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+#toast{
+  position:fixed;bottom:96px;left:50%;transform:translateX(-50%);
+  background:var(--card2);color:var(--tx);
+  border:1px solid var(--bd2);
+  padding:10px 20px;border-radius:8px;
+  font-size:.82rem;font-weight:500;
+  z-index:999;opacity:0;transition:opacity .25s;
+  pointer-events:none;white-space:nowrap;
+  font-family:'DM Mono',monospace;letter-spacing:.02em;
+}
 #toast.on{opacity:1}
 .profil-panel{position:fixed;inset:0;z-index:200;display:none;pointer-events:none}
-.profil-panel.on{display:flex}
-.profil-panel.on{pointer-events:all}
-.profil-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .25s}
+.profil-panel.on{display:flex;pointer-events:all}
+.profil-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);opacity:0;transition:opacity .25s;backdrop-filter:blur(2px)}
 .profil-panel.on .profil-overlay{opacity:1}
-.profil-drawer{position:absolute;top:0;left:0;bottom:0;width:82%;max-width:320px;background:#1e293b;transform:translateX(-100%);transition:transform .25s;overflow-y:auto;padding:60px 20px 40px}
+.profil-drawer{
+  position:absolute;top:0;left:0;bottom:0;
+  width:82%;max-width:320px;
+  background:var(--card);
+  transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto;padding:60px 20px 40px;
+  border-right:1px solid var(--bd);
+}
 .profil-panel.on .profil-drawer{transform:translateX(0)}
-.profil-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--mu);font-size:1.3rem;cursor:pointer}
-.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex-shrink:0}
+.profil-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--tx2);font-size:1.1rem;cursor:pointer;padding:4px}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;color:var(--tx);flex-shrink:0;font-size:.75rem;letter-spacing:.04em}
 </style>
 </head>
 <body>
 
 <div id="auth-screen">
   <div style="text-align:center">
-    <svg width="86" height="86" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg" style="border-radius:50%;box-shadow:0 0 0 3px #C9960C,0 0 24px rgba(201,150,12,.35)">
-      <circle cx="45" cy="45" r="45" fill="#C9960C"/>
-      <circle cx="45" cy="45" r="36" fill="#7a8fa8"/>
-      <line x1="18" y1="18" x2="72" y2="72" stroke="#1a3a6b" stroke-width="9" stroke-linecap="round"/>
-      <line x1="72" y1="18" x2="18" y2="72" stroke="#1a3a6b" stroke-width="9" stroke-linecap="round"/>
-      <text x="45" y="34" fill="#1a3a6b" font-size="11" font-weight="800" text-anchor="middle" font-family="serif">T</text>
-      <text x="24" y="52" fill="#1a3a6b" font-size="11" font-weight="800" text-anchor="middle" font-family="serif">B</text>
-      <text x="66" y="52" fill="#1a3a6b" font-size="11" font-weight="800" text-anchor="middle" font-family="serif">C</text>
-      <text x="45" y="66" fill="#1a3a6b" font-size="9" font-weight="700" text-anchor="middle" font-family="serif">Farges</text>
+    <svg width="72" height="72" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="36" cy="36" r="35" fill="none" stroke="#c9920a" stroke-width="1.5"/>
+      <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(201,146,10,.3)" stroke-width="1"/>
+      <circle cx="36" cy="36" r="4" fill="#c9920a"/>
+      <line x1="14" y1="14" x2="58" y2="58" stroke="#c9920a" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+      <line x1="58" y1="14" x2="14" y2="58" stroke="#c9920a" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+      <circle cx="36" cy="10" r="3" fill="#c9920a" opacity=".5"/>
+      <circle cx="62" cy="36" r="3" fill="#c9920a" opacity=".5"/>
+      <circle cx="36" cy="62" r="3" fill="#c9920a" opacity=".5"/>
+      <circle cx="10" cy="36" r="3" fill="#c9920a" opacity=".5"/>
     </svg>
-    <div style="color:#fff;font-size:1.1rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-top:14px">Ball Trap Club</div>
-    <div style="color:var(--or2);font-size:.72rem;letter-spacing:.22em;margin-top:3px">Farges</div>
+    <div style="color:var(--tx);font-size:1rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;margin-top:18px">Ball Trap</div>
+    <div style="color:var(--gold);font-size:.65rem;letter-spacing:.28em;margin-top:4px;opacity:.7">Club de Farges</div>
   </div>
   <div class="auth-box">
     <div class="auth-tabs">
@@ -203,13 +411,13 @@ input,button,select{font-family:inherit}
       <div class="af">
         <label>Visibilité dans le classement</label>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
-          <div id="r-vis-public" class="r-vis-opt r-vis-on" style="background:#0f172a;border:2px solid var(--or);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer">
-            <div style="font-size:1.2rem">🌍</div>
+          <div id="r-vis-public" class="r-vis-opt r-vis-on" style="background:#0f172a;border:2px solid var(--gold);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer">
+            <div style="font-size:.7rem;letter-spacing:.1em;color:var(--tx2);text-transform:uppercase;margin-bottom:6px">Public</div>
             <div style="font-size:.78rem;font-weight:700;color:var(--tx);margin-top:4px">Public</div>
             <div style="font-size:.65rem;color:var(--tx2);margin-top:2px;line-height:1.3">Visible par tous dans le classement</div>
           </div>
           <div id="r-vis-prive" class="r-vis-opt" style="background:#0f172a;border:1.5px solid var(--bd);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer">
-            <div style="font-size:1.2rem">🔒</div>
+            <div style="font-size:.7rem;letter-spacing:.1em;color:var(--tx2);text-transform:uppercase;margin-bottom:6px">Privé</div>
             <div style="font-size:.78rem;font-weight:700;color:var(--tx);margin-top:4px">Privé</div>
             <div style="font-size:.65rem;color:var(--tx2);margin-top:2px;line-height:1.3">Visible uniquement par tes amis</div>
           </div>
@@ -234,7 +442,7 @@ input,button,select{font-family:inherit}
       <span id="topbar-initials">?</span>
       <div class="badge-notif" id="badge-notif"></div>
     </button>
-    <div class="logo-center"><div class="ln">Ball Trap</div><div class="ls">Club de Farges</div></div>
+    <div class="logo-center"><div class="ln">Ball Trap</div><div class="ls">Club · Farges</div></div>
     <div id="topbar-right" style="width:40px;display:flex;justify-content:flex-end"></div>
   </div>
 
@@ -244,13 +452,13 @@ input,button,select{font-family:inherit}
   <div class="page" id="page-amis"><div id="amis-content"></div></div>
   <div class="page" id="page-classement"></div>
   <div class="page" id="page-admin">
-    <div class="section-title" style="margin-top:4px;color:#a855f7">⚙ Administration</div>
+    <div class="section-title" style="margin-top:4px;color:#a855f7">Administration</div>
     <div class="agrid" id="admin-kpis"></div>
     <div class="card"><div class="lbl">Activité — 30 jours</div><div class="chwrap" id="admin-chart"></div></div>
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <span class="lbl" style="margin:0">Utilisateurs</span>
-        <input class="inp" id="adm-search" placeholder="🔍" style="width:130px;padding:9px 12px;font-size:.85rem">
+        <input class="inp" id="adm-search" placeholder="Rechercher..." style="width:130px;padding:9px 12px;font-size:.85rem">
       </div>
       <div id="adm-users"></div>
     </div>
@@ -264,19 +472,31 @@ input,button,select{font-family:inherit}
   </div>
 
   <nav class="nav" id="main-nav">
-    <button class="nb on" data-page="home"><span class="ic">🏠</span><span class="nl">Accueil</span></button>
-    <button class="nb" data-page="stats"><span class="ic">📊</span><span class="nl">Stats</span></button>
+    <button class="nb on" data-page="home">
+      <span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/><path d="M3 12v9h18v-9"/></svg></span>
+      <span class="nl">Accueil</span>
+    </button>
+    <button class="nb" data-page="stats">
+      <span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></span>
+      <span class="nl">Stats</span>
+    </button>
     <div class="nb-center-wrap" id="btn-nouvelle-partie">
-      <div class="nb-plus"><span class="nb-plus-icon">+</span></div>
+      <div class="nb-plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
       <span class="nl">Partie</span>
     </div>
-    <button class="nb" data-page="amis"><span class="ic">👥</span><span class="nl">Amis</span></button>
-    <button class="nb" data-page="classement"><span class="ic">🏆</span><span class="nl">Classement</span></button>
+    <button class="nb" data-page="amis">
+      <span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      <span class="nl">Amis</span>
+    </button>
+    <button class="nb" data-page="classement">
+      <span class="nb-ic"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      <span class="nl">Classement</span>
+    </button>
   </nav>
 </div>
 
 <div class="mo" id="mo-ami-detail"><div class="mbox"><div class="mhandle"></div><div class="mbox-inner"><div id="mo-ami-detail-content"></div><button class="btn-o" id="mo-ami-close">Fermer</button></div></div></div>
-<div class="mo" id="mo-fin"><div class="mbox"><div class="mhandle"></div><div class="mbox-inner"><div class="mtitle">🏆 Partie terminée</div><div id="mo-fin-content"></div><button class="btn" id="btn-save-partie" style="margin-top:16px">💾 Enregistrer</button><button class="btn-o" id="btn-fin-back">Continuer à saisir</button></div></div></div>
+<div class="mo" id="mo-fin"><div class="mbox"><div class="mhandle"></div><div class="mbox-inner"><div class="mtitle">Partie terminée</div><div id="mo-fin-content"></div><button class="btn" id="btn-save-partie" style="margin-top:16px">Enregistrer</button><button class="btn-o" id="btn-fin-back">Continuer à saisir</button></div></div></div>
 <div class="mo" id="mo-detail"><div class="mbox"><div class="mhandle"></div><div class="mbox-inner"><div id="mo-detail-content"></div></div></div></div>
 <div class="mo" id="mo-vis">
   <div class="mbox">
@@ -285,8 +505,8 @@ input,button,select{font-family:inherit}
     
     <div class="mtitle">🔒 Confidentialité</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-      <div class="vopt on" id="vo-public"><div class="vi">🌍</div><div class="vl">Public</div><div style="font-size:.65rem;color:var(--tx2);margin-top:4px;line-height:1.3">Visible par tous</div></div>
-      <div class="vopt" id="vo-prive"><div class="vi">🔒</div><div class="vl">Privé</div><div style="font-size:.65rem;color:var(--tx2);margin-top:4px;line-height:1.3">Visible par tes amis</div></div>
+      <div class="vopt on" id="vo-public"><div class="vl">Public</div><div style="font-size:.65rem;color:var(--tx2);margin-top:4px;line-height:1.3">Visible par tous</div></div>
+      <div class="vopt" id="vo-prive"><div class="vl">Privé</div><div style="font-size:.65rem;color:var(--tx2);margin-top:4px;line-height:1.3">Visible par tes amis</div></div>
     </div>
     <p id="vo-desc" style="font-size:.85rem;color:var(--tx2);margin-bottom:16px;line-height:1.5"></p>
     <button class="btn" id="btn-save-vis">Enregistrer</button>
@@ -505,10 +725,10 @@ function selectRegVis(v){
   const pub=document.getElementById('r-vis-public');
   const priv=document.getElementById('r-vis-prive');
   if(v==='public'){
-    pub.style.border='2px solid var(--or)';
+    pub.style.border='2px solid var(--gold)';
     priv.style.border='1.5px solid var(--bd)';
   } else {
-    priv.style.border='2px solid var(--or)';
+    priv.style.border='2px solid var(--gold)';
     pub.style.border='1.5px solid var(--bd)';
   }
 }
@@ -569,7 +789,7 @@ async function loadApp(){
   if(isAdmin&&!$('btn-admin-top')){
     const b=document.createElement('button');b.id='btn-admin-top';
     b.style.cssText='background:#2d1b4e;border:1.5px solid #a855f7;border-radius:8px;color:#a855f7;font-size:.7rem;font-weight:700;padding:6px 10px;cursor:pointer;text-transform:uppercase';
-    b.textContent='⚙ Admin';b.addEventListener('click',()=>showPage('admin'));
+    b.textContent='Admin';b.addEventListener('click',()=>showPage('admin'));
     $('topbar-right').appendChild(b);
   }
   $('auth-screen').style.display='none';$('app').style.display='block';
@@ -599,10 +819,10 @@ function renderProfilDrawer(){
   const best=sc.length?Math.max(...sc):'—';
   const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):'—';
   const col=aColor(CP?.nom||'?');
-  const vl={public:'🌍 Public',prive:'🔒 Privé'};
+  const vl={public:'Public',prive:'Privé'};
   $('profil-drawer-content').innerHTML=`
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-      <div class="av" style="background:${col};width:54px;height:54px;font-size:1.3rem;border:2px solid var(--or)">${initials(CP?.nom)}</div>
+      <div class="av" style="background:${col};width:54px;height:54px;font-size:1.3rem;border:2px solid var(--gold)">${initials(CP?.nom)}</div>
       <div><div style="font-size:1.05rem;font-weight:800">${CP?.nom||'—'}</div>
         <div style="font-size:.75rem;color:var(--tx2);margin-top:3px">${CU.email}</div>
         ${isAdmin?'<div style="color:#a855f7;font-size:.72rem;margin-top:4px;font-weight:600">⚙ Admin</div>':''}
@@ -611,14 +831,14 @@ function renderProfilDrawer(){
     <div class="code-badge"><div class="cb-label">Mon code social</div><div class="cb-code">${CP?.code_social||'——'}</div>
       <div style="font-size:.7rem;color:var(--mu);margin-top:4px">Partage ce code pour recevoir des demandes d'amis</div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-      <div style="background:var(--bg2);border-radius:10px;padding:12px;text-align:center"><div style="font-size:1.3rem;font-weight:800;color:var(--or)">${best}</div><div style="font-size:.68rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Meilleur</div></div>
+      <div style="background:var(--bg2);border-radius:10px;padding:12px;text-align:center"><div style="font-size:1.3rem;font-weight:800;color:var(--gold)">${best}</div><div style="font-size:.68rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Meilleur</div></div>
       <div style="background:var(--bg2);border-radius:10px;padding:12px;text-align:center"><div style="font-size:1.3rem;font-weight:800">${avg}</div><div style="font-size:.68rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Moyenne</div></div>
     </div>
     <div style="background:var(--bg2);border-radius:10px;padding:12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
       <div><div style="font-size:.72rem;color:var(--mu);text-transform:uppercase;margin-bottom:4px">Confidentialité</div><div style="font-size:.9rem;font-weight:600">${vl[CP?.visibilite||'public']}</div></div>
       <button id="dp-vis-btn" style="background:transparent;color:var(--tx);border:1.5px solid var(--bd);border-radius:10px;padding:8px 12px;font-size:.82rem;cursor:pointer">Modifier</button>
     </div>
-    <button id="dp-edit-btn" style="background:var(--or);color:#fff;border:none;border-radius:12px;padding:13px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%;margin-bottom:10px">✏️ Modifier le profil</button>
+    <button id="dp-edit-btn" style="background:var(--gold);color:#fff;border:none;border-radius:12px;padding:13px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%;margin-bottom:10px">✏️ Modifier le profil</button>
     <button id="dp-logout-btn" style="background:transparent;color:#f87171;border:1.5px solid #f87171;border-radius:12px;padding:13px;font-size:.95rem;font-weight:600;cursor:pointer;width:100%">⎋ Se déconnecter</button>`;
   $('dp-vis-btn').addEventListener('click',()=>{$('profil-panel').classList.remove('on');openVisModal();});
   $('dp-edit-btn').addEventListener('click',()=>{$('profil-panel').classList.remove('on');initEditProfil();openMo('mo-edit');});
@@ -651,17 +871,17 @@ function renderHome(){
         <div style="flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;text-align:center"><div style="font-size:1.15rem;font-weight:800;color:#fff">${c1p}%</div><div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">% Simples</div></div>
       </div>
     </div>
-    ${srt.length>=2?`<div class="section-title">Progression</div><div class="card"><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'#C9960C'}])}</div></div>`:''}
-    ${feed.length?`<div class="section-title">Activité amis</div>${feed.map(g=>{const ami=allP.find(p=>p.id===g.user_id);const col=aColor(ami?.nom||'?');return `<div style="background:var(--card);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px"><div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;flex-shrink:0">${initials(ami?.nom)}</div><div style="flex:1"><div style="font-size:.88rem;font-weight:700">${ami?.nom||'?'}</div><div style="font-size:.75rem;color:var(--mu);margin-top:2px">🗺 ${g.parcours}${g.difficulte?' · '+g.difficulte:''} · ${fmtSD(g.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800;color:var(--or2)">${g.total}</div><div style="font-size:.7rem;color:var(--mu)">${g.pct}%</div></div></div>`;}).join('')}`:''}
+    ${srt.length>=2?`<div class="section-title">Progression</div><div class="card"><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'var(--gold)'}])}</div></div>`:''}
+    ${feed.length?`<div class="section-title">Activité amis</div>${feed.map(g=>{const ami=allP.find(p=>p.id===g.user_id);const col=aColor(ami?.nom||'?');return `<div style="background:var(--card);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px"><div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;flex-shrink:0">${initials(ami?.nom)}</div><div style="flex:1"><div style="font-size:.88rem;font-weight:700">${ami?.nom||'?'}</div><div style="font-size:.75rem;color:var(--mu);margin-top:2px">🗺 ${g.parcours}${g.difficulte?' · '+g.difficulte:''} · ${fmtSD(g.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800;color:var(--gold2)">${g.total}</div><div style="font-size:.7rem;color:var(--mu)">${g.pct}%</div></div></div>`;}).join('')}`:''}
     <div class="section-title">Mes dernières parties</div>
     ${pts.slice(0,4).map(p=>`<div class="hc" data-id="${p.id}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-        <div><div style="font-size:.8rem;font-weight:700;color:var(--or);text-transform:uppercase">${p.type_jeu==='DTL'?'🎯 DTL':'🗺 '+p.parcours}${p.difficulte?' · '+p.difficulte:''}</div>
+        <div><div style="font-size:.8rem;font-weight:700;color:var(--gold);text-transform:uppercase">${p.type_jeu==='DTL'?'DTL':p.parcours}${p.difficulte?' · '+p.difficulte:''}</div>
           <div style="font-size:.72rem;color:var(--mu);margin-top:3px">${fmtD(p.played_at)}</div></div>
         <div style="text-align:right"><div style="font-size:1.4rem;font-weight:800">${p.total}<span style="font-size:.85rem;color:var(--mu);font-weight:400">/${p.max_plateaux}</span></div>
           <div style="font-size:.72rem;color:var(--mu)">${p.pct}%</div></div>
       </div>
-      <div style="display:flex;gap:7px"><span class="htag" style="color:#4ade80">S: ${p.hit_simples??p.c1}</span><span class="htag" style="color:var(--or2)">D: ${p.hit_doubles??p.c2}</span></div>
+      <div style="display:flex;gap:7px"><span class="htag" style="color:#4ade80">S: ${p.hit_simples??p.c1}</span><span class="htag" style="color:var(--gold2)">D: ${p.hit_doubles??p.c2}</span></div>
     </div>`).join('')}`;
   $('home-content').querySelectorAll('.hc[data-id]').forEach(el=>el.addEventListener('click',()=>openDetail(el.dataset.id)));
 }
@@ -706,7 +926,7 @@ function renderLetterGrid(letterMap){
       const d=letterMap[l];
       if(!d||d.total===0)return`<div style="background:#0f172a;border-radius:10px;padding:10px 4px;text-align:center;border:1.5px solid var(--bd)"><div style="font-size:1rem;font-weight:800;color:var(--mu)">${l}</div><div style="font-size:.65rem;color:var(--mu);margin-top:4px">—</div></div>`;
       const pct=Math.round(d.hit/d.total*100);
-      const col=pct>=80?'#4ade80':pct>=60?'var(--or2)':pct>=40?'#fb923c':'#f87171';
+      const col=pct>=80?'#4ade80':pct>=60?'var(--gold2)':pct>=40?'#fb923c':'#f87171';
       return`<div style="background:#0f172a;border-radius:10px;padding:10px 4px;text-align:center;border:1.5px solid ${col}">
         <div style="font-size:1rem;font-weight:800;color:${col}">${l}</div>
         <div style="font-size:.72rem;font-weight:700;color:${col};margin-top:3px">${pct}%</div>
@@ -716,7 +936,7 @@ function renderLetterGrid(letterMap){
   </div>
   <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
     <span style="font-size:.68rem;color:#4ade80">● ≥80%</span>
-    <span style="font-size:.68rem;color:var(--or2)">● ≥60%</span>
+    <span style="font-size:.68rem;color:var(--gold2)">● ≥60%</span>
     <span style="font-size:.68rem;color:#fb923c">● ≥40%</span>
     <span style="font-size:.68rem;color:#f87171">● &lt;40%</span>
   </div>`;
@@ -788,12 +1008,12 @@ function renderStats(){
     const pNbS=d.games.reduce((a,x)=>a+(x.nb_simples||0),0);
     const pNbD=d.games.reduce((a,x)=>a+(x.nb_doubles||0)*2,0);
     const pc1pct=pNbS?Math.round(pHitS/pNbS*100):0;
-    const col=pp>=75?'#4ade80':pp>=50?'var(--or2)':'#f87171';
+    const col=pp>=75?'#4ade80':pp>=50?'var(--gold2)':'#f87171';
     const lettersForParc=calcLetterStats(d.games);
     const hasDiffs=[...new Set(d.games.map(g=>g.difficulte).filter(Boolean))];
     return `<div class="card" style="margin-bottom:12px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <div style="font-size:1rem;font-weight:800;color:var(--or)">🗺 ${nom}</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--gold)">🗺 ${nom}</div>
         <div style="font-size:.75rem;color:var(--mu)">${d.scores.length} partie${d.scores.length!==1?'s':''}</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:10px">
@@ -812,9 +1032,9 @@ function renderStats(){
   $('stats-content').innerHTML=`
     <div class="section-title" style="margin-top:4px">Vue globale</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-      <div class="stat-box"><div class="sv" style="color:var(--or2)">${avg}</div><div class="sl">Moyenne</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--gold2)">${avg}</div><div class="sl">Moyenne</div></div>
       <div class="stat-box"><div class="sv" style="color:#4ade80">${best}</div><div class="sl">Meilleur score</div></div>
-      <div class="stat-box"><div class="sv" style="color:var(--or2)">${avgPct}%</div><div class="sl">Taux réussite</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--gold2)">${avgPct}%</div><div class="sl">Taux réussite</div></div>
       <div class="stat-box"><div class="sv" style="color:#f87171">${worst}</div><div class="sl">Plus faible</div></div>
       <div class="stat-box"><div class="sv" style="color:#a855f7">${pts.length}</div><div class="sl">Parties jouées</div></div>
       <div class="stat-box"><div class="sv" style="color:#64748b">${stddev.toFixed(1)}</div><div class="sl">Régularité (σ)</div></div>
@@ -824,14 +1044,14 @@ function renderStats(){
       <div class="lbl" style="margin-bottom:10px">Simples vs Doubles</div>
       <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">Simples touchés</span><span style="font-size:.9rem;font-weight:700;color:#4ade80">${allHitS}/${allNbS} (${pctS}%)</span></div>
       <div class="prog-bar-bg"><div class="prog-bar" style="width:${pctS}%;background:#4ade80"></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:10px;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">Doubles touchés</span><span style="font-size:.9rem;font-weight:700;color:var(--or2)">${allHitD}/${allNbD} (${pctD}%)</span></div>
-      <div class="prog-bar-bg"><div class="prog-bar" style="width:${pctD}%;background:var(--or2)"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">Doubles touchés</span><span style="font-size:.9rem;font-weight:700;color:var(--gold2)">${allHitD}/${allNbD} (${pctD}%)</span></div>
+      <div class="prog-bar-bg"><div class="prog-bar" style="width:${pctD}%;background:var(--gold2)"></div></div>
       <div style="display:flex;justify-content:space-between;margin-top:10px;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">Ratés</span><span style="font-size:.9rem;font-weight:700;color:#f87171">${allMiss} (${allMax?Math.round(allMiss/allMax*100):0}%)</span></div>
       <div class="prog-bar-bg"><div class="prog-bar" style="width:${allMax?Math.round(allMiss/allMax*100):0}%;background:#f87171"></div></div>
     </div>
 
     ${streak>=3?`<div class="card" style="margin-bottom:12px;border-left:3px solid #4ade80;display:flex;align-items:center;gap:12px"><div style="font-size:2rem">🔥</div><div><div style="font-size:.95rem;font-weight:700">Série en cours : ${streak} parties ≥50%</div><div style="font-size:.78rem;color:var(--mu);margin-top:3px">Continue sur ta lancée !</div></div></div>`:''}
-    ${bestDay?`<div class="card" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.72rem;color:var(--mu);text-transform:uppercase;font-weight:600">Meilleure journée</div><div style="font-size:.95rem;font-weight:700;margin-top:4px">${bestDay}</div></div><div style="font-size:1.4rem;font-weight:800;color:var(--or2)">${bestDayAvg.toFixed(1)} moy.</div></div>`:''}
+    ${bestDay?`<div class="card" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.72rem;color:var(--mu);text-transform:uppercase;font-weight:600">Meilleure journée</div><div style="font-size:.95rem;font-weight:700;margin-top:4px">${bestDay}</div></div><div style="font-size:1.4rem;font-weight:800;color:var(--gold2)">${bestDayAvg.toFixed(1)} moy.</div></div>`:''}
 
     ${compactGames.length?`
     <div class="section-title">Réussite par poste — Global (Compaq)</div>
@@ -853,10 +1073,10 @@ function renderStats(){
         const hits=dtlGames.reduce((a,p)=>{const po=p.game_state?.[i];if(!po)return a;return a+(po.s.filter(v=>v==='c1'||v==='c2').length);},0);
         const total=dtlGames.reduce((a,p)=>{const po=p.game_state?.[i];if(!po)return a;return a+po.s.length;},0);
         const pct=total?Math.round(hits/total*100):0;
-        const col=pct>=80?'#4ade80':pct>=60?'var(--or2)':pct>=40?'#fb923c':'#f87171';
+        const col=pct>=80?'#4ade80':pct>=60?'var(--gold2)':pct>=40?'#fb923c':'#f87171';
         return '<div style="background:#0f172a;border-radius:10px;padding:10px 4px;text-align:center;border:1.5px solid '+col+'"><div style="font-size:.85rem;font-weight:800;color:'+col+'">P'+(i+1)+'</div><div style="font-size:.72rem;font-weight:700;color:'+col+';margin-top:3px">'+pct+'%</div><div style="font-size:.6rem;color:var(--mu);margin-top:2px">'+hits+'/'+total+'</div></div>';
       }).join('');
-      return '<div class="section-title">🎯 DTL</div><div class="card" style="margin-bottom:12px"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px"><div style="text-align:center"><div style="font-size:1.2rem;font-weight:800;color:var(--or2)">'+avg+'</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Moy.</div></div><div style="text-align:center"><div style="font-size:1.2rem;font-weight:800;color:#4ade80">'+best+'</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Meilleur</div></div><div style="text-align:center"><div style="font-size:1.2rem;font-weight:800;color:var(--or2)">'+avgP+'%</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Réussite</div></div></div><div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Réussite par poste</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">'+postesHtml+'</div></div>';
+      return '<div class="section-title">🎯 DTL</div><div class="card" style="margin-bottom:12px"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px"><div style="text-align:center"><div style="font-size:1.2rem;font-weight:800;color:var(--gold2)">'+avg+'</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Moy.</div></div><div style="text-align:center"><div style="font-size:1.2rem;font-weight:800;color:#4ade80">'+best+'</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Meilleur</div></div><div style="text-align:center"><div style="font-size:1.2rem;font-weight:800;color:var(--gold2)">'+avgP+'%</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:2px">Réussite</div></div></div><div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Réussite par poste</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">'+postesHtml+'</div></div>';
     })()}
     <div class="section-title">Par difficulté</div>
     ${Object.entries(sbd).map(([diff,d])=>{
@@ -878,9 +1098,9 @@ function renderStats(){
 
     ${srt.length>=2?`
     <div class="section-title">Progression</div>
-    <div class="card"><div class="lbl" style="margin-bottom:6px">Score dans le temps</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'#C9960C'}])}</div></div>
-    <div class="card"><div class="lbl" style="margin-bottom:6px">Taux de réussite (%)</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.pct})),color:'#4ade80'}])}</div></div>
-    <div class="card"><div class="lbl" style="margin-bottom:6px">Simples vs Doubles touchés par partie</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.hit_simples??p.c1})),color:'#4ade80'},{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.hit_doubles??p.c2})),color:'#F0B429'}])}</div></div>
+    <div class="card"><div class="lbl" style="margin-bottom:6px">Score dans le temps</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'var(--gold)'}])}</div></div>
+    <div class="card"><div class="lbl" style="margin-bottom:6px">Taux de réussite (%)</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.pct})),color:'var(--green)'}])}</div></div>
+    <div class="card"><div class="lbl" style="margin-bottom:6px">Simples vs Doubles touchés par partie</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.hit_simples??p.c1})),color:'var(--green)'},{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.hit_doubles??p.c2})),color:'var(--gold2)'}])}</div></div>
     `:''}
 
     <div class="section-title">🧠 Analyse & Patterns</div>
@@ -888,26 +1108,26 @@ function renderStats(){
 }
 
 function detectPatterns(pts,sbp,sbd,c1pct,stddev){
-  if(pts.length<3)return[{type:'warning',icon:'⏳',title:'Pas encore assez de données',desc:'Joue au moins 3 parties pour voir tes patterns.'}];
+  if(pts.length<3)return[{type:'warning',icon:'',title:'Pas encore assez de données',desc:'Joue au moins 3 parties pour voir tes patterns.'}];
   const patterns=[];
   const recent=pts.slice(0,5).map(p=>p.pct);
   const old=pts.slice(-5).map(p=>p.pct);
   const ar=recent.reduce((a,b)=>a+b,0)/recent.length;
   const ao=old.reduce((a,b)=>a+b,0)/old.length;
-  if(ar>ao+5)patterns.push({type:'success',icon:'📈',title:'Tu progresses !',desc:`Tes 5 dernières parties sont +${(ar-ao).toFixed(0)}% vs tes premières.`});
-  else if(ar<ao-5)patterns.push({type:'danger',icon:'📉',title:'Légère régression',desc:'Tes performances récentes sont en baisse. Continue, ça revient !'});
-  if(c1pct>=75)patterns.push({type:'success',icon:'🎯',title:'Excellent en C1',desc:`${c1pct}% de tes touches en première cartouche. Tu tires vite et bien !`});
-  else if(c1pct<45)patterns.push({type:'danger',icon:'⚠️',title:'Travaille ta C1',desc:`Seulement ${c1pct}% en C1. Prends le temps de viser avant de tirer.`});
+  if(ar>ao+5)patterns.push({type:'success',icon:'',title:'Tu progresses !',desc:`Tes 5 dernières parties sont +${(ar-ao).toFixed(0)}% vs tes premières.`});
+  else if(ar<ao-5)patterns.push({type:'danger',icon:'',title:'Légère régression',desc:'Tes performances récentes sont en baisse. Continue, ça revient !'});
+  if(c1pct>=75)patterns.push({type:'success',icon:'',title:'Excellent en C1',desc:`${c1pct}% de tes touches en première cartouche. Tu tires vite et bien !`});
+  else if(c1pct<45)patterns.push({type:'danger',icon:'',title:'Travaille ta C1',desc:`Seulement ${c1pct}% en C1. Prends le temps de viser avant de tirer.`});
   if(stddev!==undefined){
-    if(stddev<2)patterns.push({type:'success',icon:'🔄',title:'Tireur très régulier',desc:`Écart-type de ${stddev.toFixed(1)} pts. Tes scores sont extrêmement constants !`});
-    else if(stddev>6)patterns.push({type:'warning',icon:'🎢',title:'Performances irrégulières',desc:`Écart-type de ${stddev.toFixed(1)} pts. Le mental joue un rôle, travaille la concentration.`});
+    if(stddev<2)patterns.push({type:'success',icon:'',title:'Tireur très régulier',desc:`Écart-type de ${stddev.toFixed(1)} pts. Tes scores sont extrêmement constants !`});
+    else if(stddev>6)patterns.push({type:'warning',icon:'',title:'Performances irrégulières',desc:`Écart-type de ${stddev.toFixed(1)} pts. Le mental joue un rôle, travaille la concentration.`});
   }
   const parcs=Object.entries(sbp);
   if(parcs.length>=2){
     parcs.sort((a,b)=>{const pa=a[1].pcts.reduce((x,y)=>x+y,0)/a[1].pcts.length;const pb=b[1].pcts.reduce((x,y)=>x+y,0)/b[1].pcts.length;return pb-pa;});
     const best=parcs[0],worst=parcs[parcs.length-1];
-    patterns.push({type:'success',icon:'💪',title:`Point fort : ${best[0]}`,desc:`${Math.round(best[1].pcts.reduce((a,b)=>a+b,0)/best[1].pcts.length)}% de réussite sur ce parcours.`});
-    if(worst[0]!==best[0])patterns.push({type:'warning',icon:'📍',title:`Axe de progrès : ${worst[0]}`,desc:`${Math.round(worst[1].pcts.reduce((a,b)=>a+b,0)/worst[1].pcts.length)}% de réussite. Marge de progression ici !`});
+    patterns.push({type:'success',icon:'',title:`Point fort : ${best[0]}`,desc:`${Math.round(best[1].pcts.reduce((a,b)=>a+b,0)/best[1].pcts.length)}% de réussite sur ce parcours.`});
+    if(worst[0]!==best[0])patterns.push({type:'warning',icon:'',title:`Axe de progrès : ${worst[0]}`,desc:`${Math.round(worst[1].pcts.reduce((a,b)=>a+b,0)/worst[1].pcts.length)}% de réussite. Marge de progression ici !`});
   }
   // Lettre la plus faible globale
   const gLetters=calcLetterStats(pts);
@@ -916,12 +1136,12 @@ function detectPatterns(pts,sbp,sbd,c1pct,stddev){
     letterEntries.sort((a,b)=>(a[1].hit/a[1].total)-(b[1].hit/b[1].total));
     const [wl,wd]=letterEntries[0];
     const wpct=Math.round(wd.hit/wd.total*100);
-    if(wpct<60)patterns.push({type:'danger',icon:'🔴',title:`Poste ${wl} à travailler`,desc:`Seulement ${wpct}% de réussite sur ce poste (${wd.hit}/${wd.total}). Concentre-toi dessus !`});
+    if(wpct<60)patterns.push({type:'danger',icon:'',title:`Poste ${wl} à travailler`,desc:`Seulement ${wpct}% de réussite sur ce poste (${wd.hit}/${wd.total}). Concentre-toi dessus !`});
     const [bl,bd]=letterEntries[letterEntries.length-1];
     const bpct=Math.round(bd.hit/bd.total*100);
-    if(bpct>=75)patterns.push({type:'success',icon:'🟢',title:`Poste ${bl} = ton point fort`,desc:`${bpct}% de réussite sur ce poste. Tu le maîtrises parfaitement !`});
+    if(bpct>=75)patterns.push({type:'success',icon:'',title:`Poste ${bl} = ton point fort`,desc:`${bpct}% de réussite sur ce poste. Tu le maîtrises parfaitement !`});
   }
-  return patterns.length?patterns:[{type:'success',icon:'✅',title:'Continue !',desc:'Joue plus de parties pour des analyses plus précises.'}];
+  return patterns.length?patterns:[{type:'success',icon:'',title:'Continue !',desc:'Joue plus de parties pour des analyses plus précises.'}];
 }
 
 // GRAPHES
@@ -949,19 +1169,21 @@ function renderSelectionPage(){
     $('partie-root').innerHTML=header+`
       <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Type de jeu</div>
       <div style="display:flex;flex-direction:column;gap:12px">
-        <div id="btn-compact" style="background:#1e293b;border:2px solid #1f2937;border-radius:14px;padding:18px;cursor:pointer;display:flex;align-items:center;gap:16px">
-          <div style="font-size:2.2rem">🏕️</div>
-          <div style="flex:1"><div style="font-size:1rem;font-weight:800">Compaq</div>
-            <div style="font-size:.78rem;color:#64748b;margin-top:3px">4 parcours · Simples & Doubles</div>
-            <div style="font-size:.72rem;color:#64748b;margin-top:2px">Lac Léman · Salève · Rhône · Jura</div></div>
-          <span style="color:#C9960C;font-size:1.4rem">›</span>
+        <div id="btn-compact" style="background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 16px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:border-color .2s">
+          <div style="flex:1">
+            <div style="font-size:.95rem;font-weight:600;color:var(--tx)">Compaq</div>
+            <div style="font-size:.78rem;color:var(--tx2);margin-top:4px">4 parcours · Simples & Doubles</div>
+            <div style="font-size:.72rem;color:var(--mu);margin-top:2px">Lac Léman · Salève · Rhône · Jura</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div id="btn-dtl" style="background:#1e293b;border:2px solid #1f2937;border-radius:14px;padding:18px;cursor:pointer;display:flex;align-items:center;gap:16px">
-          <div style="font-size:2.2rem">🎯</div>
-          <div style="flex:1"><div style="font-size:1rem;font-weight:800">DTL</div>
-            <div style="font-size:.78rem;color:#64748b;margin-top:3px">5 postes · 5 tirs / poste · 2 cartouches</div>
-            <div style="font-size:.72rem;color:#64748b;margin-top:2px">25 plateaux · même point de lancement</div></div>
-          <span style="color:#C9960C;font-size:1.4rem">›</span>
+        <div id="btn-dtl" style="background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 16px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:border-color .2s">
+          <div style="flex:1">
+            <div style="font-size:.95rem;font-weight:600;color:var(--tx)">DTL</div>
+            <div style="font-size:.78rem;color:var(--tx2);margin-top:4px">5 postes · 5 tirs / poste · 2 cartouches</div>
+            <div style="font-size:.72rem;color:var(--mu);margin-top:2px">25 plateaux · même point de lancement</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
       </div>`;
     $('btn-compact').addEventListener('click',()=>{selTypeJeu='Compaq';renderSelectionPage();});
@@ -990,7 +1212,7 @@ function renderSelectionPage(){
 
   // COMPACT
   const icons=['🅐','🅑','🅒','🅓'];
-  const emojis={Bleu:'🔵',Vert:'🟢',Rouge:'🔴',Noir:'⚫'};
+  const emojis={Bleu:'🔵',Vert:'',Rouge:'',Noir:'⚫'};
   const labels={Bleu:'Débutant',Vert:'Intermédiaire',Rouge:'Avancé',Noir:'Expert'};
   let html=header+`<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;cursor:pointer" id="btn-back-compact">
     <span style="color:#C9960C;font-size:.85rem">← Compaq</span></div>
@@ -1140,11 +1362,11 @@ function finishPartie(){
     <p style="font-size:.85rem;color:var(--tx2);margin-bottom:14px;font-weight:600">${CP?.nom} · ${pConfig.nom}${pConfig.diff?' · '+pConfig.diff:''}</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
       <div class="card" style="text-align:center;border-top:3px solid #1a3a6b;margin:0;padding:14px"><div style="font-size:2rem;font-weight:800">${tot}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Total / ${mx}</div></div>
-      <div class="card" style="text-align:center;border-top:3px solid var(--or);margin:0;padding:14px"><div style="font-size:2rem;font-weight:800;color:var(--or2)">${pct}%</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Réussite</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--gold);margin:0;padding:14px"><div style="font-size:2rem;font-weight:800;color:var(--gold2)">${pct}%</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Réussite</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:#4ade80">${hitS}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Simples touchés</div></div>
-      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:var(--or2)">${hitD}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles touchés</div></div>
+      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:var(--gold2)">${hitD}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles touchés</div></div>
     </div>`;
   openMo('mo-fin');
 }
@@ -1156,9 +1378,9 @@ $('btn-save-partie').addEventListener('click',async()=>{
   try{
     const res=await db.post('parties',{user_id:CU.id,parcours:pConfig.nom,type_jeu:pConfig.type||'Compaq',difficulte:pConfig.diff,nb_simples:nbS,nb_doubles:nbD,total:tot,max_plateaux:mx,c1:lc.c1,c2:lc.c2,hit_simples:lc.hitS,hit_doubles:lc.hitD,pct:mx?Math.round(tot/mx*100):0,game_state:gState,postes:pConfig.postes,played_at:new Date().toISOString()});
     allGames.unshift(res[0]);myGames.unshift(res[0]);
-    closeMo('mo-fin');gState=[];selTypeJeu=null;showPage('home');toast('✔ Partie enregistrée !');
+    closeMo('mo-fin');gState=[];selTypeJeu=null;showPage('home');toast('Partie enregistrée !');
   }catch(e){toast('❌ '+e.message);}
-  $('btn-save-partie').disabled=false;$('btn-save-partie').textContent='💾 Enregistrer';
+  $('btn-save-partie').disabled=false;$('btn-save-partie').textContent='Enregistrer';
 });
 $('btn-fin-back').addEventListener('click',()=>closeMo('mo-fin'));
 
@@ -1168,19 +1390,19 @@ function openDetail(id){
   const gs=p.game_state||[];let html='';
   gs.forEach((po,si)=>{
     let sh='';
-    po.s.forEach((v,j)=>{const cl=v==='c1'?'color:#4ade80':v==='c2'?'color:var(--or2)':v==='miss'?'color:#f87171':'color:var(--mu)';const lb=v==='c1'?'✔ C1':v==='c2'?'✔ C2':v==='miss'?'✘ Raté':'— N/S';sh+=`<div class="dsh"><span style="color:var(--tx2)">${p.type_jeu==='DTL'?'Tir '+(j+1):'Simple '+(j+1)}</span><span style="font-weight:700;font-size:.85rem;${cl}">${lb}</span></div>`;});
-    po.d&&po.d.forEach((d,j)=>{[0,1].forEach(pi=>{const v=d[pi];const cl=v==='hit'?'color:#4ade80':v==='miss'?'color:#f87171':'color:var(--mu)';const lb=v==='hit'?'✔ Touché':v==='miss'?'✘ Raté':'— N/S';sh+=`<div class="dsh"><span style="color:var(--tx2)">Double ${j+1}·P${pi+1}</span><span style="font-weight:700;font-size:.85rem;${cl}">${lb}</span></div>`;});});
+    po.s.forEach((v,j)=>{const cl=v==='c1'?'color:var(--green)':v==='c2'?'color:var(--gold2)':v==='miss'?'color:var(--red)':'color:var(--mu)';const lb=v==='c1'?'C1':v==='c2'?'C2':v==='miss'?'Raté':'—';sh+=`<div class="dsh"><span style="color:var(--tx2)">${p.type_jeu==='DTL'?'Tir '+(j+1):'Simple '+(j+1)}</span><span style="font-weight:700;font-size:.85rem;${cl}">${lb}</span></div>`;});
+    po.d&&po.d.forEach((d,j)=>{[0,1].forEach(pi=>{const v=d[pi];const cl=v==='hit'?'color:var(--green)':v==='miss'?'color:var(--red)':'color:var(--mu)';const lb=v==='hit'?'✔ Touché':v==='miss'?'Raté':'—';sh+=`<div class="dsh"><span style="color:var(--tx2)">Double ${j+1}·P${pi+1}</span><span style="font-weight:700;font-size:.85rem;${cl}">${lb}</span></div>`;});});
     html+=`<div class="dpst"><h4>Poste ${si+1}</h4>${sh}</div>`;
   });
   $('mo-detail-content').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-      <div><div style="font-size:1rem;font-weight:800;color:var(--or)">${p.type_jeu==='DTL'?'🎯 DTL':'🗺 '+p.parcours}${p.difficulte?' · '+p.difficulte:''}</div>
+      <div><div style="font-size:1rem;font-weight:800;color:var(--gold)">${p.type_jeu==='DTL'?'DTL':p.parcours}${p.difficulte?' · '+p.difficulte:''}</div>
         <div style="font-size:.78rem;color:var(--mu);margin-top:3px">📅 ${fmtD(p.played_at)}</div></div>
       <div style="text-align:right"><div style="font-size:1.6rem;font-weight:800">${p.total}/${p.max_plateaux}</div><div style="font-size:.78rem;color:var(--mu)">${p.pct}%</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
       <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:#4ade80">${p.hit_simples??p.c1}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Simples</div></div>
-      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:var(--or2)">${p.hit_doubles??p.c2}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles</div></div>
+      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:var(--gold2)">${p.hit_doubles??p.c2}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles</div></div>
       <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:#f87171">${p.max_plateaux-p.total}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Ratés</div></div>
     </div>
     <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Détail</div>${html}
@@ -1194,7 +1416,7 @@ function openDetail(id){
 }
 async function deleteGame(id){
   if(!confirm('Supprimer ?'))return;
-  try{await db.del('parties',`id=eq.${id}`);allGames=allGames.filter(p=>p.id!==id);myGames=myGames.filter(p=>p.id!==id);closeMo('mo-detail');renderHome();toast('✔ Supprimée');}
+  try{await db.del('parties',`id=eq.${id}`);allGames=allGames.filter(p=>p.id!==id);myGames=myGames.filter(p=>p.id!==id);closeMo('mo-detail');renderHome();toast('Supprimée');}
   catch(e){toast('❌ '+e.message);}
 }
 
@@ -1210,7 +1432,7 @@ function renderAmis(){
       <div class="lbl">Ajouter un ami par code</div>
       <div style="display:flex;gap:8px">
         <input class="inp" id="ami-code-input" placeholder="Ex: A3F7K2" style="flex:1;text-transform:uppercase;letter-spacing:.1em;font-weight:700">
-        <button id="btn-add-ami" style="background:var(--or);color:#fff;border:none;border-radius:10px;padding:13px 16px;font-size:.9rem;font-weight:700;cursor:pointer">Ajouter</button>
+        <button id="btn-add-ami" style="background:var(--gold);color:#fff;border:none;border-radius:10px;padding:13px 16px;font-size:.9rem;font-weight:700;cursor:pointer">Ajouter</button>
       </div>
       <div id="ami-msg" style="font-size:.78rem;margin-top:8px;text-align:center;font-weight:600"></div>
     </div>
@@ -1233,7 +1455,7 @@ function renderAmis(){
         <div style="flex:1"><div style="font-size:1rem;font-weight:700">${ami.nom}</div>
           <div style="font-size:.75rem;color:var(--mu);margin-top:2px">${pts.length} partie${pts.length!==1?'s':''} · Mieux: ${best} · Moy: ${avg}</div>
           <div style="font-size:.7rem;color:var(--mu);margin-top:1px">Code: ${ami.code_social||'—'}</div></div>
-        <span style="color:var(--or);font-size:1.2rem">›</span>`;
+        <span style="color:var(--gold);font-size:1.2rem">›</span>`;
       div.addEventListener('click',()=>ouvrirProfilAmi(ami.id));
       list.appendChild(div);
     });
@@ -1284,17 +1506,17 @@ function ouvrirProfilAmi(uid){
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
       <div class="stat-box"><div class="sv" style="color:#4ade80">${best}</div><div class="sl">Meilleur</div></div>
-      <div class="stat-box"><div class="sv" style="color:var(--or2)">${avg}</div><div class="sl">Moyenne</div></div>
-      <div class="stat-box"><div class="sv" style="color:var(--or2)">${avgPct}%</div><div class="sl">Réussite</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--gold2)">${avg}</div><div class="sl">Moyenne</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--gold2)">${avgPct}%</div><div class="sl">Réussite</div></div>
     </div>
     <div class="card" style="margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">Précision C1</span><span style="font-size:.9rem;font-weight:700;color:#4ade80">${c1p}%</span></div>
       <div class="prog-bar-bg"><div class="prog-bar" style="width:${c1p}%;background:#4ade80"></div></div>
     </div>
-    ${Object.entries(sbp).map(([nom,d])=>{const pa=(d.scores.reduce((a,b)=>a+b,0)/d.scores.length).toFixed(1);const pp=Math.round(d.pcts.reduce((a,b)=>a+b,0)/d.pcts.length);return `<div style="background:#0f172a;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:.9rem;font-weight:600;color:var(--or)">${nom}</div><div style="display:flex;gap:14px"><div style="text-align:center"><div style="font-size:.95rem;font-weight:700">${pa}</div><div style="font-size:.62rem;color:var(--mu)">moy</div></div><div style="text-align:center"><div style="font-size:.95rem;font-weight:700;color:var(--or2)">${pp}%</div><div style="font-size:.62rem;color:var(--mu)">réussite</div></div></div></div>`;}).join('')}
+    ${Object.entries(sbp).map(([nom,d])=>{const pa=(d.scores.reduce((a,b)=>a+b,0)/d.scores.length).toFixed(1);const pp=Math.round(d.pcts.reduce((a,b)=>a+b,0)/d.pcts.length);return `<div style="background:#0f172a;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:.9rem;font-weight:600;color:var(--gold)">${nom}</div><div style="display:flex;gap:14px"><div style="text-align:center"><div style="font-size:.95rem;font-weight:700">${pa}</div><div style="font-size:.62rem;color:var(--mu)">moy</div></div><div style="text-align:center"><div style="font-size:.95rem;font-weight:700;color:var(--gold2)">${pp}%</div><div style="font-size:.62rem;color:var(--mu)">réussite</div></div></div></div>`;}).join('')}
     ${srt.length>=2?`<div class="card" style="margin-bottom:14px"><div class="lbl">Progression</div><div class="chwrap">${lineChart([{vals:srt.map(x=>({x:fmtSD(x.played_at),y:x.total})),color:'#2a5298'}])}</div></div>`:''}
     <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Dernières parties</div>
-    ${pts.slice(0,6).map(x=>`<div class="hc" style="cursor:default;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.8rem;font-weight:700;color:var(--or)">${x.type_jeu==='DTL'?'🎯 DTL':'🗺 '+x.parcours}${x.difficulte?' · '+x.difficulte:''}</div><div style="font-size:.7rem;color:var(--mu);margin-top:2px">${fmtD(x.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800">${x.total}/${x.max_plateaux}</div><div style="font-size:.7rem;color:var(--mu)">${x.pct}%</div></div></div></div>`).join('')}`;
+    ${pts.slice(0,6).map(x=>`<div class="hc" style="cursor:default;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.8rem;font-weight:700;color:var(--gold)">${x.type_jeu==='DTL'?'DTL':x.parcours}${x.difficulte?' · '+x.difficulte:''}</div><div style="font-size:.7rem;color:var(--mu);margin-top:2px">${fmtD(x.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800">${x.total}/${x.max_plateaux}</div><div style="font-size:.7rem;color:var(--mu)">${x.pct}%</div></div></div></div>`).join('')}`;
   openMo('mo-ami-detail');
 }
 $('mo-ami-close').addEventListener('click',()=>closeMo('mo-ami-detail'));
@@ -1334,13 +1556,13 @@ function renderCList(){
   const sorted=Object.values(byU).sort((a,b)=>rMetric==='score'?b.bs-a.bs:b.bp-a.bp);
   const el=$('rank-list');
   if(!sorted.length){el.innerHTML=`<div class="empty"><div class="ei">🏆</div><p>Aucune donnée.</p></div>`;return;}
-  const medals=['🥇','🥈','🥉'];
+  const medals=['1','2','3'];
   el.innerHTML=sorted.map((u,i)=>{const pr=allP.find(p=>p.id===u.uid),nom=pr?.nom||'?',col=aColor(nom),isMe=u.uid===CU.id;
-    return `<div class="ri" style="${isMe?'border:1.5px solid var(--or);background:var(--or-pale)':''}">
-      <div style="font-size:1.2rem;width:30px;text-align:center">${medals[i]||(i+1)}</div>
+    return `<div class="ri" style="${isMe?'border:1.5px solid var(--gold);background:var(--gold-dim)':''}">
+      <div style="font-size:1.2rem;width:30px;text-align:center">${i+1}</div>
       <div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem">${initials(nom)}</div>
-      <div style="flex:1"><div style="font-size:.95rem;font-weight:700">${nom}${isMe?' <span style="color:var(--or);font-size:.72rem">(moi)</span>':''}</div><div style="font-size:.75rem;color:var(--mu)">${u.nb} partie${u.nb!==1?'s':''}</div></div>
-      <div style="font-size:1.2rem;font-weight:800;color:var(--or2)">${rMetric==='score'?u.bs+' pts':u.bp+'%'}</div>
+      <div style="flex:1"><div style="font-size:.95rem;font-weight:700">${nom}${isMe?' <span style="color:var(--gold);font-size:.72rem">(moi)</span>':''}</div><div style="font-size:.75rem;color:var(--mu)">${u.nb} partie${u.nb!==1?'s':''}</div></div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--gold2)">${rMetric==='score'?u.bs+' pts':u.bp+'%'}</div>
     </div>`;
   }).join('');
 }
@@ -1360,12 +1582,12 @@ function renderAdmUsers(){
   const q=($('adm-search').value||'').toLowerCase();$('adm-users').innerHTML='';
   allP.filter(p=>p.nom.toLowerCase().includes(q)).forEach(p=>{
     const pts=allGames.filter(x=>x.user_id===p.id);const best=pts.length?Math.max(...pts.map(x=>x.total)):'—';const col=aColor(p.nom);
-    const vl={public:'🌍',prive:'🔒'};
+    const vl={public:'·',prive:'·'};
     const row=document.createElement('div');row.className='arow';
     row.innerHTML=`<div class="av" style="background:${col};width:34px;height:34px;font-size:.85rem;flex-shrink:0">${initials(p.nom)}</div>
       <div style="flex:1"><div style="font-size:.9rem;font-weight:700">${p.nom} ${vl[p.visibilite||'public']}${p.is_admin?' <span style="color:#a855f7;font-size:.72rem">admin</span>':''}</div>
       <div style="font-size:.75rem;color:var(--mu)">Code: ${p.code_social||'—'} · ${pts.length} parties · Mieux: ${best}</div></div>`;
-    const del=document.createElement('button');del.className='btn-r';del.textContent='🗑';
+    const del=document.createElement('button');del.className='btn-r';del.textContent='Suppr.';
     del.addEventListener('click',async()=>{if(!confirm(`Supprimer ${p.nom} ?`))return;try{await db.del('profils',`id=eq.${p.id}`);allP=allP.filter(x=>x.id!==p.id);allGames=allGames.filter(x=>x.user_id!==p.id);myGames=myGames.filter(x=>x.user_id!==p.id);toast(`✔ ${p.nom} supprimé`);renderAdmin();}catch(e){toast('❌ '+e.message);}});
     row.appendChild(del);$('adm-users').appendChild(row);
   });
@@ -1376,10 +1598,10 @@ function renderAdmParties(){
   list.forEach(p=>{
     const pr=allP.find(x=>x.id===p.user_id);
     const row=document.createElement('div');row.className='arow';
-    row.innerHTML=`<div style="flex:1"><div style="font-size:.88rem;font-weight:700">${pr?.nom||'?'} <span style="color:var(--or)">· ${p.parcours}</span>${p.difficulte?` <span style="color:${DIFF_COLORS[p.difficulte]||'#64748b'};font-size:.75rem">· ${p.difficulte}</span>`:''}</div>
+    row.innerHTML=`<div style="flex:1"><div style="font-size:.88rem;font-weight:700">${pr?.nom||'?'} <span style="color:var(--gold)">· ${p.parcours}</span>${p.difficulte?` <span style="color:${DIFF_COLORS[p.difficulte]||'#64748b'};font-size:.75rem">· ${p.difficulte}</span>`:''}</div>
       <div style="font-size:.75rem;color:var(--mu)">${fmtD(p.played_at)} · ${p.total}/${p.max_plateaux} (${p.pct}%)</div></div>`;
-    const del=document.createElement('button');del.className='btn-r';del.textContent='🗑';
-    del.addEventListener('click',async()=>{if(!confirm('Supprimer ?'))return;try{await db.del('parties',`id=eq.${p.id}`);allGames=allGames.filter(x=>x.id!==p.id);myGames=myGames.filter(x=>x.id!==p.id);toast('✔ Supprimé');renderAdmin();}catch(e){toast('❌ '+e.message);}});
+    const del=document.createElement('button');del.className='btn-r';del.textContent='Suppr.';
+    del.addEventListener('click',async()=>{if(!confirm('Supprimer ?'))return;try{await db.del('parties',`id=eq.${p.id}`);allGames=allGames.filter(x=>x.id!==p.id);myGames=myGames.filter(x=>x.id!==p.id);toast('Supprimé');renderAdmin();}catch(e){toast('❌ '+e.message);}});
     row.appendChild(del);$('adm-parties').appendChild(row);
   });
 }
@@ -1397,7 +1619,7 @@ $('btn-save-vis').addEventListener('click',async()=>{
   try{
     await db.patch('profils',`id=eq.${CU.id}`,{visibilite:tVis});
     CP.visibilite=tVis;
-    toast('✔ Confidentialité mise à jour');
+    toast('Confidentialité mise à jour');
     closeMo('mo-vis');
   }catch(e){toast('❌ '+e.message);}
   $('btn-save-vis').disabled=false;

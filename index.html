@@ -904,7 +904,7 @@ $('l-btn').addEventListener('click',async()=>{
   $('l-err').textContent='';
   if(!email||!pwd){$('l-err').textContent='Remplis tous les champs.';return;}
   $('l-btn').disabled=true;$('l-btn').textContent='Connexion…';
-  try{const r=await api('POST','/auth/v1/token?grant_type=password',{email,password:pwd});token=r.access_token;CU=r.user;await loadApp();}
+  try{const r=await api('POST','/auth/v1/token?grant_type=password',{email,password:pwd});token=r.access_token;CU=r.user;localStorage.setItem('sb_token',token);localStorage.setItem('sb_user',JSON.stringify(CU));await loadApp();}
   catch(e){$('l-err').textContent=' '+e.message;}
   $('l-btn').disabled=false;$('l-btn').textContent='Se connecter';
 });
@@ -917,6 +917,7 @@ $('r-btn').addEventListener('click',async()=>{
   try{
     const r=await api('POST','/auth/v1/signup',{email,password:pwd});
     token=r.access_token;CU=r.user;
+    localStorage.setItem('sb_token',token);localStorage.setItem('sb_user',JSON.stringify(CU));
     const code=Math.random().toString(36).substring(2,8).toUpperCase();
     await db.post('profils',{id:CU.id,nom,visibilite:regVis,code_social:code});
     await loadApp();
@@ -1046,7 +1047,7 @@ function renderProfilDrawer(){
     <button id="dp-logout-btn" style="background:transparent;color:#f87171;border:1.5px solid #f87171;border-radius:12px;padding:13px;font-size:.95rem;font-weight:600;cursor:pointer;width:100%">Se déconnecter</button>`;
   $('dp-vis-btn').addEventListener('click',()=>{$('profil-panel').classList.remove('on');openVisModal();});
   $('dp-edit-btn').addEventListener('click',()=>{$('profil-panel').classList.remove('on');initEditProfil();openMo('mo-edit');});
-  $('dp-logout-btn').addEventListener('click',async()=>{if(!confirm('Se déconnecter ?'))return;try{await api('POST','/auth/v1/logout',{});}catch(e){}token=null;CU=null;CP=null;isAdmin=false;$('auth-screen').style.display='flex';$('app').style.display='none';$('profil-panel').classList.remove('on');});
+  $('dp-logout-btn').addEventListener('click',async()=>{if(!confirm('Se déconnecter ?'))return;try{await api('POST','/auth/v1/logout',{});}catch(e){}token=null;CU=null;CP=null;isAdmin=false;localStorage.removeItem('sb_token');localStorage.removeItem('sb_user');$('auth-screen').style.display='flex';$('app').style.display='none';$('profil-panel').classList.remove('on');});
 }
 
 // HOME
@@ -1980,6 +1981,30 @@ $('ep-close').addEventListener('click',()=>closeMo('mo-edit'));
 
   // Initialiser aussi tous les modals existants maintenant
   document.querySelectorAll('.mo').forEach(initSwipe);
+})();
+
+
+// AUTO LOGIN — restaurer la session au démarrage
+(async function(){
+  const savedToken=localStorage.getItem('sb_token');
+  const savedUser=localStorage.getItem('sb_user');
+  if(!savedToken||!savedUser)return;
+  try{
+    // Vérifier que le token est encore valide
+    token=savedToken;
+    CU=JSON.parse(savedUser);
+    // Vérifier avec Supabase que la session est active
+    const r=await fetch(SUPA+'/auth/v1/user',{headers:H()});
+    if(!r.ok)throw new Error('Session expirée');
+    const userData=await r.json();
+    CU=userData;
+    await loadApp();
+  }catch(e){
+    // Session invalide, on repart de zéro
+    token=null;CU=null;
+    localStorage.removeItem('sb_token');
+    localStorage.removeItem('sb_user');
+  }
 })();
 
 </script>

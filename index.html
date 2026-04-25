@@ -12,26 +12,26 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#06090f;
-  --bg2:#0a1020;
-  --card:#0f1825;
-  --card2:#141f30;
-  --gold:#c8900a;
-  --gold2:#e8a820;
-  --gold3:#ffc84a;
-  --gold-dim:rgba(200,144,10,.1);
-  --gold-glow:rgba(200,144,10,.25);
-  --tx:#dde6f0;
-  --tx2:#5e7a96;
-  --mu:#2e4055;
-  --bd:rgba(255,255,255,.06);
-  --bd2:rgba(255,255,255,.11);
-  --green:#1db87a;
-  --green-dim:rgba(29,184,122,.1);
-  --red:#d94f4f;
-  --red-dim:rgba(217,79,79,.1);
+  --bg:#f2f0eb;
+  --bg2:#e8e5de;
+  --card:#ffffff;
+  --card2:#f7f5f0;
+  --gold:#a06e00;
+  --gold2:#b87d00;
+  --gold3:#c98e10;
+  --gold-dim:rgba(160,110,0,.1);
+  --gold-glow:rgba(160,110,0,.2);
+  --tx:#0f1117;
+  --tx2:#4a5568;
+  --mu:#9aa5b4;
+  --bd:rgba(0,0,0,.09);
+  --bd2:rgba(0,0,0,.16);
+  --green:#0a7c4e;
+  --green-dim:rgba(10,124,78,.1);
+  --red:#b83232;
+  --red-dim:rgba(184,50,50,.1);
   --r:14px;--r-sm:10px;--r-lg:18px;
-  --shadow:0 4px 24px rgba(0,0,0,.4);
+  --shadow:0 4px 24px rgba(0,0,0,.1);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -64,14 +64,14 @@ input,button,select,textarea{font-family:inherit}
   content:'';position:absolute;
   top:-20%;left:50%;transform:translateX(-50%);
   width:500px;height:500px;
-  background:radial-gradient(circle,rgba(200,144,10,.06) 0%,transparent 65%);
+  background:radial-gradient(circle,rgba(160,110,0,.08) 0%,transparent 65%);
   pointer-events:none;
 }
 #auth-screen::after{
   content:'';position:absolute;
   bottom:-10%;right:-15%;
   width:300px;height:300px;
-  background:radial-gradient(circle,rgba(29,184,122,.04) 0%,transparent 70%);
+  background:radial-gradient(circle,rgba(10,124,78,.05) 0%,transparent 70%);
   pointer-events:none;
 }
 .auth-logo-wrap{text-align:center;animation:fadeUp .5s cubic-bezier(.4,0,.2,1) both}
@@ -87,7 +87,7 @@ input,button,select,textarea{font-family:inherit}
   box-shadow:0 24px 48px rgba(0,0,0,.3);
 }
 .auth-tabs{
-  display:flex;background:var(--bg);
+  display:flex;background:var(--bg2);
   border-radius:10px;padding:3px;
   margin-bottom:24px;border:1px solid var(--bd);
 }
@@ -106,7 +106,7 @@ input,button,select,textarea{font-family:inherit}
   display:block;margin-bottom:8px;
 }
 .af input{
-  background:var(--bg2);
+  background:var(--card2);
   border:1px solid var(--bd);
   border-radius:10px;color:var(--tx);
   padding:13px 14px;font-size:.95rem;width:100%;outline:none;
@@ -138,7 +138,7 @@ input,button,select,textarea{font-family:inherit}
 #app{display:none;min-height:100vh;padding-bottom:82px}
 
 .topbar{
-  background:rgba(6,9,15,.92);
+  background:rgba(242,240,235,.94);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   padding:14px 16px 12px;
   display:flex;align-items:center;justify-content:space-between;
@@ -147,13 +147,13 @@ input,button,select,textarea{font-family:inherit}
 }
 .avatar-btn{
   width:36px;height:36px;border-radius:50%;
-  background:rgba(200,144,10,.12);
+  background:rgba(160,110,0,.1);
   display:flex;align-items:center;justify-content:center;
-  border:1px solid rgba(200,144,10,.4);
+  border:1px solid rgba(160,110,0,.35);
   cursor:pointer;flex-shrink:0;position:relative;
   transition:border-color .2s,background .2s;
 }
-.avatar-btn:active{background:rgba(200,144,10,.2)}
+.avatar-btn:active{background:rgba(160,110,0,.18)}
 .avatar-btn span{color:var(--gold2);font-size:11px;font-weight:600;letter-spacing:.03em}
 .badge-notif{
   position:absolute;top:-2px;right:-2px;
@@ -171,7 +171,7 @@ input,button,select,textarea{font-family:inherit}
 /* ── NAV ──────────────────────────────────────────────────────────────────── */
 .nav{
   display:flex;
-  background:rgba(6,9,15,.95);
+  background:rgba(242,240,235,.97);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-top:1px solid var(--bd);
   position:fixed;bottom:0;left:0;right:0;z-index:50;
@@ -198,7 +198,7 @@ input,button,select,textarea{font-family:inherit}
   background:var(--gold);
   display:flex;align-items:center;justify-content:center;
   border:3px solid var(--bg);margin-bottom:4px;
-  box-shadow:0 0 0 1px var(--gold-glow),0 8px 20px var(--gold-glow);
+  box-shadow:0 0 0 1px var(--gold-glow),0 6px 16px var(--gold-glow);
   transition:transform .12s,box-shadow .2s;
 }
 .nb-plus:active{transform:scale(.91)}
@@ -225,13 +225,13 @@ input,button,select,textarea{font-family:inherit}
   border:1px solid var(--bd);
 }
 .card-highlight{
-  background:linear-gradient(135deg,var(--card2) 0%,var(--card) 100%);
+  background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);
   border:1px solid var(--bd2);
 }
 
 /* ── INPUTS ───────────────────────────────────────────────────────────────── */
 .inp{
-  background:var(--bg2);border:1px solid var(--bd);
+  background:var(--card2);border:1px solid var(--bd);
   border-radius:10px;color:var(--tx);
   padding:12px 14px;font-size:.95rem;width:100%;outline:none;
   transition:border-color .2s,box-shadow .2s;
@@ -282,7 +282,7 @@ input,button,select,textarea{font-family:inherit}
 /* ── MODAL ────────────────────────────────────────────────────────────────── */
 .mo{
   display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.7);z-index:100;
+  background:rgba(0,0,0,.45);z-index:100;
   align-items:flex-end;justify-content:center;
   touch-action:none;overscroll-behavior:none;
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
@@ -315,7 +315,7 @@ input,button,select,textarea{font-family:inherit}
   margin-bottom:8px;overflow:hidden;border:1px solid var(--bd);
 }
 .sthd{
-  background:var(--bg2);padding:11px 16px;
+  background:var(--card2);padding:11px 16px;
   display:flex;justify-content:space-between;align-items:center;
   border-bottom:1px solid var(--bd);
 }
@@ -328,7 +328,7 @@ input,button,select,textarea{font-family:inherit}
 .sbt{
   height:44px;border-radius:10px;
   border:1px solid var(--bd);
-  background:var(--bg2);color:var(--mu);
+  background:var(--card2);color:var(--mu);
   font-size:.72rem;font-weight:600;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:transform .08s,border-color .15s,background .15s,color .15s;
@@ -360,7 +360,7 @@ input,button,select,textarea{font-family:inherit}
 }
 .hc:active{border-color:var(--bd2);transform:scale(.99)}
 .htag{
-  background:rgba(255,255,255,.04);
+  background:rgba(0,0,0,.04);
   border-radius:6px;padding:3px 9px;
   font-size:.68rem;color:var(--tx2);font-weight:500;
   border:1px solid var(--bd);letter-spacing:.02em;
@@ -375,7 +375,7 @@ input,button,select,textarea{font-family:inherit}
   transition:border-color .15s;
 }
 .trow{
-  display:flex;background:var(--bg2);
+  display:flex;background:var(--card2);
   border-radius:10px;margin-bottom:14px;
   padding:3px;border:1px solid var(--bd);
 }
@@ -398,7 +398,7 @@ input,button,select,textarea{font-family:inherit}
 .ftag.on{background:var(--gold-dim);color:var(--gold2);border-color:rgba(200,144,10,.3)}
 .vopts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .vopt{
-  background:var(--bg2);border:1px solid var(--bd);
+  background:var(--card2);border:1px solid var(--bd);
   border-radius:var(--r);padding:16px 10px;text-align:center;
   cursor:pointer;transition:all .18s;
 }
@@ -406,7 +406,7 @@ input,button,select,textarea{font-family:inherit}
 .vopt .vi{font-size:1.3rem;margin-bottom:6px}
 .vopt .vl{font-size:.68rem;color:var(--tx2);font-weight:500;text-transform:uppercase;letter-spacing:.07em}
 .vopt.on .vl{color:var(--gold2)}
-.dpst{background:var(--bg2);border-radius:var(--r-sm);padding:12px;margin-bottom:8px;border:1px solid var(--bd)}
+.dpst{background:var(--card2);border-radius:var(--r-sm);padding:12px;margin-bottom:8px;border:1px solid var(--bd)}
 .dpst h4{font-size:.65rem;color:var(--tx2);font-weight:500;text-transform:uppercase;letter-spacing:.11em;margin-bottom:8px}
 .dsh{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:.85rem}
 .dsh:last-child{border-bottom:none}
@@ -439,7 +439,7 @@ input,button,select,textarea{font-family:inherit}
 }
 .code-badge{
   background:var(--gold-dim);
-  border:1px solid rgba(200,144,10,.2);
+  border:1px solid rgba(160,110,0,.25);
   border-radius:var(--r);padding:16px;text-align:center;margin-bottom:16px;
 }
 .code-badge .cb-label{
@@ -470,7 +470,7 @@ input,button,select,textarea{font-family:inherit}
 .stat-box .sv{font-size:1.5rem;font-weight:600;font-variant-numeric:tabular-nums}
 .stat-box .sl{font-size:.6rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.09em;margin-top:4px}
 .prog-bar-bg{
-  background:rgba(255,255,255,.04);
+  background:rgba(0,0,0,.04);
   border-radius:20px;height:3px;overflow:hidden;margin-top:8px;
 }
 .prog-bar{height:3px;border-radius:20px;transition:width .6s cubic-bezier(.4,0,.2,1)}
@@ -488,8 +488,8 @@ input,button,select,textarea{font-family:inherit}
 #toast{
   position:fixed;bottom:100px;left:50%;
   transform:translateX(-50%) translateY(8px);
-  background:var(--card2);color:var(--tx);
-  border:1px solid var(--bd2);
+  background:#1a1a2e;color:#f0f0f0;
+  border:none;
   padding:10px 18px;border-radius:10px;
   font-size:.8rem;font-weight:500;
   z-index:999;opacity:0;
@@ -505,7 +505,7 @@ input,button,select,textarea{font-family:inherit}
 .profil-panel.on{display:flex;pointer-events:all}
 .profil-overlay{
   position:absolute;inset:0;
-  background:rgba(0,0,0,.55);opacity:0;
+  background:rgba(0,0,0,.35);opacity:0;
   transition:opacity .25s;
   backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
 }
@@ -518,7 +518,7 @@ input,button,select,textarea{font-family:inherit}
   transition:transform .3s cubic-bezier(.4,0,.2,1);
   overflow-y:auto;padding:56px 20px 40px;
   border-right:1px solid var(--bd);
-  box-shadow:8px 0 32px rgba(0,0,0,.4);
+  box-shadow:8px 0 32px rgba(0,0,0,.12);
 }
 .profil-panel.on .profil-drawer{transform:translateX(0)}
 .profil-close{
@@ -530,7 +530,7 @@ input,button,select,textarea{font-family:inherit}
 .profil-close:active{color:var(--tx)}
 .av{
   border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-weight:600;color:rgba(255,255,255,.85);
+  font-weight:600;color:rgba(0,0,0,.8);
   flex-shrink:0;font-size:.72rem;letter-spacing:.04em;
 }
 </style>
@@ -940,7 +940,7 @@ async function loadApp(){
     ld=document.createElement('div');
     ld.id='app-loader';
     ld.style.cssText='position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px';
-    ld.innerHTML='<div style="width:32px;height:32px;border:2px solid var(--bd);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite"></div><div style="font-size:.75rem;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase">Chargement</div>';
+    ld.innerHTML='<div style="width:32px;height:32px;border:2px solid rgba(0,0,0,.1);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite"></div><div style="font-size:.75rem;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase">Chargement</div>';
     document.body.appendChild(ld);
   }
   allP=await db.get('profils','order=created_at.asc');
@@ -1063,17 +1063,17 @@ function renderHome(){
   const amiIds=mesAmis.map(a=>a.id);
   const feed=allGames.filter(g=>amiIds.includes(g.user_id)).sort((a,b)=>new Date(b.played_at)-new Date(a.played_at)).slice(0,5);
   $('home-content').innerHTML=`
-    <div style="background:linear-gradient(135deg,var(--card2) 0%,rgba(26,58,107,.6) 100%);border-radius:14px;padding:18px;margin-bottom:14px;border:1px solid var(--bd2)">
+    <div style="background:linear-gradient(135deg,#1a3a6b 0%,#2a5298 100%);border-radius:14px;padding:18px;margin-bottom:14px;border:none">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
         <div><div style="font-size:1rem;font-weight:800;color:#fff">${CP?.nom||'—'}</div>
           <div style="font-size:.75rem;color:rgba(255,255,255,.6);margin-top:3px">${pts[0]?'Dernière · '+fmtSD(pts[0].played_at):pts.length+' partie'+(pts.length!==1?'s':'')}</div></div>
         <div style="text-align:right"><div style="font-size:2rem;font-weight:800;color:var(--gold2);line-height:1">${best}</div>
-          <div style="font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:2px">Meilleur</div></div>
+          <div style="font-size:.7rem;color:rgba(0,0,0,.45);text-transform:uppercase;margin-top:2px">Meilleur</div></div>
       </div>
       <div style="display:flex;gap:8px">
-        <div style="flex:1;background:rgba(255,255,255,.06);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.08)"><div style="font-size:1.15rem;font-weight:800;color:#fff">${avg}</div><div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">Moyenne</div></div>
-        <div style="flex:1;background:rgba(255,255,255,.06);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.08)"><div style="font-size:1.15rem;font-weight:800;color:#fff">${avgPct}%</div><div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">Réussite</div></div>
-        <div style="flex:1;background:rgba(255,255,255,.06);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.08)"><div style="font-size:1.15rem;font-weight:800;color:#fff">${c1p}%</div><div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:3px">% Simples</div></div>
+        <div style="flex:1;background:rgba(0,0,0,.05);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(0,0,0,.07)"><div style="font-size:1.15rem;font-weight:800;color:#fff">${avg}</div><div style="font-size:.65rem;color:rgba(0,0,0,.45);text-transform:uppercase;margin-top:3px">Moyenne</div></div>
+        <div style="flex:1;background:rgba(0,0,0,.05);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(0,0,0,.07)"><div style="font-size:1.15rem;font-weight:800;color:#fff">${avgPct}%</div><div style="font-size:.65rem;color:rgba(0,0,0,.45);text-transform:uppercase;margin-top:3px">Réussite</div></div>
+        <div style="flex:1;background:rgba(0,0,0,.05);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(0,0,0,.07)"><div style="font-size:1.15rem;font-weight:800;color:#fff">${c1p}%</div><div style="font-size:.65rem;color:rgba(0,0,0,.45);text-transform:uppercase;margin-top:3px">% Simples</div></div>
       </div>
     </div>
     ${srt.length>=2?`<div class="section-title">Progression</div><div class="card"><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'var(--gold)'}])}</div></div>`:''}

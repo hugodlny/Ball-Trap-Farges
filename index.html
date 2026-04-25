@@ -1027,10 +1027,10 @@ function renderProfilDrawer(){
   const vl={public:'Public',prive:'Privé'};
   $('profil-drawer-content').innerHTML=`
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-      <div class="av" style="background:${col};width:54px;height:54px;font-size:1.3rem;border:2px solid var(--gold)">${initials(CP?.nom)}</div>
+      <div class="av" style="background:${col};width:54px;height:54px;font-size:1.1rem;border:2px solid rgba(255,255,255,.25);color:#fff">${initials(CP?.nom)}</div>
       <div><div style="font-size:1.05rem;font-weight:800">${CP?.nom||'—'}</div>
         <div style="font-size:.75rem;color:var(--tx2);margin-top:3px">${CU.email}</div>
-        ${isAdmin?'<div style="color:#8b6abf;font-size:.72rem;margin-top:4px;font-weight:600"> Admin</div>':''}
+        ${isAdmin?'<div style="color:var(--gold);font-size:.68rem;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">Admin</div>':''}
       </div>
     </div>
     <div class="code-badge"><div class="cb-label">Mon code social</div><div class="cb-code">${CP?.code_social||'——'}</div>
@@ -1085,7 +1085,7 @@ function renderHome(){
       </div>
     </div>
     ${srt.length>=2?`<div class="section-title">Progression</div><div class="card"><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'var(--gold)'}])}</div></div>`:''}
-    ${feed.length?`<div class="section-title">Activité amis</div>${feed.map(g=>{const ami=allP.find(p=>p.id===g.user_id);const col=aColor(ami?.nom||'?');return `<div style="background:var(--card);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px"><div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;flex-shrink:0">${initials(ami?.nom)}</div><div style="flex:1"><div style="font-size:.88rem;font-weight:700">${ami?.nom||'?'}</div><div style="font-size:.75rem;color:var(--mu);margin-top:2px">${g.parcours}${g.difficulte?' · '+g.difficulte:''} · ${fmtSD(g.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800;color:var(--gold2)">${g.total}</div><div style="font-size:.7rem;color:var(--mu)">${g.pct}%</div></div></div>`;}).join('')}`:''}
+    ${feed.length?`<div class="section-title">Activité amis</div>${feed.map(g=>{const ami=allP.find(p=>p.id===g.user_id);const col=aColor(ami?.nom||'?');return `<div style="background:var(--card);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px"><div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;flex-shrink:0;color:#fff">${initials(ami?.nom)}</div><div style="flex:1"><div style="font-size:.88rem;font-weight:700">${ami?.nom||'?'}</div><div style="font-size:.75rem;color:var(--mu);margin-top:2px">${g.parcours}${g.difficulte?' · '+g.difficulte:''} · ${fmtSD(g.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800;color:var(--gold2)">${g.total}</div><div style="font-size:.7rem;color:var(--mu)">${g.pct}%</div></div></div>`;}).join('')}`:''}
     <div class="section-title">Mes dernières parties</div>
     ${pts.slice(0,4).map(p=>`<div class="hc" data-id="${p.id}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
@@ -1149,7 +1149,7 @@ function renderLetterGrid(letterMap){
     }).join('')}
   </div>
   <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
-    <span style="font-size:.65rem;color:var(--green);font-weight:500">≥80%</span>
+    <span style="font-size:.65rem;color:var(--green);font-weight:600">≥80%</span>
     <span style="font-size:.65rem;color:var(--gold);font-weight:500">≥60%</span>
     <span style="font-size:.65rem;color:#c06010;font-weight:500">≥40%</span>
     <span style="font-size:.65rem;color:var(--red);font-weight:500">&lt;40%</span>
@@ -1682,7 +1682,7 @@ function renderAmis(){
     <div class="section-title" style="margin-top:4px">Mes amis</div>
     ${demandesRecues.length?`<div style="background:rgba(251,191,36,.1);border:1.5px solid #fbbf24;border-radius:14px;padding:14px;margin-bottom:14px">
       <div style="font-size:.78rem;font-weight:700;color:var(--gold2);text-transform:uppercase;margin-bottom:10px"> ${demandesRecues.length} demande${demandesRecues.length>1?'s':''} en attente</div>
-      ${demandesRecues.map(d=>{const dem=allP.find(p=>p.id===d.demandeur_id);const col=aColor(dem?.nom||'?');return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;flex-shrink:0">${initials(dem?.nom)}</div><div style="flex:1"><div style="font-size:.9rem;font-weight:700">${dem?.nom||'?'}</div><div style="font-size:.72rem;color:var(--mu)">Code : ${dem?.code_social||'—'}</div></div><button class="btn-gr" style="padding:6px 10px;font-size:.75rem" data-id="${d.id}" data-action="accepte"></button><button class="btn-r" style="padding:6px 10px;font-size:.75rem" data-id="${d.id}" data-action="refuse"></button></div>`;}).join('')}
+      ${demandesRecues.map(d=>{const dem=allP.find(p=>p.id===d.demandeur_id);const col=aColor(dem?.nom||'?');return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;flex-shrink:0;color:#fff">${initials(dem?.nom)}</div><div style="flex:1"><div style="font-size:.9rem;font-weight:700">${dem?.nom||'?'}</div><div style="font-size:.72rem;color:var(--mu)">Code : ${dem?.code_social||'—'}</div></div><button class="btn-gr" style="padding:6px 10px;font-size:.75rem" data-id="${d.id}" data-action="accepte"></button><button class="btn-r" style="padding:6px 10px;font-size:.75rem" data-id="${d.id}" data-action="refuse"></button></div>`;}).join('')}
     </div>`:''}
     <div class="card" style="margin-bottom:14px">
       <div class="lbl">Ajouter un ami par code</div>
@@ -1707,7 +1707,7 @@ function renderAmis(){
       const avg=pts.length?(pts.reduce((a,x)=>a+x.total,0)/pts.length).toFixed(1):'—';
       const col=aColor(ami.nom);
       const div=document.createElement('div');div.className='ami-card';div.style.cursor='pointer';
-      div.innerHTML=`<div class="av" style="background:${col};width:46px;height:46px;font-size:1.05rem">${initials(ami.nom)}</div>
+      div.innerHTML=`<div class="av" style="background:${col};width:46px;height:46px;font-size:1.05rem;color:#fff">${initials(ami.nom)}</div>
         <div style="flex:1"><div style="font-size:1rem;font-weight:700">${ami.nom}</div>
           <div style="font-size:.75rem;color:var(--mu);margin-top:2px">${pts.length} partie${pts.length!==1?'s':''} · Mieux: ${best} · Moy: ${avg}</div>
           <div style="font-size:.7rem;color:var(--mu);margin-top:1px">Code: ${ami.code_social||'—'}</div></div>
@@ -1757,7 +1757,7 @@ function ouvrirProfilAmi(uid){
   const sbp={};pts.forEach(p=>{if(!sbp[p.parcours])sbp[p.parcours]={scores:[],pcts:[]};sbp[p.parcours].scores.push(p.total);sbp[p.parcours].pcts.push(p.pct);});
   $('mo-ami-detail-content').innerHTML=`
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-      <div class="av" style="background:${col};width:54px;height:54px;font-size:1.3rem">${initials(ami.nom)}</div>
+      <div class="av" style="background:${col};width:54px;height:54px;font-size:1.3rem;color:#fff">${initials(ami.nom)}</div>
       <div><div style="font-size:1.1rem;font-weight:800">${ami.nom}</div><div style="font-size:.78rem;color:var(--mu);margin-top:3px">Code: ${ami.code_social||'—'}</div><div style="font-size:.75rem;color:var(--mu);margin-top:2px">${pts.length} partie${pts.length!==1?'s':''}</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
@@ -1816,7 +1816,7 @@ function renderCList(){
   el.innerHTML=sorted.map((u,i)=>{const pr=allP.find(p=>p.id===u.uid),nom=pr?.nom||'?',col=aColor(nom),isMe=u.uid===CU.id;
     return `<div class="ri" style="${isMe?'border:1.5px solid var(--gold);background:var(--gold-dim)':''}">
       <div style="font-size:1.2rem;width:30px;text-align:center">${i+1}</div>
-      <div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem">${initials(nom)}</div>
+      <div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;color:#fff">${initials(nom)}</div>
       <div style="flex:1"><div style="font-size:.95rem;font-weight:700">${nom}${isMe?' <span style="color:var(--gold);font-size:.72rem">(moi)</span>':''}</div><div style="font-size:.75rem;color:var(--mu)">${u.nb} partie${u.nb!==1?'s':''}</div></div>
       <div style="font-size:1.2rem;font-weight:800;color:var(--gold2)">${rMetric==='score'?u.bs+' pts':u.bp+'%'}</div>
     </div>`;
@@ -1840,8 +1840,8 @@ function renderAdmUsers(){
     const pts=allGames.filter(x=>x.user_id===p.id);const best=pts.length?Math.max(...pts.map(x=>x.total)):'—';const col=aColor(p.nom);
     const vl={public:'·',prive:'·'};
     const row=document.createElement('div');row.className='arow';
-    row.innerHTML=`<div class="av" style="background:${col};width:34px;height:34px;font-size:.85rem;flex-shrink:0">${initials(p.nom)}</div>
-      <div style="flex:1"><div style="font-size:.9rem;font-weight:700">${p.nom} ${vl[p.visibilite||'public']}${p.is_admin?' <span style="color:#8b6abf;font-size:.72rem">admin</span>':''}</div>
+    row.innerHTML=`<div class="av" style="background:${col};width:34px;height:34px;font-size:.85rem;flex-shrink:0;color:#fff">${initials(p.nom)}</div>
+      <div style="flex:1"><div style="font-size:.9rem;font-weight:700">${p.nom} ${vl[p.visibilite||'public']}${p.is_admin?' <span style="color:var(--gold);font-size:.68rem">admin</span>':''}</div>
       <div style="font-size:.75rem;color:var(--mu)">Code: ${p.code_social||'—'} · ${pts.length} parties · Mieux: ${best}</div></div>`;
     const del=document.createElement('button');del.className='btn-r';del.textContent='Suppr.';
     del.addEventListener('click',async()=>{if(!confirm(`Supprimer ${p.nom} ?`))return;try{await db.del('profils',`id=eq.${p.id}`);allP=allP.filter(x=>x.id!==p.id);allGames=allGames.filter(x=>x.user_id!==p.id);myGames=myGames.filter(x=>x.user_id!==p.id);toast(` ${p.nom} supprimé`);renderAdmin();}catch(e){toast(' '+e.message);}});

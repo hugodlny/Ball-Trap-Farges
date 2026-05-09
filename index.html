@@ -12,26 +12,30 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f2f0eb;
-  --bg2:#e8e5de;
+  --bg:#f4f1ea;
+  --bg2:#e8e3d8;
   --card:#ffffff;
-  --card2:#f7f5f0;
-  --gold:#a06e00;
-  --gold2:#b87d00;
-  --gold3:#c98e10;
-  --gold-dim:rgba(160,110,0,.1);
-  --gold-glow:rgba(160,110,0,.2);
-  --tx:#0f1117;
-  --tx2:#4a5568;
-  --mu:#9aa5b4;
-  --bd:rgba(0,0,0,.09);
-  --bd2:rgba(0,0,0,.16);
-  --green:#0a7c4e;
-  --green-dim:rgba(10,124,78,.1);
-  --red:#b83232;
-  --red-dim:rgba(184,50,50,.1);
+  --card2:#f0ece3;
+  --accent:#2d5016;
+  --accent2:#3a6b1e;
+  --accent3:#4d8428;
+  --accent-dim:rgba(45,80,22,.1);
+  --accent-glow:rgba(45,80,22,.2);
+  --accent-border:rgba(45,80,22,.3);
+  --tx:#111318;
+  --tx2:#374151;
+  --mu:#6b7280;
+  --bd:rgba(0,0,0,.1);
+  --bd2:rgba(0,0,0,.18);
+  --green:#1a6b3a;
+  --green-dim:rgba(26,107,58,.1);
+  --green-border:rgba(26,107,58,.3);
+  --red:#9b1c1c;
+  --red-dim:rgba(155,28,28,.08);
+  --red-border:rgba(155,28,28,.3);
+  --blue:#1d4ed8;
+  --purple:#6d28d9;
   --r:14px;--r-sm:10px;--r-lg:18px;
-  --shadow:0 4px 24px rgba(0,0,0,.1);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -64,14 +68,14 @@ input,button,select,textarea{font-family:inherit}
   content:'';position:absolute;
   top:-20%;left:50%;transform:translateX(-50%);
   width:500px;height:500px;
-  background:radial-gradient(circle,rgba(160,110,0,.08) 0%,transparent 65%);
+  background:radial-gradient(circle,rgba(45,80,22,.07) 0%,transparent 65%);
   pointer-events:none;
 }
 #auth-screen::after{
   content:'';position:absolute;
   bottom:-10%;right:-15%;
   width:300px;height:300px;
-  background:radial-gradient(circle,rgba(10,124,78,.05) 0%,transparent 70%);
+  background:radial-gradient(circle,rgba(45,80,22,.05) 0%,transparent 70%);
   pointer-events:none;
 }
 .auth-logo-wrap{text-align:center;animation:fadeUp .5s cubic-bezier(.4,0,.2,1) both}
@@ -113,11 +117,11 @@ input,button,select,textarea{font-family:inherit}
   transition:border-color .2s,box-shadow .2s;
 }
 .af input:focus{
-  border-color:var(--gold);
-  box-shadow:0 0 0 3px var(--gold-dim);
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-dim);
 }
 .abtn{
-  background:var(--gold);color:#000;border:none;
+  background:var(--accent);color:#fff;border:none;
   border-radius:10px;padding:14px;
   font-size:.9rem;font-weight:600;cursor:pointer;width:100%;
   margin-bottom:8px;letter-spacing:.02em;
@@ -138,7 +142,7 @@ input,button,select,textarea{font-family:inherit}
 #app{display:none;min-height:100vh;padding-bottom:82px}
 
 .topbar{
-  background:rgba(242,240,235,.94);
+  background:rgba(244,241,234,.96);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   padding:14px 16px 12px;
   display:flex;align-items:center;justify-content:space-between;
@@ -147,14 +151,14 @@ input,button,select,textarea{font-family:inherit}
 }
 .avatar-btn{
   width:36px;height:36px;border-radius:50%;
-  background:rgba(160,110,0,.1);
+  background:rgba(45,80,22,.1);
   display:flex;align-items:center;justify-content:center;
-  border:1px solid rgba(160,110,0,.35);
+  border:1px solid rgba(45,80,22,.3);
   cursor:pointer;flex-shrink:0;position:relative;
   transition:border-color .2s,background .2s;
 }
-.avatar-btn:active{background:rgba(160,110,0,.18)}
-.avatar-btn span{color:var(--gold2);font-size:11px;font-weight:600;letter-spacing:.03em}
+.avatar-btn:active{background:rgba(45,80,22,.16)}
+.avatar-btn span{color:var(--accent);font-size:11px;font-weight:600;letter-spacing:.03em}
 .badge-notif{
   position:absolute;top:-2px;right:-2px;
   width:12px;height:12px;
@@ -166,12 +170,12 @@ input,button,select,textarea{font-family:inherit}
 .badge-notif.on{display:flex}
 .logo-center{text-align:center;flex:1}
 .logo-center .ln{color:var(--tx);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
-.logo-center .ls{color:var(--gold);font-size:.58rem;letter-spacing:.28em;margin-top:2px;opacity:.6}
+.logo-center .ls{color:var(--accent2);font-size:.58rem;letter-spacing:.28em;margin-top:2px;opacity:.6}
 
 /* ── NAV ──────────────────────────────────────────────────────────────────── */
 .nav{
   display:flex;
-  background:rgba(242,240,235,.97);
+  background:rgba(244,241,234,.98);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-top:1px solid var(--bd);
   position:fixed;bottom:0;left:0;right:0;z-index:50;
@@ -187,23 +191,23 @@ input,button,select,textarea{font-family:inherit}
   width:32px;height:28px;display:flex;align-items:center;justify-content:center;
   border-radius:8px;transition:background .2s;
 }
-.nb.on .nb-ic{background:var(--gold-dim)}
+.nb.on .nb-ic{background:var(--accent-dim)}
 .nb-ic svg{width:19px;height:19px;stroke:var(--mu);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
-.nb.on .nb-ic svg{stroke:var(--gold2)}
+.nb.on .nb-ic svg{stroke:var(--accent2)}
 .nb .nl{color:var(--mu);font-size:.55rem;text-transform:uppercase;letter-spacing:.1em;font-weight:500;transition:color .2s}
-.nb.on .nl{color:var(--gold2)}
+.nb.on .nl{color:var(--accent2)}
 .nb-center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding-bottom:2px;cursor:pointer}
 .nb-plus{
   width:46px;height:46px;border-radius:50%;
-  background:var(--gold);
+  background:var(--accent);
   display:flex;align-items:center;justify-content:center;
   border:3px solid var(--bg);margin-bottom:4px;
-  box-shadow:0 0 0 1px var(--gold-glow),0 6px 16px var(--gold-glow);
+  box-shadow:0 2px 12px var(--accent-glow);
   transition:transform .12s,box-shadow .2s;
 }
 .nb-plus:active{transform:scale(.91)}
-.nb-plus svg{width:20px;height:20px;stroke:#000;fill:none;stroke-width:2.4;stroke-linecap:round}
-.nb-center-wrap .nl{color:var(--gold2);font-size:.55rem;text-transform:uppercase;letter-spacing:.1em;font-weight:500}
+.nb-plus svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round}
+.nb-center-wrap .nl{color:var(--accent2);font-size:.55rem;text-transform:uppercase;letter-spacing:.1em;font-weight:500}
 
 /* ── SECTION TITLE ────────────────────────────────────────────────────────── */
 .section-title{
@@ -236,7 +240,7 @@ input,button,select,textarea{font-family:inherit}
   padding:12px 14px;font-size:.95rem;width:100%;outline:none;
   transition:border-color .2s,box-shadow .2s;
 }
-.inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
 .lbl{
   font-size:.68rem;color:var(--tx2);font-weight:500;
   text-transform:uppercase;letter-spacing:.09em;
@@ -246,12 +250,12 @@ input,button,select,textarea{font-family:inherit}
 
 /* ── BUTTONS ──────────────────────────────────────────────────────────────── */
 .btn{
-  background:var(--gold);color:#000;border:none;
+  background:var(--accent);color:#fff;border:none;
   border-radius:10px;padding:14px 20px;
   font-size:.9rem;font-weight:600;cursor:pointer;width:100%;
   letter-spacing:.02em;
   transition:transform .1s,opacity .15s,box-shadow .2s;
-  box-shadow:0 4px 16px var(--gold-glow);
+  box-shadow:0 2px 10px var(--accent-glow);
 }
 .btn:active{opacity:.85;transform:scale(.98);box-shadow:none}
 .btn:disabled{opacity:.35;pointer-events:none;box-shadow:none}
@@ -323,12 +327,12 @@ input,button,select,textarea{font-family:inherit}
 .sts{font-size:.65rem;color:var(--tx2);letter-spacing:.03em}
 .stbd{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
 .shr{display:flex;align-items:center;gap:10px}
-.shl{font-size:.75rem;color:var(--tx2);font-weight:400;width:64px;flex-shrink:0;letter-spacing:.02em}
+.shl{font-size:.75rem;color:var(--tx);font-weight:500;width:64px;flex-shrink:0;letter-spacing:.01em}
 .sbts{display:flex;gap:6px}
 .sbt{
   height:44px;border-radius:10px;
-  border:1px solid var(--bd);
-  background:var(--card2);color:var(--mu);
+  border:1px solid var(--bd2);
+  background:var(--card2);color:var(--tx2);
   font-size:.72rem;font-weight:600;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:transform .08s,border-color .15s,background .15s,color .15s;
@@ -336,7 +340,7 @@ input,button,select,textarea{font-family:inherit}
 }
 .sbt:active{transform:scale(.88)}
 .sbt.c1{background:var(--green-dim);border-color:rgba(29,184,122,.45);color:var(--green)}
-.sbt.c2{background:var(--gold-dim);border-color:rgba(200,144,10,.35);color:var(--gold2)}
+.sbt.c2{background:var(--accent-dim);border-color:rgba(200,144,10,.35);color:var(--accent2)}
 .sbt.miss{background:var(--red-dim);border-color:rgba(217,79,79,.35);color:var(--red)}
 .sbt-c1{width:52px}.sbt-c2{width:52px}.sbt-x{width:44px}
 .dbt{
@@ -395,17 +399,17 @@ input,button,select,textarea{font-family:inherit}
   flex-shrink:0;font-weight:500;
   border:1px solid var(--bd);transition:all .18s;
 }
-.ftag.on{background:var(--gold-dim);color:var(--gold2);border-color:rgba(200,144,10,.3)}
+.ftag.on{background:var(--accent-dim);color:var(--accent2);border-color:rgba(200,144,10,.3)}
 .vopts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .vopt{
   background:var(--card2);border:1px solid var(--bd);
   border-radius:var(--r);padding:16px 10px;text-align:center;
   cursor:pointer;transition:all .18s;
 }
-.vopt.on{border-color:rgba(200,144,10,.5);background:var(--gold-dim)}
+.vopt.on{border-color:rgba(45,80,22,.5);background:var(--accent-dim)}
 .vopt .vi{font-size:1.3rem;margin-bottom:6px}
 .vopt .vl{font-size:.68rem;color:var(--tx2);font-weight:500;text-transform:uppercase;letter-spacing:.07em}
-.vopt.on .vl{color:var(--gold2)}
+.vopt.on .vl{color:var(--accent2)}
 .dpst{background:var(--card2);border-radius:var(--r-sm);padding:12px;margin-bottom:8px;border:1px solid var(--bd)}
 .dpst h4{font-size:.65rem;color:var(--tx2);font-weight:500;text-transform:uppercase;letter-spacing:.11em;margin-bottom:8px}
 .dsh{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:.85rem}
@@ -418,7 +422,7 @@ input,button,select,textarea{font-family:inherit}
   cursor:pointer;display:flex;align-items:center;justify-content:center;
   flex-shrink:0;transition:all .15s;
 }
-.achk.on{background:var(--gold);border-color:var(--gold);color:#000}
+.achk.on{background:var(--accent);border-color:var(--accent);color:#000}
 .agrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .astat{
   background:var(--card);border-radius:var(--r);
@@ -438,7 +442,7 @@ input,button,select,textarea{font-family:inherit}
   display:flex;align-items:center;gap:12px;border:1px solid var(--bd);
 }
 .code-badge{
-  background:var(--gold-dim);
+  background:var(--accent-dim);
   border:1px solid rgba(160,110,0,.25);
   border-radius:var(--r);padding:16px;text-align:center;margin-bottom:16px;
 }
@@ -449,7 +453,7 @@ input,button,select,textarea{font-family:inherit}
 .code-badge .cb-code{
   font-family:'DM Mono',monospace;
   font-size:1.8rem;font-weight:500;
-  color:var(--gold2);letter-spacing:.22em;
+  color:var(--accent2);letter-spacing:.22em;
 }
 .pattern-card{
   background:var(--card);border-radius:var(--r);
@@ -457,11 +461,11 @@ input,button,select,textarea{font-family:inherit}
   border:1px solid var(--bd);border-left:2px solid;
 }
 .pattern-card.danger{border-left-color:var(--red)}
-.pattern-card.warning{border-left-color:var(--gold)}
+.pattern-card.warning{border-left-color:var(--accent)}
 .pattern-card.success{border-left-color:var(--green)}
 .pattern-card .pc-icon{display:none}
 .pattern-card .pc-title{font-size:.875rem;font-weight:600;margin-bottom:5px;color:var(--tx)}
-.pattern-card .pc-desc{font-size:.78rem;color:var(--tx2);line-height:1.55}
+.pattern-card .pc-desc{font-size:.78rem;color:var(--tx2);line-height:1.55;font-weight:400}
 .stat-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .stat-box{
   background:var(--card);border-radius:var(--r-sm);
@@ -478,7 +482,7 @@ input,button,select,textarea{font-family:inherit}
 .empty .ei{font-size:1.5rem;margin-bottom:10px;opacity:.25}
 .loader{
   display:inline-block;width:16px;height:16px;
-  border:1.5px solid var(--bd2);border-top-color:var(--gold);
+  border:1.5px solid var(--bd2);border-top-color:var(--accent);
   border-radius:50%;animation:spin .7s linear infinite;
   vertical-align:middle;margin-right:6px;
 }
@@ -540,18 +544,18 @@ input,button,select,textarea{font-family:inherit}
 <div id="auth-screen">
   <div style="text-align:center">
     <svg width="72" height="72" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="36" cy="36" r="35" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+      <circle cx="36" cy="36" r="35" fill="none" stroke="var(--accent2)" stroke-width="1.5"/>
       <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(160,110,0,.25)" stroke-width="1"/>
-      <circle cx="36" cy="36" r="4" fill="var(--gold)"/>
-      <line x1="14" y1="14" x2="58" y2="58" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
-      <line x1="58" y1="14" x2="14" y2="58" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
-      <circle cx="36" cy="10" r="3" fill="var(--gold)" opacity=".4"/>
-      <circle cx="62" cy="36" r="3" fill="var(--gold)" opacity=".4"/>
-      <circle cx="36" cy="62" r="3" fill="var(--gold)" opacity=".4"/>
-      <circle cx="10" cy="36" r="3" fill="var(--gold)" opacity=".4"/>
+      <circle cx="36" cy="36" r="4" fill="var(--accent)"/>
+      <line x1="14" y1="14" x2="58" y2="58" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <line x1="58" y1="14" x2="14" y2="58" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <circle cx="36" cy="10" r="3" fill="var(--accent)" opacity=".4"/>
+      <circle cx="62" cy="36" r="3" fill="var(--accent)" opacity=".4"/>
+      <circle cx="36" cy="62" r="3" fill="var(--accent)" opacity=".4"/>
+      <circle cx="10" cy="36" r="3" fill="var(--accent)" opacity=".4"/>
     </svg>
     <div style="color:var(--tx);font-size:1rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;margin-top:18px">Ball Trap</div>
-    <div style="color:var(--gold);font-size:.65rem;letter-spacing:.28em;margin-top:4px;opacity:.7">Club de Farges</div>
+    <div style="color:var(--accent);font-size:.65rem;letter-spacing:.28em;margin-top:4px;opacity:.7">Club de Farges</div>
   </div>
   <div class="auth-box">
     <div class="auth-tabs">
@@ -572,7 +576,7 @@ input,button,select,textarea{font-family:inherit}
       <div class="af">
         <label>Visibilité dans le classement</label>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
-          <div id="r-vis-public" class="r-vis-opt r-vis-on" style="background:var(--gold-dim);border:1.5px solid rgba(200,144,10,.5);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s">
+          <div id="r-vis-public" class="r-vis-opt r-vis-on" style="background:var(--accent-dim);border:1.5px solid rgba(45,80,22,.5);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s">
             <div style="font-size:.88rem;font-weight:600;color:var(--tx);margin-bottom:4px">Public</div>
             <div style="font-size:.7rem;color:var(--tx2);line-height:1.4">Visible par tous</div>
           </div>
@@ -884,10 +888,10 @@ function selectRegVis(v){
   const pub=document.getElementById('r-vis-public');
   const priv=document.getElementById('r-vis-prive');
   if(v==='public'){
-    pub.style.cssText='background:var(--gold-dim);border:1.5px solid rgba(200,144,10,.5);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s';
+    pub.style.cssText='background:var(--accent-dim);border:1.5px solid rgba(45,80,22,.5);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s';
     priv.style.cssText='background:var(--bg2);border:1.5px solid var(--bd);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s';
   } else {
-    priv.style.cssText='background:var(--gold-dim);border:1.5px solid rgba(200,144,10,.5);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s';
+    priv.style.cssText='background:var(--accent-dim);border:1.5px solid rgba(45,80,22,.5);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s';
     pub.style.cssText='background:var(--bg2);border:1.5px solid var(--bd);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s';
   }
 }
@@ -940,7 +944,7 @@ async function loadApp(){
     ld=document.createElement('div');
     ld.id='app-loader';
     ld.style.cssText='position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px';
-    ld.innerHTML='<div style="width:32px;height:32px;border:2px solid rgba(0,0,0,.1);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite"></div><div style="font-size:.75rem;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase">Chargement</div>';
+    ld.innerHTML='<div style="width:32px;height:32px;border:2px solid rgba(0,0,0,.1);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite"></div><div style="font-size:.75rem;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase">Chargement</div>';
     document.body.appendChild(ld);
   }
   allP=await db.get('profils','order=created_at.asc');
@@ -1030,20 +1034,20 @@ function renderProfilDrawer(){
       <div class="av" style="background:${col};width:54px;height:54px;font-size:1.1rem;border:2px solid rgba(255,255,255,.25);color:#fff">${initials(CP?.nom)}</div>
       <div><div style="font-size:1.05rem;font-weight:800">${CP?.nom||'—'}</div>
         <div style="font-size:.75rem;color:var(--tx2);margin-top:3px">${CU.email}</div>
-        ${isAdmin?'<div style="color:var(--gold);font-size:.68rem;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">Admin</div>':''}
+        ${isAdmin?'<div style="color:var(--accent);font-size:.68rem;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">Admin</div>':''}
       </div>
     </div>
     <div class="code-badge"><div class="cb-label">Mon code social</div><div class="cb-code">${CP?.code_social||'——'}</div>
       <div style="font-size:.7rem;color:var(--mu);margin-top:4px">Partage ce code pour recevoir des demandes d'amis</div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-      <div style="background:var(--card2);border-radius:10px;padding:12px;text-align:center;border:1px solid var(--bd)"><div style="font-size:1.3rem;font-weight:700;color:var(--gold)">${best}</div><div style="font-size:.68rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Meilleur</div></div>
+      <div style="background:var(--card2);border-radius:10px;padding:12px;text-align:center;border:1px solid var(--bd)"><div style="font-size:1.3rem;font-weight:700;color:var(--accent)">${best}</div><div style="font-size:.68rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Meilleur</div></div>
       <div style="background:var(--card2);border-radius:10px;padding:12px;text-align:center;border:1px solid var(--bd)"><div style="font-size:1.3rem;font-weight:700">${avg}</div><div style="font-size:.68rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Moyenne</div></div>
     </div>
     <div style="background:var(--card2);border-radius:10px;padding:12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--bd)">
       <div><div style="font-size:.72rem;color:var(--mu);text-transform:uppercase;margin-bottom:4px">Confidentialité</div><div style="font-size:.9rem;font-weight:600">${vl[CP?.visibilite||'public']}</div></div>
       <button id="dp-vis-btn" style="background:transparent;color:var(--tx);border:1.5px solid var(--bd);border-radius:10px;padding:8px 12px;font-size:.82rem;cursor:pointer">Modifier</button>
     </div>
-    <button id="dp-edit-btn" style="background:var(--gold);color:#fff;border:none;border-radius:10px;padding:13px;font-size:.9rem;font-weight:600;cursor:pointer;width:100%;margin-bottom:8px">Modifier le profil</button>
+    <button id="dp-edit-btn" style="background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px;font-size:.9rem;font-weight:600;cursor:pointer;width:100%;margin-bottom:8px;font-family:inherit">Modifier le profil</button>
     <button id="dp-logout-btn" style="background:var(--red-dim);color:var(--red);border:1px solid rgba(184,50,50,.3);border-radius:10px;padding:13px;font-size:.9rem;font-weight:500;cursor:pointer;width:100%">Se déconnecter</button>`;
   $('dp-vis-btn').addEventListener('click',()=>{$('profil-panel').classList.remove('on');openVisModal();});
   $('dp-edit-btn').addEventListener('click',()=>{$('profil-panel').classList.remove('on');initEditProfil();openMo('mo-edit');});
@@ -1071,30 +1075,30 @@ function renderHome(){
   const amiIds=mesAmis.map(a=>a.id);
   const feed=allGames.filter(g=>amiIds.includes(g.user_id)).sort((a,b)=>new Date(b.played_at)-new Date(a.played_at)).slice(0,5);
   $('home-content').innerHTML=`
-    <div style="background:linear-gradient(135deg,#1a3a6b 0%,#2a5298 100%);border-radius:14px;padding:18px;margin-bottom:14px;border:none">
+    <div style="background:linear-gradient(135deg,#1e3d0e 0%,#2d5016 100%);border-radius:14px;padding:18px;margin-bottom:14px;border:none">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
         <div><div style="font-size:1rem;font-weight:800;color:#fff">${CP?.nom||'—'}</div>
-          <div style="font-size:.75rem;color:rgba(255,255,255,.65);margin-top:3px">${pts.length} partie${pts.length!==1?'s':''}${pts[0]?' · Dernière le '+fmtSD(pts[0].played_at):''}</div></div>
-        <div style="text-align:right"><div style="font-size:2rem;font-weight:800;color:var(--gold2);line-height:1">${best}</div>
-          <div style="font-size:.7rem;color:rgba(0,0,0,.45);text-transform:uppercase;margin-top:2px">Meilleur</div></div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.7);margin-top:3px">${pts.length} partie${pts.length!==1?'s':''}${pts[0]?' · Dernière le '+fmtSD(pts[0].played_at):''}</div></div>
+        <div style="text-align:right"><div style="font-size:2rem;font-weight:800;color:var(--accent2);line-height:1">${best}</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.6);text-transform:uppercase;margin-top:2px">Meilleur</div></div>
       </div>
       <div style="display:flex;gap:8px">
-        <div style="flex:1;background:rgba(0,0,0,.05);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(0,0,0,.07)"><div style="font-size:1.15rem;font-weight:800;color:#fff">${avg}</div><div style="font-size:.65rem;color:rgba(0,0,0,.45);text-transform:uppercase;margin-top:3px">Moyenne</div></div>
-        <div style="flex:1;background:rgba(0,0,0,.05);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(0,0,0,.07)"><div style="font-size:1.15rem;font-weight:800;color:#fff">${avgPct}%</div><div style="font-size:.65rem;color:rgba(0,0,0,.45);text-transform:uppercase;margin-top:3px">Réussite</div></div>
-        <div style="flex:1;background:rgba(0,0,0,.05);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(0,0,0,.07)"><div style="font-size:1.15rem;font-weight:800;color:#fff">${c1p}%</div><div style="font-size:.65rem;color:rgba(0,0,0,.45);text-transform:uppercase;margin-top:3px">% Simples</div></div>
+        <div style="flex:1;background:rgba(255,255,255,.12);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.15)"><div style="font-size:1.15rem;font-weight:700;color:#fff">${avg}</div><div style="font-size:.65rem;color:rgba(255,255,255,.6);text-transform:uppercase;margin-top:3px">Moyenne</div></div>
+        <div style="flex:1;background:rgba(255,255,255,.12);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.15)"><div style="font-size:1.15rem;font-weight:700;color:#fff">${avgPct}%</div><div style="font-size:.65rem;color:rgba(255,255,255,.6);text-transform:uppercase;margin-top:3px">Réussite</div></div>
+        <div style="flex:1;background:rgba(255,255,255,.12);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.15)"><div style="font-size:1.15rem;font-weight:700;color:#fff">${c1p}%</div><div style="font-size:.65rem;color:rgba(255,255,255,.6);text-transform:uppercase;margin-top:3px">% Simples</div></div>
       </div>
     </div>
-    ${srt.length>=2?`<div class="section-title">Progression</div><div class="card"><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'var(--gold)'}])}</div></div>`:''}
-    ${feed.length?`<div class="section-title">Activité amis</div>${feed.map(g=>{const ami=allP.find(p=>p.id===g.user_id);const col=aColor(ami?.nom||'?');return `<div style="background:var(--card);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px"><div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;flex-shrink:0;color:#fff">${initials(ami?.nom)}</div><div style="flex:1"><div style="font-size:.88rem;font-weight:700">${ami?.nom||'?'}</div><div style="font-size:.75rem;color:var(--mu);margin-top:2px">${g.parcours}${g.difficulte?' · '+g.difficulte:''} · ${fmtSD(g.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800;color:var(--gold2)">${g.total}</div><div style="font-size:.7rem;color:var(--mu)">${g.pct}%</div></div></div>`;}).join('')}`:''}
+    ${srt.length>=2?`<div class="section-title">Progression</div><div class="card"><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'var(--accent)'}])}</div></div>`:''}
+    ${feed.length?`<div class="section-title">Activité amis</div>${feed.map(g=>{const ami=allP.find(p=>p.id===g.user_id);const col=aColor(ami?.nom||'?');return `<div style="background:var(--card);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px"><div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;flex-shrink:0;color:#fff">${initials(ami?.nom)}</div><div style="flex:1"><div style="font-size:.88rem;font-weight:700">${ami?.nom||'?'}</div><div style="font-size:.75rem;color:var(--mu);margin-top:2px">${g.parcours}${g.difficulte?' · '+g.difficulte:''} · ${fmtSD(g.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800;color:var(--accent2)">${g.total}</div><div style="font-size:.7rem;color:var(--mu)">${g.pct}%</div></div></div>`;}).join('')}`:''}
     <div class="section-title">Mes dernières parties</div>
     ${pts.slice(0,4).map(p=>`<div class="hc" data-id="${p.id}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-        <div><div style="font-size:.8rem;font-weight:700;color:var(--gold);text-transform:uppercase">${p.type_jeu==='DTL'?'DTL':p.parcours}${p.difficulte?' · '+p.difficulte:''}</div>
+        <div><div style="font-size:.8rem;font-weight:700;color:var(--accent);text-transform:uppercase">${p.type_jeu==='DTL'?'DTL':p.parcours}${p.difficulte?' · '+p.difficulte:''}</div>
           <div style="font-size:.72rem;color:var(--mu);margin-top:3px">${fmtD(p.played_at)}</div></div>
         <div style="text-align:right"><div style="font-size:1.4rem;font-weight:800">${p.total}<span style="font-size:.85rem;color:var(--mu);font-weight:400">/${p.max_plateaux}</span></div>
           <div style="font-size:.72rem;color:var(--mu)">${p.pct}%</div></div>
       </div>
-      <div style="display:flex;gap:7px"><span class="htag" style="color:var(--green)">S: ${p.hit_simples??p.c1}</span><span class="htag" style="color:var(--gold)">D: ${p.hit_doubles??p.c2}</span></div>
+      <div style="display:flex;gap:7px"><span class="htag" style="color:var(--green);font-weight:600">S: ${p.hit_simples??p.c1}</span><span class="htag" style="color:var(--accent);font-weight:600">D: ${p.hit_doubles??p.c2}</span></div>
     </div>`).join('')}`;
   $('home-content').querySelectorAll('.hc[data-id]').forEach(el=>el.addEventListener('click',()=>openDetail(el.dataset.id)));
 }
@@ -1139,8 +1143,8 @@ function renderLetterGrid(letterMap){
       const d=letterMap[l];
       if(!d||d.total===0)return`<div style="background:var(--bg2);border-radius:8px;padding:10px 4px;text-align:center;border:1px solid var(--bd)"><div style="font-size:.95rem;font-weight:700;color:var(--mu)">${l}</div><div style="font-size:.6rem;color:var(--mu);margin-top:3px">—</div></div>`;
       const pct=Math.round(d.hit/d.total*100);
-      const col=pct>=80?'var(--green)':pct>=60?'var(--gold)':pct>=40?'#c06010':'var(--red)';
-      const bg=pct>=80?'var(--green-dim)':pct>=60?'var(--gold-dim)':pct>=40?'rgba(192,96,16,.1)':'var(--red-dim)';
+      const col=pct>=80?'var(--green)':pct>=60?'var(--accent)':pct>=40?'#c06010':'var(--red)';
+      const bg=pct>=80?'var(--green-dim)':pct>=60?'var(--accent-dim)':pct>=40?'rgba(192,96,16,.1)':'var(--red-dim)';
       return`<div style="background:${bg};border-radius:8px;padding:10px 4px;text-align:center;border:1px solid ${col};border-opacity:.4">
         <div style="font-size:.95rem;font-weight:700;color:${col}">${l}</div>
         <div style="font-size:.7rem;font-weight:600;color:${col};margin-top:2px">${pct}%</div>
@@ -1150,14 +1154,14 @@ function renderLetterGrid(letterMap){
   </div>
   <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
     <span style="font-size:.65rem;color:var(--green);font-weight:600">≥80%</span>
-    <span style="font-size:.65rem;color:var(--gold);font-weight:500">≥60%</span>
+    <span style="font-size:.65rem;color:var(--accent);font-weight:500">≥60%</span>
     <span style="font-size:.65rem;color:#c06010;font-weight:500">≥40%</span>
     <span style="font-size:.65rem;color:var(--red);font-weight:500">&lt;40%</span>
   </div>`;
 }
 
 function renderStats(){
-  if(!myGames.length){$('stats-content').innerHTML=`<div class="empty"><p style="font-size:.9rem;font-weight:500;color:var(--tx2);margin-bottom:6px">Aucune partie</p><p style="font-size:.8rem;color:var(--mu)">Lance ta première partie via le bouton +</p></div>`;return;}
+  if(!myGames.length){$('stats-content').innerHTML=`<div class="empty"><p style="font-size:.9rem;font-weight:500;color:var(--tx);margin-bottom:6px">Aucune partie</p><p style="font-size:.8rem;color:var(--tx2)">Lance ta première partie via le bouton +</p></div>`;return;}
   const pts=myGames;
   const sc=pts.map(x=>x.total);
   const avg=(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1);
@@ -1196,9 +1200,9 @@ function renderStats(){
   $('stats-content').innerHTML=`
     <div class="section-title" style="margin-top:4px">Vue globale</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
-      <div class="stat-box"><div class="sv" style="color:var(--gold2)">${avg}</div><div class="sl">Moyenne</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--accent2)">${avg}</div><div class="sl">Moyenne</div></div>
       <div class="stat-box"><div class="sv" style="color:var(--green)">${best}</div><div class="sl">Meilleur</div></div>
-      <div class="stat-box"><div class="sv" style="color:var(--gold2)">${avgPct}%</div><div class="sl">Réussite</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--accent2)">${avgPct}%</div><div class="sl">Réussite</div></div>
       <div class="stat-box"><div class="sv" style="color:var(--red)">${worst}</div><div class="sl">Plus faible</div></div>
       <div class="stat-box"><div class="sv">${pts.length}</div><div class="sl">Parties</div></div>
       <div class="stat-box"><div class="sv" style="color:var(--tx2)">${stddev.toFixed(1)}</div><div class="sl">Régularité σ</div></div>
@@ -1208,16 +1212,16 @@ function renderStats(){
       <div class="lbl" style="margin-bottom:12px">Simples vs Doubles</div>
       <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:.85rem;color:var(--tx2)">Simples</span><span style="font-size:.85rem;font-weight:600;color:var(--green)">${allHitS}/${allNbS} — ${pctS}%</span></div>
       <div class="prog-bar-bg"><div class="prog-bar" style="width:${pctS}%;background:var(--green)"></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:10px;margin-bottom:5px"><span style="font-size:.85rem;color:var(--tx2)">Doubles</span><span style="font-size:.85rem;font-weight:600;color:var(--gold2)">${allHitD}/${allNbD} — ${pctD}%</span></div>
-      <div class="prog-bar-bg"><div class="prog-bar" style="width:${pctD}%;background:var(--gold2)"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;margin-bottom:5px"><span style="font-size:.85rem;color:var(--tx2)">Doubles</span><span style="font-size:.85rem;font-weight:600;color:var(--accent2)">${allHitD}/${allNbD} — ${pctD}%</span></div>
+      <div class="prog-bar-bg"><div class="prog-bar" style="width:${pctD}%;background:var(--accent2)"></div></div>
     </div>
 
     ${streak>=3?`<div class="card" style="margin-bottom:10px;border-left:2px solid var(--green)"><div style="font-size:.88rem;font-weight:600">Série en cours — ${streak} parties ≥ 50%</div><div style="font-size:.75rem;color:var(--tx2);margin-top:3px">Continue sur ta lancée</div></div>`:''}
-    ${bestDay?`<div class="card" style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"><div><div class="lbl" style="margin:0 0 4px">Meilleure journée</div><div style="font-size:.95rem;font-weight:600">${bestDay}</div></div><div style="font-size:1.5rem;font-weight:600;color:var(--gold2)">${bestDayAvg.toFixed(1)}</div></div>`:''}
+    ${bestDay?`<div class="card" style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"><div><div class="lbl" style="margin:0 0 4px">Meilleure journée</div><div style="font-size:.95rem;font-weight:600">${bestDay}</div></div><div style="font-size:1.5rem;font-weight:600;color:var(--accent2)">${bestDayAvg.toFixed(1)}</div></div>`:''}
 
     ${srt.length>=2?`
     <div class="section-title">Progression</div>
-    <div class="card" style="margin-bottom:10px"><div class="lbl" style="margin-bottom:6px">Score</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'var(--gold)'}])}</div></div>
+    <div class="card" style="margin-bottom:10px"><div class="lbl" style="margin-bottom:6px">Score</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.total})),color:'var(--accent)'}])}</div></div>
     <div class="card" style="margin-bottom:10px"><div class="lbl" style="margin-bottom:6px">Réussite %</div><div class="chwrap">${lineChart([{vals:srt.map(p=>({x:fmtSD(p.played_at),y:p.pct})),color:'var(--green)'}])}</div></div>
     `:''}
 
@@ -1286,8 +1290,8 @@ function renderStatsCompaq(sbp){
           <div style="margin-bottom:10px">
             <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:.75rem;color:var(--tx2)">Simples</span><span style="font-size:.75rem;font-weight:600;color:var(--green)">${dHitS}/${dNbS} — ${dPctS}%</span></div>
             <div class="prog-bar-bg"><div class="prog-bar" style="width:${dPctS}%;background:var(--green)"></div></div>
-            <div style="display:flex;justify-content:space-between;margin-top:8px;margin-bottom:4px"><span style="font-size:.75rem;color:var(--tx2)">Doubles</span><span style="font-size:.75rem;font-weight:600;color:var(--gold2)">${dHitD}/${dNbD} — ${dPctD}%</span></div>
-            <div class="prog-bar-bg"><div class="prog-bar" style="width:${dPctD}%;background:var(--gold2)"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;margin-bottom:4px"><span style="font-size:.75rem;color:var(--tx2)">Doubles</span><span style="font-size:.75rem;font-weight:600;color:var(--accent2)">${dHitD}/${dNbD} — ${dPctD}%</span></div>
+            <div class="prog-bar-bg"><div class="prog-bar" style="width:${dPctD}%;background:var(--accent2)"></div></div>
           </div>
           <div style="font-size:.65rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Réussite par poste</div>
           ${renderLetterGrid(letters)}
@@ -1303,7 +1307,7 @@ function renderStatsCompaq(sbp){
         </div>
         <div style="display:flex;align-items:center;gap:12px">
           <div style="text-align:right">
-            <div style="font-size:.9rem;font-weight:600;color:var(--gold2)">${pp}%</div>
+            <div style="font-size:.9rem;font-weight:600;color:var(--accent2)">${pp}%</div>
             <div style="font-size:.65rem;color:var(--mu)">moy. ${pa}</div>
           </div>
           <svg id="chevron-${id}" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--mu)" stroke-width="2" stroke-linecap="round" style="transition:transform .2s"><path d="M6 9l6 6 6-6"/></svg>
@@ -1332,7 +1336,7 @@ function renderStatsDTL(dtlGames){
     const hits=dtlGames.reduce((a,p)=>{const po=p.game_state?.[i];if(!po)return a;return a+(po.s.filter(v=>v==='c1'||v==='c2').length);},0);
     const total=dtlGames.reduce((a,p)=>{const po=p.game_state?.[i];if(!po)return a;return a+po.s.length;},0);
     const pct=total?Math.round(hits/total*100):0;
-    const col=pct>=80?'var(--green)':pct>=60?'var(--gold)':pct>=40?'#c06010':'var(--red)';
+    const col=pct>=80?'var(--green)':pct>=60?'var(--accent)':pct>=40?'#c06010':'var(--red)';
     return `<div style="background:var(--bg);border-radius:8px;padding:10px 4px;text-align:center;border:1px solid var(--bd)">
       <div style="font-size:.8rem;font-weight:600;color:var(--tx2)">P${i+1}</div>
       <div style="font-size:1rem;font-weight:600;color:${col};margin-top:4px">${pct}%</div>
@@ -1341,9 +1345,9 @@ function renderStatsDTL(dtlGames){
   }).join('');
   root.innerHTML=`<div class="card" style="margin-bottom:8px">
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
-      <div style="text-align:center"><div style="font-size:1.15rem;font-weight:600;color:var(--gold2)">${avg}</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Moy.</div></div>
+      <div style="text-align:center"><div style="font-size:1.15rem;font-weight:600;color:var(--accent2)">${avg}</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Moy.</div></div>
       <div style="text-align:center"><div style="font-size:1.15rem;font-weight:600;color:var(--green)">${best}</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Mieux</div></div>
-      <div style="text-align:center"><div style="font-size:1.15rem;font-weight:600;color:var(--gold2)">${avgP}%</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Réussite</div></div>
+      <div style="text-align:center"><div style="font-size:1.15rem;font-weight:600;color:var(--accent2)">${avgP}%</div><div style="font-size:.62rem;color:var(--mu);text-transform:uppercase;margin-top:3px">Réussite</div></div>
     </div>
     <div class="lbl" style="margin-bottom:8px">Réussite par poste</div>
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">${postesHtml}</div>
@@ -1405,13 +1409,13 @@ function renderSelectionPage(){
   const header=`<div class="section-title" style="margin-top:4px">Nouvelle partie</div>
     <div style="background:var(--card);border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:20px">
       <div style="font-size:2rem"></div>
-      <div><div style="font-size:.72rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Tireur</div>
+      <div><div style="font-size:.72rem;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Tireur</div>
       <div style="font-size:1.05rem;font-weight:800">${CP?.nom||'—'}</div></div>
     </div>`;
 
   if(!selTypeJeu){
     $('partie-root').innerHTML=header+`
-      <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Type de jeu</div>
+      <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Type de jeu</div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div id="btn-compact" style="background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 16px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:border-color .2s">
           <div style="flex:1">
@@ -1419,7 +1423,7 @@ function renderSelectionPage(){
             <div style="font-size:.78rem;color:var(--tx2);margin-top:4px">4 parcours · Simples & Doubles</div>
             <div style="font-size:.72rem;color:var(--mu);margin-top:2px">Lac Léman · Salève · Rhône · Jura</div>
           </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
         <div id="btn-dtl" style="background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 16px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:border-color .2s">
           <div style="flex:1">
@@ -1427,7 +1431,7 @@ function renderSelectionPage(){
             <div style="font-size:.78rem;color:var(--tx2);margin-top:4px">5 postes · 5 tirs / poste · 2 cartouches</div>
             <div style="font-size:.72rem;color:var(--mu);margin-top:2px">25 plateaux · même point de lancement</div>
           </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
       </div>`;
     $('btn-compact').addEventListener('click',()=>{selTypeJeu='Compaq';renderSelectionPage();});
@@ -1437,18 +1441,18 @@ function renderSelectionPage(){
 
   if(selTypeJeu==='DTL'){
     $('partie-root').innerHTML=header+`
-      <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">DTL — Confirmation</div>
-      <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:16px">
-        <div style="font-size:.95rem;font-weight:800;margin-bottom:12px">DTL <span style="color:#64748b;font-size:.8rem;font-weight:500">· Discipline de la Tour</span></div>
-        ${Array.from({length:5},(_,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--bg2);border-radius:8px;padding:8px 12px;margin-bottom:6px">
-          <div style="font-size:.72rem;font-weight:700;color:#C9960C;width:52px;flex-shrink:0">Poste ${i+1}</div>
-          <div style="display:flex;gap:4px;flex-wrap:wrap">${Array.from({length:5},(_,j)=>`<div style="background:rgba(201,150,12,.15);border:1px solid #C9960C;border-radius:4px;padding:2px 10px;font-size:.72rem;color:#F0B429;font-weight:700">T${j+1}</div>`).join('')}</div>
-          <div style="font-size:.7rem;color:#64748b">5 tirs</div>
+      <div class="section-title" style="margin-top:0;margin-bottom:12px">DTL — Discipline de la Tour</div>
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-size:.88rem;font-weight:600;margin-bottom:12px;color:var(--tx)">5 postes · 5 tirs par poste · 25 plateaux</div>
+        ${Array.from({length:5},(_,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--card2);border-radius:8px;padding:8px 12px;margin-bottom:6px;border:1px solid var(--bd)">
+          <div style="font-size:.68rem;font-weight:600;color:var(--mu);width:48px;flex-shrink:0">P.${i+1}</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap">${Array.from({length:5},(_,j)=>`<span style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:4px;padding:2px 8px;font-size:.68rem;color:var(--accent);font-weight:600">T${j+1}</span>`).join('')}</div>
+          <div style="font-size:.65rem;color:var(--mu)">5 tirs</div>
         </div>`).join('')}
-        <div style="font-size:.75rem;color:#64748b;margin-top:10px;text-align:center">25 plateaux · C1 ou C2 par tir</div>
+        <div style="font-size:.75rem;color:var(--mu);margin-top:10px;text-align:center">C1 ou C2 = touché · × = raté</div>
       </div>
-      <button id="btn-start-dtl" style="background:#C9960C;color:#fff;border:none;border-radius:12px;padding:16px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;margin-bottom:10px"> Lancer la partie DTL</button>
-      <button id="btn-back-dtl" style="background:transparent;color:#94a3b8;border:1.5px solid #1f2937;border-radius:12px;padding:13px;font-size:.9rem;font-weight:600;cursor:pointer;width:100%">← Retour</button>`;
+      <button id="btn-start-dtl" class="btn" style="margin-bottom:8px">Lancer la partie DTL</button>
+      <button id="btn-back-dtl" class="btn-o" style="margin-top:0">← Retour</button>`;
     $('btn-start-dtl').addEventListener('click',startDTL);
     $('btn-back-dtl').addEventListener('click',()=>{selTypeJeu=null;renderSelectionPage();});
     return;
@@ -1458,12 +1462,11 @@ function renderSelectionPage(){
   const icons=['','','',''];
   const emojis={Bleu:'',Vert:'',Rouge:'',Noir:''};
   const labels={Bleu:'Débutant',Vert:'Intermédiaire',Rouge:'Avancé',Noir:'Expert'};
-  let html=header+`<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;cursor:pointer" id="btn-back-compact">
-    <span style="color:#C9960C;font-size:.85rem">Retour</span></div>
-    <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">1 — Choix du parcours</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px" id="parc-grid"></div>
-    <div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">2 — Difficulté</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px" id="diff-grid"></div>
+  let html=header+`<button style="background:none;border:none;color:var(--accent);font-size:.85rem;font-weight:500;cursor:pointer;padding:0;margin-bottom:18px;display:block;font-family:inherit" id="btn-back-compact">← Retour</button>
+    <div class="section-title" style="margin-top:0;margin-bottom:12px">Parcours</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px" id="parc-grid"></div>
+    <div class="section-title" style="margin-bottom:12px">Difficulté</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px" id="diff-grid"></div>
     <div id="preview-poste"></div>`;
   $('partie-root').innerHTML=html;
   $('btn-back-compact').addEventListener('click',()=>{selTypeJeu=null;renderSelectionPage();});
@@ -1472,8 +1475,8 @@ function renderSelectionPage(){
   PARCOURS_NOMS.forEach((nom,i)=>{
     const sel=selParcours===nom;
     const div=document.createElement('div');
-    div.style.cssText=`background:${sel?'rgba(201,150,12,.2)':'var(--card)'};border:2px solid ${sel?'#C9960C':'#1f2937'};border-radius:12px;padding:16px;text-align:center;cursor:pointer`;
-    div.innerHTML=`<div style="font-size:1.8rem;margin-bottom:8px">${icons[i]}</div><div style="font-size:.95rem;font-weight:700;color:${sel?'#C9960C':'#f1f5f9'}">${nom}</div>`;
+    div.style.cssText=`background:${sel?'var(--accent-dim)':'var(--card)'};border:2px solid ${sel?'var(--accent)':'var(--bd2)'};border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .15s`;
+    div.innerHTML=`<div style="font-size:.95rem;font-weight:600;color:${sel?'var(--accent)':'var(--tx)'};margin-bottom:2px">${nom}</div>`;
     div.addEventListener('click',()=>{selParcours=nom;selDiff=null;renderSelectionPage();});
     $('parc-grid').appendChild(div);
   });
@@ -1482,8 +1485,8 @@ function renderSelectionPage(){
   DIFFICULTES.forEach(d=>{
     const sel=selDiff===d;const off=!selParcours;const col=DIFF_COLORS[d];
     const div=document.createElement('div');
-    div.style.cssText=`background:${sel?'rgba(100,120,220,.15)':'var(--card)'};border:2px solid ${sel?col:'#1f2937'};border-radius:12px;padding:16px;text-align:center;cursor:${off?'default':'pointer'};opacity:${off?'0.35':'1'}`;
-    div.innerHTML=`<div style="font-size:1.8rem;margin-bottom:6px">${emojis[d]}</div><div style="font-size:.95rem;font-weight:700;color:${sel?col:'#f1f5f9'}">${d}</div><div style="font-size:.7rem;color:#64748b;margin-top:4px">${labels[d]}</div>`;
+    div.style.cssText=`background:${sel?col+'22':'var(--card)'};border:2px solid ${sel?col:'var(--bd2)'};border-radius:12px;padding:14px;text-align:center;cursor:${off?'default':'pointer'};opacity:${off?'0.4':'1'};transition:all .15s`;
+    div.innerHTML=`<div style="width:10px;height:10px;border-radius:50%;background:${col};margin:0 auto 8px"></div><div style="font-size:.9rem;font-weight:600;color:${sel?col:'var(--tx)'}">${d}</div><div style="font-size:.68rem;color:var(--mu);margin-top:3px">${labels[d]}</div>`;
     if(!off)div.addEventListener('click',()=>{selDiff=d;renderSelectionPage();});
     $('diff-grid').appendChild(div);
   });
@@ -1493,21 +1496,22 @@ function renderSelectionPage(){
     const pd=PARCOURS[selParcours][selDiff];
     const totS=pd.reduce((a,p)=>a+p.s,0),totD=pd.reduce((a,p)=>a+p.d,0),totP=pd.reduce((a,p)=>a+p.s+p.d*2,0);
     const prev=document.createElement('div');
-    prev.innerHTML=`<div style="font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">3 — Structure des postes</div>
-      <div style="background:var(--card);border-radius:14px;padding:14px;margin-bottom:16px">
+    prev.innerHTML=`<div class="section-title" style="margin-bottom:12px">Structure du parcours</div>
+      <div class="card" style="margin-bottom:14px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div style="font-size:.95rem;font-weight:800">${selParcours} <span style="color:${DIFF_COLORS[selDiff]}">· ${selDiff}</span></div>
-          <div style="font-size:.75rem;color:#64748b">${totP} plx · ${totS}S · ${totD}D</div>
+          <div><span style="font-size:.9rem;font-weight:600;color:var(--tx)">${selParcours}</span> <span style="font-size:.85rem;color:${DIFF_COLORS[selDiff]};font-weight:600">· ${selDiff}</span></div>
+          <div style="font-size:.72rem;color:var(--mu);background:var(--bg2);padding:4px 10px;border-radius:20px;border:1px solid var(--bd)">${totP} plx · ${totS}S · ${totD}D</div>
         </div>
         ${pd.map((p,i)=>{
-          const st=p.simples?p.simples.map(l=>`<div style="background:rgba(201,150,12,.15);border:1px solid #C9960C;border-radius:4px;padding:2px 8px;font-size:.72rem;color:#F0B429;font-weight:700">${l}</div>`).join(''):Array(p.s).fill('<div style="background:rgba(201,150,12,.15);border:1px solid #C9960C;border-radius:4px;padding:2px 8px;font-size:.72rem;color:#F0B429;font-weight:700">S</div>').join('');
-          const dt=p.doubles?p.doubles.map(d=>`<div style="background:rgba(59,130,246,.12);border:1px solid ${d.type==='CF'?'#3b82f6':'#a855f7'};border-radius:4px;padding:2px 8px;font-size:.68rem;color:${d.type==='CF'?'#60a5fa':'#c084fc'};font-weight:700">${d.p1}/${d.p2} ${d.type}</div>`).join(''):Array(p.d).fill('<div style="background:rgba(59,130,246,.12);border:1px solid #3b82f6;border-radius:4px;padding:2px 8px;font-size:.68rem;color:#60a5fa;font-weight:700">D</div>').join('');
-          return `<div style="display:flex;align-items:center;gap:8px;background:var(--bg2);border-radius:8px;padding:8px 12px;margin-bottom:6px"><div style="font-size:.72rem;font-weight:700;color:#C9960C;width:52px;flex-shrink:0">Poste ${i+1}</div><div style="display:flex;gap:4px;flex:1;flex-wrap:wrap">${st}${dt}</div><div style="font-size:.7rem;color:#64748b">${p.s+p.d*2} plx</div></div>`;
+          const st=p.simples?p.simples.map(l=>`<span style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:4px;padding:2px 7px;font-size:.7rem;color:var(--accent);font-weight:600">${l}</span>`).join(''):Array(p.s).fill('<span style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:4px;padding:2px 7px;font-size:.7rem;color:var(--accent);font-weight:600">S</span>').join('');
+          const dt=p.doubles?p.doubles.map(d=>`<span style="background:rgba(29,78,216,.08);border:1px solid rgba(29,78,216,.3);border-radius:4px;padding:2px 7px;font-size:.67rem;color:var(--blue);font-weight:600">${d.p1}/${d.p2}</span>`).join(''):Array(p.d).fill('<span style="background:rgba(29,78,216,.08);border:1px solid rgba(29,78,216,.3);border-radius:4px;padding:2px 7px;font-size:.67rem;color:var(--blue);font-weight:600">D</span>').join('');
+          return `<div style="display:flex;align-items:center;gap:8px;background:var(--card2);border-radius:8px;padding:8px 12px;margin-bottom:6px;border:1px solid var(--bd)"><div style="font-size:.68rem;font-weight:600;color:var(--mu);width:48px;flex-shrink:0">P.${i+1}</div><div style="display:flex;gap:4px;flex:1;flex-wrap:wrap">${st}${dt}</div><div style="font-size:.65rem;color:var(--mu)">${p.s+p.d*2}</div></div>`;
         }).join('')}
       </div>`;
     const btn=document.createElement('button');
-    btn.style.cssText='background:#C9960C;color:#fff;border:none;border-radius:12px;padding:16px;font-size:1rem;font-weight:700;cursor:pointer;width:100%;margin-bottom:10px';
-    btn.textContent=' Lancer la partie';
+    btn.className='btn';
+    btn.style.cssText='margin-bottom:10px';
+    btn.textContent='Lancer la partie';
     btn.addEventListener('click',startPartie);
     prev.appendChild(btn);
     $('preview-poste').appendChild(prev);
@@ -1532,7 +1536,7 @@ function buildJeuUI(){
   $('partie-root').innerHTML=`
     <div style="background:var(--card2);border:1px solid var(--bd2);border-radius:var(--r);padding:16px;margin-bottom:14px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px">
       <div style="text-align:center">
-        <div style="font-size:1.9rem;font-weight:600;color:var(--gold2);font-variant-numeric:tabular-nums" id="ls-tot">0</div>
+        <div style="font-size:1.9rem;font-weight:600;color:var(--accent2);font-variant-numeric:tabular-nums" id="ls-tot">0</div>
         <div style="font-size:.58rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;margin-top:3px">Total/<span id="ls-max">0</span></div>
       </div>
       <div style="text-align:center">
@@ -1540,7 +1544,7 @@ function buildJeuUI(){
         <div style="font-size:.58rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;margin-top:3px">Simples</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:1.9rem;font-weight:600;color:var(--gold2);font-variant-numeric:tabular-nums" id="ls-c2">0</div>
+        <div style="font-size:1.9rem;font-weight:600;color:var(--accent2);font-variant-numeric:tabular-nums" id="ls-c2">0</div>
         <div style="font-size:.58rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;margin-top:3px">Doubles</div>
       </div>
       <div style="text-align:center">
@@ -1617,12 +1621,12 @@ function finishPartie(){
   $('mo-fin-content').innerHTML=`
     <p style="font-size:.85rem;color:var(--tx2);margin-bottom:14px;font-weight:600">${CP?.nom} · ${pConfig.nom}${pConfig.diff?' · '+pConfig.diff:''}</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-      <div class="card" style="text-align:center;border-top:3px solid #1a3a6b;margin:0;padding:14px"><div style="font-size:2rem;font-weight:800">${tot}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Total / ${mx}</div></div>
-      <div class="card" style="text-align:center;border-top:3px solid var(--gold);margin:0;padding:14px"><div style="font-size:2rem;font-weight:800;color:var(--gold2)">${pct}%</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Réussite</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--accent);margin:0;padding:14px"><div style="font-size:2rem;font-weight:800">${tot}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Total / ${mx}</div></div>
+      <div class="card" style="text-align:center;border-top:3px solid var(--accent);margin:0;padding:14px"><div style="font-size:2rem;font-weight:800;color:var(--accent2)">${pct}%</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Réussite</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:var(--green)">${hitS}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Simples touchés</div></div>
-      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:var(--gold2)">${hitD}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles touchés</div></div>
+      <div class="card" style="text-align:center;margin:0;padding:14px"><div style="font-size:1.5rem;font-weight:800;color:var(--accent2)">${hitD}</div><div style="font-size:.7rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles touchés</div></div>
     </div>`;
   openMo('mo-fin');
 }
@@ -1646,19 +1650,19 @@ function openDetail(id){
   const gs=p.game_state||[];let html='';
   gs.forEach((po,si)=>{
     let sh='';
-    po.s.forEach((v,j)=>{const cl=v==='c1'?'color:var(--green)':v==='c2'?'color:var(--gold2)':v==='miss'?'color:var(--red)':'color:var(--mu)';const lb=v==='c1'?'C1':v==='c2'?'C2':v==='miss'?'Raté':'—';sh+=`<div class="dsh"><span style="color:var(--tx2)">${p.type_jeu==='DTL'?'Tir '+(j+1):'Simple '+(j+1)}</span><span style="font-weight:700;font-size:.85rem;${cl}">${lb}</span></div>`;});
+    po.s.forEach((v,j)=>{const cl=v==='c1'?'color:var(--green)':v==='c2'?'color:var(--accent2)':v==='miss'?'color:var(--red)':'color:var(--mu)';const lb=v==='c1'?'C1':v==='c2'?'C2':v==='miss'?'Raté':'—';sh+=`<div class="dsh"><span style="color:var(--tx2)">${p.type_jeu==='DTL'?'Tir '+(j+1):'Simple '+(j+1)}</span><span style="font-weight:700;font-size:.85rem;${cl}">${lb}</span></div>`;});
     po.d&&po.d.forEach((d,j)=>{[0,1].forEach(pi=>{const v=d[pi];const cl=v==='hit'?'color:var(--green)':v==='miss'?'color:var(--red)':'color:var(--mu)';const lb=v==='hit'?'Touché':v==='miss'?'Raté':'—';sh+=`<div class="dsh"><span style="color:var(--tx2)">Double ${j+1}·P${pi+1}</span><span style="font-weight:700;font-size:.85rem;${cl}">${lb}</span></div>`;});});
     html+=`<div class="dpst"><h4>Poste ${si+1}</h4>${sh}</div>`;
   });
   $('mo-detail-content').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-      <div><div style="font-size:1rem;font-weight:800;color:var(--gold)">${p.type_jeu==='DTL'?'DTL':p.parcours}${p.difficulte?' · '+p.difficulte:''}</div>
+      <div><div style="font-size:1rem;font-weight:800;color:var(--accent)">${p.type_jeu==='DTL'?'DTL':p.parcours}${p.difficulte?' · '+p.difficulte:''}</div>
         <div style="font-size:.78rem;color:var(--mu);margin-top:3px"> ${fmtD(p.played_at)}</div></div>
       <div style="text-align:right"><div style="font-size:1.6rem;font-weight:800">${p.total}/${p.max_plateaux}</div><div style="font-size:.78rem;color:var(--mu)">${p.pct}%</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
       <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:var(--green)">${p.hit_simples??p.c1}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Simples</div></div>
-      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:var(--gold2)">${p.hit_doubles??p.c2}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles</div></div>
+      <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:var(--accent2)">${p.hit_doubles??p.c2}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Doubles</div></div>
       <div class="card" style="text-align:center;padding:12px;margin:0"><div style="font-size:1.4rem;font-weight:800;color:var(--red)">${p.max_plateaux-p.total}</div><div style="font-size:.68rem;color:var(--mu);font-weight:600;text-transform:uppercase;margin-top:3px">Ratés</div></div>
     </div>
     <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Détail</div>${html}
@@ -1681,14 +1685,14 @@ function renderAmis(){
   $('amis-content').innerHTML=`
     <div class="section-title" style="margin-top:4px">Mes amis</div>
     ${demandesRecues.length?`<div style="background:rgba(251,191,36,.1);border:1.5px solid #fbbf24;border-radius:14px;padding:14px;margin-bottom:14px">
-      <div style="font-size:.78rem;font-weight:700;color:var(--gold2);text-transform:uppercase;margin-bottom:10px"> ${demandesRecues.length} demande${demandesRecues.length>1?'s':''} en attente</div>
+      <div style="font-size:.78rem;font-weight:700;color:var(--accent2);text-transform:uppercase;margin-bottom:10px"> ${demandesRecues.length} demande${demandesRecues.length>1?'s':''} en attente</div>
       ${demandesRecues.map(d=>{const dem=allP.find(p=>p.id===d.demandeur_id);const col=aColor(dem?.nom||'?');return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;flex-shrink:0;color:#fff">${initials(dem?.nom)}</div><div style="flex:1"><div style="font-size:.9rem;font-weight:700">${dem?.nom||'?'}</div><div style="font-size:.72rem;color:var(--mu)">Code : ${dem?.code_social||'—'}</div></div><button class="btn-gr" style="padding:6px 10px;font-size:.75rem" data-id="${d.id}" data-action="accepte"></button><button class="btn-r" style="padding:6px 10px;font-size:.75rem" data-id="${d.id}" data-action="refuse"></button></div>`;}).join('')}
     </div>`:''}
     <div class="card" style="margin-bottom:14px">
       <div class="lbl">Ajouter un ami par code</div>
       <div style="display:flex;gap:8px">
         <input class="inp" id="ami-code-input" placeholder="Ex: A3F7K2" style="flex:1;text-transform:uppercase;letter-spacing:.1em;font-weight:700">
-        <button id="btn-add-ami" style="background:var(--gold);color:#fff;border:none;border-radius:10px;padding:13px 16px;font-size:.9rem;font-weight:700;cursor:pointer">Ajouter</button>
+        <button id="btn-add-ami" style="background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px 16px;font-size:.9rem;font-weight:700;cursor:pointer">Ajouter</button>
       </div>
       <div id="ami-msg" style="font-size:.78rem;margin-top:8px;text-align:center;font-weight:600"></div>
     </div>
@@ -1711,7 +1715,7 @@ function renderAmis(){
         <div style="flex:1"><div style="font-size:1rem;font-weight:700">${ami.nom}</div>
           <div style="font-size:.75rem;color:var(--mu);margin-top:2px">${pts.length} partie${pts.length!==1?'s':''} · Mieux: ${best} · Moy: ${avg}</div>
           <div style="font-size:.7rem;color:var(--mu);margin-top:1px">Code: ${ami.code_social||'—'}</div></div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>`;
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>`;
       div.addEventListener('click',()=>ouvrirProfilAmi(ami.id));
       list.appendChild(div);
     });
@@ -1725,7 +1729,7 @@ async function envoyerDemande(){
   const cible=allP.find(p=>p.code_social===code);
   if(!cible){msg.style.color='var(--red)';msg.textContent=' Aucun joueur trouvé.';return;}
   if(cible.id===CU.id){msg.style.color='var(--red)';msg.textContent=' Tu ne peux pas t\'ajouter toi-même.';return;}
-  if(mesAmis.some(a=>a.id===cible.id)){msg.style.color='var(--gold2)';msg.textContent='Déjà amis.';return;}
+  if(mesAmis.some(a=>a.id===cible.id)){msg.style.color='var(--accent2)';msg.textContent='Déjà amis.';return;}
   try{await db.post('amis',{demandeur_id:CU.id,destinataire_id:cible.id,statut:'en_attente'});msg.style.color='var(--green)';msg.textContent=` Demande envoyée à ${cible.nom} !`;$('ami-code-input').value='';}
   catch(e){msg.style.color='var(--red)';msg.textContent=' '+e.message;}
 }
@@ -1762,17 +1766,17 @@ function ouvrirProfilAmi(uid){
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
       <div class="stat-box"><div class="sv" style="color:var(--green)">${best}</div><div class="sl">Meilleur</div></div>
-      <div class="stat-box"><div class="sv" style="color:var(--gold2)">${avg}</div><div class="sl">Moyenne</div></div>
-      <div class="stat-box"><div class="sv" style="color:var(--gold2)">${avgPct}%</div><div class="sl">Réussite</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--accent2)">${avg}</div><div class="sl">Moyenne</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--accent2)">${avgPct}%</div><div class="sl">Réussite</div></div>
     </div>
     <div class="card" style="margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.85rem;color:var(--tx2)">Précision C1</span><span style="font-size:.9rem;font-weight:700;color:var(--green)">${c1p}%</span></div>
       <div class="prog-bar-bg"><div class="prog-bar" style="width:${c1p}%;background:#4ade80"></div></div>
     </div>
-    ${Object.entries(sbp).map(([nom,d])=>{const pa=(d.scores.reduce((a,b)=>a+b,0)/d.scores.length).toFixed(1);const pp=Math.round(d.pcts.reduce((a,b)=>a+b,0)/d.pcts.length);return `<div style="background:var(--bg2);border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:.9rem;font-weight:600;color:var(--gold)">${nom}</div><div style="display:flex;gap:14px"><div style="text-align:center"><div style="font-size:.95rem;font-weight:700">${pa}</div><div style="font-size:.62rem;color:var(--mu)">moy</div></div><div style="text-align:center"><div style="font-size:.95rem;font-weight:700;color:var(--gold2)">${pp}%</div><div style="font-size:.62rem;color:var(--mu)">réussite</div></div></div></div>`;}).join('')}
+    ${Object.entries(sbp).map(([nom,d])=>{const pa=(d.scores.reduce((a,b)=>a+b,0)/d.scores.length).toFixed(1);const pp=Math.round(d.pcts.reduce((a,b)=>a+b,0)/d.pcts.length);return `<div style="background:var(--bg2);border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:.9rem;font-weight:600;color:var(--accent)">${nom}</div><div style="display:flex;gap:14px"><div style="text-align:center"><div style="font-size:.95rem;font-weight:700">${pa}</div><div style="font-size:.62rem;color:var(--mu)">moy</div></div><div style="text-align:center"><div style="font-size:.95rem;font-weight:700;color:var(--accent2)">${pp}%</div><div style="font-size:.62rem;color:var(--mu)">réussite</div></div></div></div>`;}).join('')}
     ${srt.length>=2?`<div class="card" style="margin-bottom:14px"><div class="lbl">Progression</div><div class="chwrap">${lineChart([{vals:srt.map(x=>({x:fmtSD(x.played_at),y:x.total})),color:'#2a5298'}])}</div></div>`:''}
     <div style="font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Dernières parties</div>
-    ${pts.slice(0,6).map(x=>`<div class="hc" style="cursor:default;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.8rem;font-weight:700;color:var(--gold)">${x.type_jeu==='DTL'?'DTL':x.parcours}${x.difficulte?' · '+x.difficulte:''}</div><div style="font-size:.7rem;color:var(--mu);margin-top:2px">${fmtD(x.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800">${x.total}/${x.max_plateaux}</div><div style="font-size:.7rem;color:var(--mu)">${x.pct}%</div></div></div></div>`).join('')}`;
+    ${pts.slice(0,6).map(x=>`<div class="hc" style="cursor:default;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.8rem;font-weight:700;color:var(--accent)">${x.type_jeu==='DTL'?'DTL':x.parcours}${x.difficulte?' · '+x.difficulte:''}</div><div style="font-size:.7rem;color:var(--mu);margin-top:2px">${fmtD(x.played_at)}</div></div><div style="text-align:right"><div style="font-size:1.3rem;font-weight:800">${x.total}/${x.max_plateaux}</div><div style="font-size:.7rem;color:var(--mu)">${x.pct}%</div></div></div></div>`).join('')}`;
   openMo('mo-ami-detail');
 }
 $('mo-ami-close').addEventListener('click',()=>closeMo('mo-ami-detail'));
@@ -1814,11 +1818,11 @@ function renderCList(){
   if(!sorted.length){el.innerHTML=`<div class="empty"><div class="ei"></div><p>Aucune donnée.</p></div>`;return;}
   const medals=['1','2','3'];
   el.innerHTML=sorted.map((u,i)=>{const pr=allP.find(p=>p.id===u.uid),nom=pr?.nom||'?',col=aColor(nom),isMe=u.uid===CU.id;
-    return `<div class="ri" style="${isMe?'border:1.5px solid var(--gold);background:var(--gold-dim)':''}">
+    return `<div class="ri" style="${isMe?'border:1.5px solid var(--accent);background:var(--accent-dim)':''}">
       <div style="font-size:1.2rem;width:30px;text-align:center">${i+1}</div>
       <div class="av" style="background:${col};width:38px;height:38px;font-size:.9rem;color:#fff">${initials(nom)}</div>
-      <div style="flex:1"><div style="font-size:.95rem;font-weight:700">${nom}${isMe?' <span style="color:var(--gold);font-size:.72rem">(moi)</span>':''}</div><div style="font-size:.75rem;color:var(--mu)">${u.nb} partie${u.nb!==1?'s':''}</div></div>
-      <div style="font-size:1.2rem;font-weight:800;color:var(--gold2)">${rMetric==='score'?u.bs+' pts':u.bp+'%'}</div>
+      <div style="flex:1"><div style="font-size:.95rem;font-weight:700">${nom}${isMe?' <span style="color:var(--accent);font-size:.72rem">(moi)</span>':''}</div><div style="font-size:.75rem;color:var(--mu)">${u.nb} partie${u.nb!==1?'s':''}</div></div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--accent2)">${rMetric==='score'?u.bs+' pts':u.bp+'%'}</div>
     </div>`;
   }).join('');
 }
@@ -1841,7 +1845,7 @@ function renderAdmUsers(){
     const vl={public:'·',prive:'·'};
     const row=document.createElement('div');row.className='arow';
     row.innerHTML=`<div class="av" style="background:${col};width:34px;height:34px;font-size:.85rem;flex-shrink:0;color:#fff">${initials(p.nom)}</div>
-      <div style="flex:1"><div style="font-size:.9rem;font-weight:700">${p.nom} ${vl[p.visibilite||'public']}${p.is_admin?' <span style="color:var(--gold);font-size:.68rem">admin</span>':''}</div>
+      <div style="flex:1"><div style="font-size:.9rem;font-weight:700">${p.nom} ${vl[p.visibilite||'public']}${p.is_admin?' <span style="color:var(--accent);font-size:.68rem">admin</span>':''}</div>
       <div style="font-size:.75rem;color:var(--mu)">Code: ${p.code_social||'—'} · ${pts.length} parties · Mieux: ${best}</div></div>`;
     const del=document.createElement('button');del.className='btn-r';del.textContent='Suppr.';
     del.addEventListener('click',async()=>{if(!confirm(`Supprimer ${p.nom} ?`))return;try{await db.del('profils',`id=eq.${p.id}`);allP=allP.filter(x=>x.id!==p.id);allGames=allGames.filter(x=>x.user_id!==p.id);myGames=myGames.filter(x=>x.user_id!==p.id);toast(` ${p.nom} supprimé`);renderAdmin();}catch(e){toast(' '+e.message);}});
@@ -1854,7 +1858,7 @@ function renderAdmParties(){
   list.forEach(p=>{
     const pr=allP.find(x=>x.id===p.user_id);
     const row=document.createElement('div');row.className='arow';
-    row.innerHTML=`<div style="flex:1"><div style="font-size:.88rem;font-weight:700">${pr?.nom||'?'} <span style="color:var(--gold)">· ${p.parcours}</span>${p.difficulte?` <span style="color:${DIFF_COLORS[p.difficulte]||'#64748b'};font-size:.75rem">· ${p.difficulte}</span>`:''}</div>
+    row.innerHTML=`<div style="flex:1"><div style="font-size:.88rem;font-weight:700">${pr?.nom||'?'} <span style="color:var(--accent)">· ${p.parcours}</span>${p.difficulte?` <span style="color:${DIFF_COLORS[p.difficulte]||'var(--mu)'};font-size:.75rem">· ${p.difficulte}</span>`:''}</div>
       <div style="font-size:.75rem;color:var(--mu)">${fmtD(p.played_at)} · ${p.total}/${p.max_plateaux} (${p.pct}%)</div></div>`;
     const del=document.createElement('button');del.className='btn-r';del.textContent='Suppr.';
     del.addEventListener('click',async()=>{if(!confirm('Supprimer ?'))return;try{await db.del('parties',`id=eq.${p.id}`);allGames=allGames.filter(x=>x.id!==p.id);myGames=myGames.filter(x=>x.id!==p.id);toast('Supprimé');renderAdmin();}catch(e){toast(' '+e.message);}});
